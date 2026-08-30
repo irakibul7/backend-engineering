@@ -17,6 +17,7 @@ import {
   Clock3,
   Code2,
   FileText,
+  Flame,
   LockKeyhole,
   Menu,
   Monitor,
@@ -34,7 +35,7 @@ import {
   type Chapter,
 } from "./content/chapters";
 import { searchChapters } from "./lib/search";
-import { readNote, readProgress, readTheme, writeNote, writeProgress, writeTheme, type Theme } from "./lib/storage";
+import { readNote, readProgress, readTheme, recordLearningVisit, toLocalDateKey, writeNote, writeProgress, writeTheme, type LearningStreak, type Theme } from "./lib/storage";
 
 const knownPublishedSlugs = new Set(publishedChapters.map((chapter) => chapter.slug));
 const themes: Theme[] = ["light", "original", "dark"];
@@ -175,13 +176,41 @@ function FeatureLine({ icon: Icon, title, body, action }: { icon: typeof Code2; 
   return action ? <button className="feature-line" type="button" onClick={action}>{content}</button> : <div className="feature-line">{content}</div>;
 }
 
+function LearningStreakPanel({ streak }: { streak: LearningStreak }) {
+  const today = new Date();
+  const mondayOffset = (today.getDay() + 6) % 7;
+  const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - mondayOffset);
+  const activeDates = new Set(streak.activeDates);
+  const week = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + index);
+    return { label: ["M", "T", "W", "T", "F", "S", "S"][index], active: activeDates.has(toLocalDateKey(date)), future: date > today };
+  });
+
+  return (
+    <section className="streak-panel" aria-labelledby="streak-heading">
+      <Flame size={27} aria-hidden="true" />
+      <div className="streak-copy">
+        <span id="streak-heading">Learning streak</span>
+        <strong>{streak.currentStreak} <small>{streak.currentStreak === 1 ? "day" : "days"}</small></strong>
+        <small>Best: {streak.bestStreak}</small>
+      </div>
+      <div className="streak-week" aria-label={`${streak.currentStreak}-day current learning streak`}>
+        {week.map((day, index) => <span key={`${day.label}-${index}`}><b>{day.label}</b><i className={day.active ? "is-active" : day.future ? "is-future" : ""} /></span>)}
+      </div>
+    </section>
+  );
+}
+
 function CatalogPage({
   completed,
+  streak,
   onToggle,
   onOpenNotes,
   navigate,
 }: {
   completed: Set<string>;
+  streak: LearningStreak;
   onToggle: (slug: string) => void;
   onOpenNotes: () => void;
   navigate: (href: string) => void;
@@ -194,6 +223,7 @@ function CatalogPage({
         <p className="eyebrow">Engineer’s field notebook</p>
         <h1>Backend <br />Engineering</h1>
         <p className="intro-copy">Understand the systems behind reliable backend software—protocols, boundaries, data, security, resilience, and production delivery.</p>
+        <LearningStreakPanel streak={streak} />
         <section className="progress-panel" aria-labelledby="progress-heading">
           <div className="progress-heading"><span id="progress-heading">Reading progress</span><strong>{completed.size} <small>of 6</small></strong><b>{progress}%</b></div>
           <div className="progress-track" role="progressbar" aria-label="Launch chapter progress" aria-valuemin={0} aria-valuemax={6} aria-valuenow={completed.size}><i style={{ width: `${progress}%` }} /></div>
@@ -384,6 +414,7 @@ function NotesPanel({ scope, onClose }: { scope: string; onClose: () => void }) 
 export function Prototype() {
   const { path, navigate } = useRoute();
   const [completed, setCompleted] = useState(() => readProgress(knownPublishedSlugs));
+  const [streak] = useState(() => recordLearningVisit());
   const [theme, setTheme] = useState<Theme>(() => readTheme());
   const [searchOpen, setSearchOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
@@ -420,7 +451,7 @@ export function Prototype() {
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
       <AppHeader path={path} theme={theme} navigate={navigate} onOpenSearch={() => setSearchOpen(true)} onOpenNotes={() => setNotesOpen(true)} onCycleTheme={cycleTheme} />
-      {lesson ? <LessonPage chapter={lesson} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage completed={completed} onToggle={toggleComplete} onOpenNotes={() => setNotesOpen(true)} navigate={navigate} />}
+      {lesson ? <LessonPage chapter={lesson} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage completed={completed} streak={streak} onToggle={toggleComplete} onOpenNotes={() => setNotesOpen(true)} navigate={navigate} />}
       {searchOpen ? <SearchDialog onClose={() => setSearchOpen(false)} navigate={navigate} /> : null}
       {notesOpen ? <NotesPanel scope={noteScope} onClose={() => setNotesOpen(false)} /> : null}
     </>

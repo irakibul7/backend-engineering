@@ -121,6 +121,22 @@ type NoteV1 = {
 };
 ```
 
+### Learning streak
+
+Key: `backend-engineering:streak:v1`
+
+```ts
+type LearningStreakV1 = {
+  schemaVersion: 1;
+  currentStreak: number;
+  bestStreak: number;
+  lastVisitDate: string;      // local YYYY-MM-DD
+  activeDates: string[];      // rolling 14-day local activity window
+};
+```
+
+A same-day return is idempotent. A visit on the next local calendar day extends the streak; a longer gap resets the current streak to one while preserving the best streak.
+
 Limits:
 
 - reject notes larger than 500 KiB with a recoverable warning;

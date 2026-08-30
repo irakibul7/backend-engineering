@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { readNote, readProgress, readTheme, writeNote, writeProgress, writeTheme } from "./storage";
+import { readLearningStreak, readNote, readProgress, readTheme, recordLearningVisit, writeNote, writeProgress, writeTheme } from "./storage";
 
 describe("browser storage", () => {
   beforeEach(() => window.localStorage.clear());
@@ -24,5 +24,20 @@ describe("browser storage", () => {
 
     expect(readTheme()).toBe("original");
     expect(readNote("master")).toContain("Remember the boundary");
+  });
+
+  it("records one learning visit per local calendar day", () => {
+    recordLearningVisit(new Date(2026, 7, 28, 9));
+    recordLearningVisit(new Date(2026, 7, 28, 18));
+
+    expect(readLearningStreak()).toMatchObject({ currentStreak: 1, bestStreak: 1, lastVisitDate: "2026-08-28" });
+  });
+
+  it("extends consecutive visits and preserves the best streak after a gap", () => {
+    recordLearningVisit(new Date(2026, 7, 27, 9));
+    recordLearningVisit(new Date(2026, 7, 28, 9));
+    recordLearningVisit(new Date(2026, 7, 30, 9));
+
+    expect(readLearningStreak()).toMatchObject({ currentStreak: 1, bestStreak: 2, lastVisitDate: "2026-08-30" });
   });
 });

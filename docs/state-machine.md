@@ -42,7 +42,24 @@ Invariants:
 - toggling does not navigate;
 - accessible name and pressed/checked state match the visual state.
 
-## 3. Theme
+## 3. Learning streak
+
+```text
+missing -> current(1), best(1) (first visit)
+current(n) -> current(n) (same local calendar day)
+current(n) -> current(n + 1) (next local calendar day)
+current(n) -> current(1), best(max(best, n)) (gap longer than one day)
+malformed stored value -> current(1), best(1) + repaired storage
+```
+
+Invariants:
+
+- a browser visit contributes at most once per local calendar day;
+- only the rolling fourteen-day activity window is retained;
+- streak data stays local and is never included in analytics;
+- current and best values remain readable without relying on the flame icon or color.
+
+## 4. Theme
 
 ```text
 unresolved -> system (no saved choice)
@@ -53,7 +70,7 @@ invalid stored choice -> system
 
 The bootstrap runs before first paint. `prefers-color-scheme` affects only the `system` choice.
 
-## 4. Study notes panel
+## 5. Study notes panel
 
 ```text
 closed -> opening -> open.edit.clean
@@ -77,7 +94,7 @@ Invariants:
 - mobile open state traps focus; desktop sheet remains modal to background controls;
 - notes never leave the browser unless the learner triggers a file download.
 
-## 5. Lesson contents navigation
+## 6. Lesson contents navigation
 
 ```text
 desktop.rail.active(sectionId)

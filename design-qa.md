@@ -19,17 +19,14 @@ Responsive and focused interaction evidence:
 
 - `docs/qa/backend-engineering-implementation-mobile.png`
 - `docs/qa/backend-engineering-lesson-mobile-drawer.png`
+- `docs/qa/backend-engineering-streak-desktop.png`
+- `docs/qa/backend-engineering-streak-mobile.png`
 
 The desktop pair was viewed together in the same browser comparison input. The mobile captures were inspected independently because the approved concept is desktop-only and does not define a mobile composition.
 
 ## Findings
 
 No actionable P0, P1, or P2 findings remain for the approved checkpoint.
-
-- [Expected] Real progress replaces a decorative streak.
-  - Location: left study rail.
-  - Evidence: the concept includes a seven-day streak; the product does not track streaks. The implementation exposes truthful local reading progress and a Continue action instead.
-  - Classification: intentional product-integrity decision, not visual drift.
 
 - [Expected] Binary completion replaces invented partial progress.
   - Location: syllabus progress column.
@@ -54,7 +51,7 @@ No actionable P0, P1, or P2 findings remain for the approved checkpoint.
 - Asset fidelity: the target contains no photographic or illustrative art. Interface symbols use Lucide outline icons; no placeholder images, handcrafted SVGs, CSS illustrations, or hotlinked assets were introduced.
 - Copy and positioning: the public title is `Backend Engineering`. Public-facing product copy is language-neutral. Current examples may use TypeScript, while the information architecture can later incorporate other languages.
 - Responsive behavior: the catalog collapses cleanly to one column, keeps chapters near the first viewport, and has no horizontal overflow at 390 px. The lesson contents becomes an accessible off-canvas drawer.
-- Interaction and accessibility: search, completion, notes, theme cycling, roadmap disclosure, lesson navigation, Escape handling, semantic labels, focus-visible styles, and reduced-motion behavior are present.
+- Interaction and accessibility: search, completion, real local learning streaks, notes, theme cycling, roadmap disclosure, lesson navigation, Escape handling, semantic labels, focus-visible styles, and reduced-motion behavior are present.
 
 ## Comparison history
 
@@ -72,6 +69,12 @@ No actionable P0, P1, or P2 findings remain for the approved checkpoint.
 - Inspected the responsive catalog and lesson drawer at 390 × 844.
 - Result: no actionable P0/P1/P2 visual or interaction findings remain.
 
+### Pass 3
+
+- Restored the approved learning-streak block between the project introduction and reading progress.
+- Replaced the concept's illustrative seven-day value with truthful current/best values and a local calendar-week activity strip.
+- Verified the first-visit state at desktop and mobile sizes; no horizontal overflow or console warnings were present.
+
 ## Primary interactions tested
 
 - marked chapter 01 complete and observed progress update to `1`
@@ -79,15 +82,16 @@ No actionable P0, P1, or P2 findings remain for the approved checkpoint.
 - cycled the theme to Original
 - opened notes, entered Markdown containing a script, and confirmed the preview remained sanitized
 - opened the mobile lesson contents drawer and verified all six section links
+- recorded one learning visit for the day and displayed current streak `1`, best streak `1`, and the active weekday marker
 - checked a fresh browser tab after interaction; console warnings and errors: 0
 
 ## Automated verification
 
 - strict TypeScript check
 - ESLint with zero warnings
-- 12 unit tests
+- 14 unit tests
 - production build
-- 4 hosting tests
+- 6 hosting tests
 - repository whitespace check
 
 final result: passed
