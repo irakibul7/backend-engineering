@@ -24,7 +24,13 @@ test("emits favicon, app icons, manifest, and the social-sharing cover", async (
   assert.deepEqual(pngDimensions(icon512), { width: 512, height: 512 });
   assert.deepEqual(pngDimensions(socialCover), { width: 1200, height: 630 });
   await stat(new URL("favicon.svg", clientUrl));
+  await stat(new URL("favicon.ico", clientUrl));
   await stat(new URL("apple-touch-icon.png", clientUrl));
+  await stat(new URL("apple-touch-icon-precomposed.png", clientUrl));
+  const home = await read("index.html");
+  assert.match(home, /favicon\.svg\?v=2/);
+  assert.match(home, /favicon\.ico\?v=2/);
+  assert.match(home, /manifest\.webmanifest\?v=2/);
 });
 
 test("emits route-specific canonical, Open Graph, Twitter, and structured metadata", async () => {
