@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: Backend from First Principles API Boundary
+  version: 0.1.0
+  description: >-
+    The MVP is a statically generated learning site with no runtime HTTP API.
+    This intentionally empty contract prevents accidental introduction of a
+    server boundary without specification, threat modeling, and review.
+servers:
+  - url: https://backend.therakibul.me
+    description: Confirmed production origin.
+paths: {}
+tags: []
+x-static-site: true
+x-change-policy: >-
+  Adding any path requires a reviewed ADR, an updated role matrix and threat
+  model, contract tests, and explicit human approval.
