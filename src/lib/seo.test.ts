@@ -13,12 +13,13 @@ describe("SEO metadata", () => {
       "/roadmap/",
       "/chapters/http-as-a-state-machine/",
       "/chapters/routing-and-request-dispatch/",
+      "/chapters/representation-and-serialization/",
     ]);
     expect(routes.every((route) => route.robots.startsWith("index"))).toBe(true);
   });
 
   it("marks unknown and unfinished lesson routes noindex", () => {
-    expect(getSeoMetadata("/chapters/representation-and-serialization", publishedChapters)).toMatchObject({
+    expect(getSeoMetadata("/chapters/identity-authentication-authorization", publishedChapters)).toMatchObject({
       robots: "noindex, nofollow",
       title: "Page not found — Backend Engineering",
     });

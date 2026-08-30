@@ -31,6 +31,8 @@ import {
   publishedChapters,
   roadmapChapters,
   type Chapter,
+  type LessonSection,
+  type LessonVisual,
 } from "./content/chapters";
 import { searchChapters } from "./lib/search";
 import { readNote, readReadingProgress, readTheme, recordLearningVisit, toLocalDateKey, writeNote, writeProgress, writeReadingProgress, writeTheme, type LearningStreak, type ReadingProgress, type Theme } from "./lib/storage";
@@ -325,6 +327,94 @@ function CodeBlock({ filename, source }: { filename: string; source: string }) {
   return <figure className="code-block"><figcaption><span>{filename}</span><button type="button" onClick={copy}>{copied ? "Copied" : "Copy"}</button></figcaption><pre><code>{source}</code></pre></figure>;
 }
 
+function FlowVisual({ visual }: { visual: Extract<LessonVisual, { kind: "flow" }> }) {
+  return (
+    <ol className="visual-flow" aria-label="Ordered system flow">
+      {visual.stages.map((stage, index) => (
+        <li key={stage.title}>
+          <span className="visual-index">{String(index + 1).padStart(2, "0")}</span>
+          <strong>{stage.title}</strong>
+          <p>{stage.detail}</p>
+          {index < visual.stages.length - 1 ? <ArrowRight size={17} aria-hidden="true" /> : null}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function DecisionVisual({ visual }: { visual: Extract<LessonVisual, { kind: "decision" }> }) {
+  return (
+    <div className="visual-decision">
+      <p className="decision-question"><span>Decision</span>{visual.question}</p>
+      <ol>
+        {visual.outcomes.map((outcome) => (
+          <li key={outcome.condition}>
+            <span>{outcome.condition}</span>
+            <ArrowRight size={17} aria-hidden="true" />
+            <div><strong>{outcome.result}</strong><p>{outcome.detail}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function LadderVisual({ visual }: { visual: Extract<LessonVisual, { kind: "ladder" }> }) {
+  return (
+    <div className="visual-ladder">
+      <p className="ladder-request"><span>Incoming request</span><code>{visual.request}</code></p>
+      <ol>
+        {visual.entries.map((entry) => (
+          <li key={entry.pattern} className={entry.selected ? "is-selected" : undefined} aria-current={entry.selected ? "true" : undefined}>
+            <span>{entry.rank}</span>
+            <code>{entry.pattern}</code>
+            <p>{entry.result}</p>
+            <strong>{entry.selected ? "Selected" : "Candidate"}</strong>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function TimelineVisual({ visual }: { visual: Extract<LessonVisual, { kind: "timeline" }> }) {
+  return (
+    <ol className="visual-timeline" aria-label="Ordered rollout phases">
+      {visual.phases.map((phase) => (
+        <li key={phase.marker}>
+          <span>{phase.marker}</span>
+          <div><strong>{phase.title}</strong><p>{phase.detail}</p></div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function LessonVisualFigure({ visual }: { visual: LessonVisual }) {
+  return (
+    <figure className={`lesson-visual lesson-visual--${visual.kind}`} aria-label={visual.label}>
+      <figcaption><span>System visual</span><strong>{visual.label}</strong></figcaption>
+      {visual.kind === "flow" ? <FlowVisual visual={visual} /> : null}
+      {visual.kind === "decision" ? <DecisionVisual visual={visual} /> : null}
+      {visual.kind === "ladder" ? <LadderVisual visual={visual} /> : null}
+      {visual.kind === "timeline" ? <TimelineVisual visual={visual} /> : null}
+      <p className="visual-alternative"><span>Text view</span>{visual.alternative}</p>
+    </figure>
+  );
+}
+
+function LessonTable({ table }: { table: NonNullable<LessonSection["table"]> }) {
+  return (
+    <div className="lesson-table-wrap" tabIndex={0} aria-label={`${table.caption}. Scroll horizontally to inspect every column.`}>
+      <table>
+        <caption>{table.caption}</caption>
+        <thead><tr>{table.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
+        <tbody>{table.rows.map((row) => <tr key={row.join("|")}>{row.map((cell, index) => index === 0 ? <th key={cell} scope="row">{cell}</th> : <td key={`${index}-${cell}`}>{cell}</td>)}</tr>)}</tbody>
+      </table>
+    </div>
+  );
+}
+
 function LessonPage({
   chapter,
   readSectionIds,
@@ -392,8 +482,11 @@ function LessonPage({
               <p className="section-intro">{section.introduction}</p>
               {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               {section.callout ? <aside className="lesson-callout"><strong>{section.callout.label}</strong><p>{section.callout.body}</p></aside> : null}
+              {section.visuals?.map((visual) => <LessonVisualFigure key={visual.label} visual={visual} />)}
               {section.code ? <CodeBlock filename={section.code.filename} source={section.code.source} /> : null}
+              {section.table ? <LessonTable table={section.table} /> : null}
               {section.checklist ? <ul className="lesson-checklist">{section.checklist.map((item) => <li key={item}><Check size={16} />{item}</li>)}</ul> : null}
+              {section.questions ? <div className="lesson-questions"><h3>Design questions</h3><ol>{section.questions.map((question) => <li key={question}>{question}</li>)}</ol></div> : null}
               {section.references ? (
                 <div className="lesson-references">
                   <h3>Primary references</h3>

@@ -10,14 +10,14 @@ describe("Backend Engineering prototype", () => {
     document.documentElement.removeAttribute("data-theme");
   });
 
-  it("presents two published chapters, four coming-next chapters, and a visible public roadmap", () => {
+  it("presents three published chapters, three coming-next chapters, and a visible public roadmap", () => {
     render(<Prototype />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
     expect(screen.getByRole("heading", { name: "Launch chapters" })).toBeInTheDocument();
-    expect(screen.getAllByText("Coming next")).toHaveLength(4);
+    expect(screen.getAllByText("Coming next")).toHaveLength(3);
     expect(screen.getByRole("link", { name: "Open Routing and Request Dispatch" })).toHaveAttribute("href", "/chapters/routing-and-request-dispatch/");
-    expect(screen.queryByRole("link", { name: "Open Representation and Serialization" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open Representation and Serialization" })).toHaveAttribute("href", "/chapters/representation-and-serialization/");
     expect(screen.getByText((_, element) => element?.textContent === "Roadmap (18 topics)")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /View all 18 roadmap topics/ })).toHaveAttribute("href", "/roadmap/");
   });
@@ -39,7 +39,7 @@ describe("Backend Engineering prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "46");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "29");
     expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuemax", "100");
     expect(screen.getByRole("button", { name: "Reset chapter 1 reading progress" })).toHaveAttribute("aria-pressed", "true");
   });
@@ -94,22 +94,47 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("HTTP as a State Machine");
   });
 
-  it("renders the complete routing chapter with references and no unpublished next link", () => {
+  it("renders the complete routing chapter with references and a published next link", () => {
     window.history.replaceState({}, "", "/chapters/routing-and-request-dispatch");
     render(<Prototype />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Routing and Request Dispatch");
     expect(screen.getByRole("heading", { name: "Separate 404 from 405" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "RFC 9110: HTTP Semantics" })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc9110.html");
-    expect(screen.queryByText("Next")).not.toBeInTheDocument();
+    expect(screen.getByText("Next")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /NextRepresentation and Serialization/ })).toHaveAttribute("href", "/chapters/representation-and-serialization/");
+    expect(screen.getByRole("figure", { name: "Route specificity for GET /users/me" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "Preserving 404 and 405 during dispatch" })).toBeInTheDocument();
   });
 
   it("does not expose an unfinished chapter as a lesson", () => {
-    window.history.replaceState({}, "", "/chapters/representation-and-serialization");
+    window.history.replaceState({}, "", "/chapters/identity-authentication-authorization");
     render(<Prototype />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
-    expect(screen.queryByRole("heading", { level: 1, name: "Representation and Serialization" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1, name: "Identity, Authentication, and Authorization" })).not.toBeInTheDocument();
     expect(screen.queryByText(/approved launch collection/i)).not.toBeInTheDocument();
+  });
+
+  it("renders the complete serialization chapter with annotated visuals, compatibility table, questions, and references", () => {
+    window.history.replaceState({}, "", "/chapters/representation-and-serialization");
+    render(<Prototype />);
+
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Representation and Serialization");
+    expect(screen.getByRole("figure", { name: "The representation boundary" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "A compatibility-first schema rollout" })).toBeInTheDocument();
+    expect(screen.getByText(/A domain value is mapped to a wire model/i)).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: "Compatibility matrix for common schema changes" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Design questions" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /RFC 8259/ })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc8259.html");
+    expect(screen.queryByText("Next")).not.toBeInTheDocument();
+  });
+
+  it("renders two explanatory visuals in the HTTP chapter", () => {
+    window.history.replaceState({}, "", "/chapters/http-as-a-state-machine");
+    render(<Prototype />);
+
+    expect(screen.getByRole("figure", { name: "Request ownership from client to use case" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "A cache freshness decision" })).toBeInTheDocument();
   });
 });

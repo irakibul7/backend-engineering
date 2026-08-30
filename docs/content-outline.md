@@ -2,13 +2,13 @@
 
 The sequence intentionally covers the same general backend learning journey as the reference, but every chapter will use original structure, prose, examples, diagrams, and citations.
 
-Publication status: chapters 01–02 are the fully authored first release. Chapters 03–06 are visible as coming next without lesson routes. Chapters 07–24 form the public roadmap.
+Publication status: chapters 01–03 are fully authored. Chapters 04–06 are visible as coming next without lesson routes. Chapters 07–24 form the public roadmap.
 
 | No. | Status | Working title | First-principles promise | Core evidence |
 | --- | --- | --- | --- | --- |
 | 01 | Published | HTTP as a State Machine | Trace a request from bytes to semantics and explain HTTP properties without framework vocabulary. | RFC 9110/9112 and TypeScript server |
 | 02 | Published | Routing and Request Dispatch | Derive routing from path matching, method dispatch, precedence, and request context. | TypeScript router implementation and ambiguity tests |
-| 03 | Coming next | Representation and Serialization | Explain how data crosses process boundaries and where JSON, Protobuf, and schema evolution fail. | TypeScript encoders and compatibility matrix |
+| 03 | Published | Representation and Serialization | Explain how data crosses process boundaries and where JSON, Protobuf, and schema evolution fail. | TypeScript encoders and compatibility matrix |
 | 04 | Coming next | Identity, Authentication, and Authorization | Separate identity proof, session state, and policy decisions. | TypeScript session/JWT flows and authorization matrix |
 | 05 | Coming next | Validation at Trust Boundaries | Model parsing, validation, normalization, and safe transformation as distinct steps. | TypeScript failure taxonomy and schema tests |
 | 06 | Coming next | Layered Request Handling | Derive handlers, services, repositories, middleware, and request-scoped context from change boundaries. | TypeScript dependency flow and tracing example |
@@ -38,10 +38,12 @@ Every chapter must include:
 1. Learning promise and prerequisites.
 2. The underlying problem before the named technology.
 3. Mental model and system boundary diagram.
-4. Protocol or data-flow walkthrough.
+4. A second visual that explains a decision, comparison, state change, or rollout.
 5. TypeScript implementation examples.
 6. Production failure modes and trade-offs.
 7. Debugging checklist.
 8. Knowledge checks or design questions.
 9. Linked glossary terms.
 10. Primary technical references with review date.
+
+Every visual must be original, captioned, readable without color, and followed by an equivalent text explanation. Qualitative comparisons must be labeled as qualitative; the project does not present invented benchmark values as measured evidence.

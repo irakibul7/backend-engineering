@@ -16,6 +16,13 @@ describe("searchChapters", () => {
     expect(results[0]?.chapter.status).toBe("roadmap");
   });
 
+  it("finds a published chapter by one of its section headings", () => {
+    const results = searchChapters(chapters, "round trips");
+
+    expect(results[0]?.chapter.title).toBe("Representation and Serialization");
+    expect(results[0]?.chapter.status).toBe("published");
+  });
+
   it("returns no results for an empty query", () => {
     expect(searchChapters(chapters, "   ")).toEqual([]);
   });

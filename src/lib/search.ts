@@ -21,6 +21,7 @@ export function searchChapters(chapters: Chapter[], rawQuery: string): SearchRes
       const summary = normalize(chapter.summary);
       const tags = normalize(chapter.tags.join(" "));
       const promise = normalize(chapter.promise);
+      const sectionHeadings = normalize(chapter.sections?.map((section) => section.title).join(" ") ?? "");
       let score = 0;
 
       for (const token of tokens) {
@@ -31,6 +32,7 @@ export function searchChapters(chapters: Chapter[], rawQuery: string): SearchRes
         else if (tags.includes(token)) score += 3;
         if (summary.includes(token)) score += 2;
         if (promise.includes(token)) score += 1;
+        if (sectionHeadings.includes(token)) score += 2;
       }
 
       return { chapter, score };

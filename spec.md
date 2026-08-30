@@ -58,8 +58,8 @@ A visitor should be able to:
 - Responsive behavior at desktop, tablet, and mobile.
 - Author/community card, portfolio link, GitHub link, and project attribution.
 - SEO, social preview, sitemap, robots, structured data, analytics hooks, and Vercel deployment configuration.
-- Two fully written first-release chapters: HTTP and routing.
-- Four visible coming-next chapters: serialization, authentication/authorization, validation, and layered request handling. These do not link to lesson routes until complete.
+- Three fully written chapters: HTTP, routing, and serialization.
+- Three visible coming-next chapters: authentication/authorization, validation, and layered request handling. These do not link to lesson routes until complete.
 - A public roadmap for chapters 07–24. Roadmap entries remain visible but are not presented as finished lessons.
 
 ### Explicitly out of scope for MVP
@@ -120,6 +120,7 @@ A visitor should be able to:
 - `LES-006`: Provide previous/next navigation with chapter number and title.
 - `LES-007`: Preserve the current section when a theme or notes panel changes.
 - `LES-008`: Expose stable anchors so sections can be deep-linked.
+- `LES-009`: Include at least two original explanatory visuals in every published chapter, with a visible caption and an equivalent text explanation. Visuals must clarify a system boundary, decision, comparison, state change, or rollout rather than decorate the lesson.
 
 ### Search
 
@@ -195,11 +196,11 @@ A visitor should be able to:
 
 ## 9. Content requirements
 
-- The first public release includes two complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 03–06 are coming next and chapters 07–24 are public roadmap entries.
+- The current release includes three complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 04–06 are coming next and chapters 07–24 are public roadmap entries.
 - Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, practical examples, failure cases, debugging checklist, glossary links, and primary references.
 - Product navigation and positioning remain implementation-language neutral. Initial examples are authored in the current repository language, while the content model must allow additional languages later without renaming the product or restructuring the curriculum.
 - Content must not be bulk-copied or lightly paraphrased from the reference.
-- Every diagram is created specifically for this project and has a text alternative.
+- Every published chapter contains at least two diagrams or graphs created specifically for this project, and every visual has a visible caption and equivalent text explanation.
 
 ## 10. Architecture
 
@@ -215,8 +216,8 @@ If Vercel Web Analytics and Speed Insights are enabled, only route and performan
 
 The release is ready only when:
 
-1. All 24 catalog entries exist; only complete chapters have canonical lesson routes, chapters 03–06 are labeled coming next, and chapters 07–24 link to the roadmap.
-2. Chapters 01–02 are fully authored; coming-next and roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
+1. All 24 catalog entries exist; only complete chapters have canonical lesson routes, chapters 04–06 are labeled coming next, and chapters 07–24 link to the roadmap.
+2. Chapters 01–03 are fully authored; coming-next and roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
 3. Search, progress, theme, and notes pass keyboard and mobile Playwright coverage.
 4. All repository quality gates in `docs/test-strategy.md` pass.
 5. Design QA compares desktop and mobile captures against the approved original mock and records `final result: passed`.
@@ -229,7 +230,7 @@ The release is ready only when:
 Confirmed 2026-08-30:
 
 1. Canonical domain: `backend.therakibul.me`.
-2. Staged launch: two complete foundation chapters, four visible coming-next chapters, and a public roadmap for chapters 07–24.
+2. Staged growth: three complete foundation chapters, three visible coming-next chapters, and a public roadmap for chapters 07–24.
 3. Public positioning is language-neutral. Initial examples use the current repository language; additional language variants may be added later.
 4. Specification approved; proceed through technical validation and small reviewed slices.
 

@@ -162,6 +162,15 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Acceptance: editorial checklist, primary references, schema validation, TypeScript code tests, and diagram alternatives pass for each chapter.
 - Files in scope: chapters 03–06 and original diagrams
 - Exclusions: roadmap chapters
+- Status: In progress. Chapter 03 is complete and published; Chapters 04–06 remain coming next.
+
+### T-602A Add the published-chapter visual learning system
+
+- Requirements: `LES-004`, `LES-009`, `THE-003`, `A11Y-001`, `A11Y-003`
+- Acceptance: Chapters 01–03 each contain at least two original, captioned visuals; flows, route decisions, precedence, caching, serialization boundaries, and compatibility rollout remain understandable without color; every visual includes an equivalent text explanation; desktop, 390 px, and 320 px layouts have no page overflow; accessibility and design QA pass.
+- Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, typed chapter visual data, lesson visual renderers/styles/tests, and visual-system validation evidence
+- Exclusions: new chapters, fabricated benchmark data, animations, handcrafted SVGs, reference-site prose or artwork, and changes to progress persistence
+- Status: Complete and awaiting human review. Direction 2, Annotated Comparisons, was selected and verified on 2026-08-30; evidence is recorded in `docs/validation/chapter-visual-system.md` and `design-qa.md`.
 
 ### T-603 Publish roadmap chapters 07–15
 
