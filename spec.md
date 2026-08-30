@@ -49,7 +49,7 @@ A visitor should be able to:
 
 ### MVP
 
-- 24-chapter catalog with duration, tags, summary, completion state, and an explicit launch/roadmap status.
+- 24-chapter catalog with duration, tags, summary, completion state, and explicit published/coming-next/roadmap status.
 - Long-form chapter route with table of contents, active-section indication, previous/next navigation, diagrams, code blocks, callouts, tables, and references.
 - Command-search dialog available by click and keyboard shortcut.
 - Completion tracking, theme preference, and notes stored locally.
@@ -58,7 +58,8 @@ A visitor should be able to:
 - Responsive behavior at desktop, tablet, and mobile.
 - Author/community card, portfolio link, GitHub link, and project attribution.
 - SEO, social preview, sitemap, robots, structured data, analytics hooks, and Vercel deployment configuration.
-- Six fully written launch chapters: HTTP, routing, serialization, authentication/authorization, validation, and layered request handling.
+- Two fully written first-release chapters: HTTP and routing.
+- Four visible coming-next chapters: serialization, authentication/authorization, validation, and layered request handling. These do not link to lesson routes until complete.
 - A public roadmap for chapters 07–24. Roadmap entries remain visible but are not presented as finished lessons.
 
 ### Explicitly out of scope for MVP
@@ -75,7 +76,7 @@ A visitor should be able to:
 ### Routes
 
 - `/` — catalog and project introduction
-- `/chapters/[slug]/` — one route per chapter
+- `/chapters/[slug]/` — one route per published chapter
 - `/glossary/` — searchable backend term index
 - `/roadmap/` — status and planned scope for chapters 07–24
 - `/about/` — methodology, author, sources, and contribution guidance
@@ -105,9 +106,9 @@ A visitor should be able to:
 - `CAT-001`: Render all published chapters in deterministic numeric order.
 - `CAT-002`: Show number, title, estimated duration, short summary, and tags for each chapter.
 - `CAT-003`: Make the complete card keyboard and pointer navigable while keeping completion a separate control.
-- `CAT-004`: Show launch progress as `n of 6` and update it immediately. Roadmap topics do not count as completed lessons until they are published.
+- `CAT-004`: Show progress as `n of published chapters` and update it immediately. Coming-next and roadmap topics do not count until they are published.
 - `CAT-005`: Preserve a quiet editorial hierarchy at 320 px through wide desktop layouts.
-- `CAT-006`: Distinguish published lessons from roadmap entries in text and accessible state, not color alone.
+- `CAT-006`: Distinguish published lessons, coming-next chapters, and roadmap entries in text and accessible state, not color alone.
 
 ### Lessons
 
@@ -194,7 +195,7 @@ A visitor should be able to:
 
 ## 9. Content requirements
 
-- The initial release includes six complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 07–24 are public roadmap entries.
+- The first public release includes two complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 03–06 are coming next and chapters 07–24 are public roadmap entries.
 - Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, practical examples, failure cases, debugging checklist, glossary links, and primary references.
 - Product navigation and positioning remain implementation-language neutral. Initial examples are authored in the current repository language, while the content model must allow additional languages later without renaming the product or restructuring the curriculum.
 - Content must not be bulk-copied or lightly paraphrased from the reference.
@@ -214,8 +215,8 @@ If Vercel Web Analytics and Speed Insights are enabled, only route and performan
 
 The release is ready only when:
 
-1. All 24 catalog entries exist; six launch chapters have canonical lesson routes and chapters 07–24 link to the roadmap.
-2. Chapters 01–06 are fully authored; roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
+1. All 24 catalog entries exist; only complete chapters have canonical lesson routes, chapters 03–06 are labeled coming next, and chapters 07–24 link to the roadmap.
+2. Chapters 01–02 are fully authored; coming-next and roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
 3. Search, progress, theme, and notes pass keyboard and mobile Playwright coverage.
 4. All repository quality gates in `docs/test-strategy.md` pass.
 5. Design QA compares desktop and mobile captures against the approved original mock and records `final result: passed`.
@@ -228,7 +229,7 @@ The release is ready only when:
 Confirmed 2026-08-30:
 
 1. Canonical domain: `backend.therakibul.me`.
-2. Staged launch: six complete foundation chapters plus a public roadmap for chapters 07–24.
+2. Staged launch: two complete foundation chapters, four visible coming-next chapters, and a public roadmap for chapters 07–24.
 3. Public positioning is language-neutral. Initial examples use the current repository language; additional language variants may be added later.
 4. Specification approved; proceed through technical validation and small reviewed slices.
 

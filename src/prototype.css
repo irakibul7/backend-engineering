@@ -265,6 +265,7 @@ kbd {
 .syllabus-difficulty,
 .syllabus-duration,
 .row-progress,
+.syllabus-availability,
 .catalog-footnote,
 .toc-brand small,
 .section-label,
@@ -636,7 +637,7 @@ button.feature-line {
   white-space: nowrap;
 }
 
-.syllabus-copy:hover strong {
+.syllabus-copy[href]:hover strong {
   color: var(--accent-strong);
 }
 
@@ -644,6 +645,22 @@ button.feature-line {
 .syllabus-duration,
 .row-progress {
   font-size: 11px;
+}
+
+.syllabus-availability {
+  width: fit-content;
+  padding: 5px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 99px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.syllabus-row.is-coming-next .syllabus-number,
+.syllabus-row.is-coming-next .syllabus-copy strong {
+  color: var(--muted);
 }
 
 .syllabus-difficulty {
@@ -686,6 +703,10 @@ button.feature-line {
   display: grid;
   place-items: center;
   color: var(--muted);
+}
+
+.row-arrow--muted {
+  color: var(--line-strong);
 }
 
 .roadmap-band {
@@ -1129,6 +1150,46 @@ button.feature-line {
 .lesson-checklist svg {
   margin-top: 5px;
   color: var(--accent);
+}
+
+.lesson-references {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.lesson-references h3 {
+  margin: 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lesson-references ul {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson-references a {
+  width: fit-content;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent-strong);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lesson-references a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .chapter-navigation {
@@ -1715,6 +1776,20 @@ button.feature-line {
     grid-column: 3;
     grid-row: 2;
     padding: 8px 0 0;
+  }
+
+  .syllabus-availability {
+    grid-column: 3 / 5;
+    grid-row: 2;
+    align-self: end;
+    justify-self: end;
+    margin-top: 10px;
+    padding: 3px 6px;
+    white-space: nowrap;
+  }
+
+  .row-arrow--muted {
+    display: none;
   }
 
   .row-progress .progress-segments {

@@ -30,6 +30,7 @@ import {
   chapterBySlug,
   chapterHref,
   chapters,
+  launchChapters,
   publishedChapters,
   roadmapChapters,
   type Chapter,
@@ -66,7 +67,11 @@ function useRoute() {
     const url = new URL(href, window.location.origin);
     window.history.pushState({}, "", `${url.pathname}${url.hash}`);
     setPath(url.pathname);
-    window.scrollTo({ top: 0, behavior: "auto" });
+    if (url.hash) {
+      window.requestAnimationFrame(() => document.getElementById(url.hash.slice(1))?.scrollIntoView());
+    } else {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
   };
 
   return { path, navigate };
@@ -147,26 +152,32 @@ function SyllabusRow({
   navigate: (href: string) => void;
 }) {
   const labels = chapterLabels[chapter.number];
+  const available = chapter.status === "published";
+  const copy = <><strong>{chapter.title}</strong><span>{chapter.summary}</span></>;
+
   return (
-    <article className={`syllabus-row ${chapter.number === 1 ? "is-current" : ""}`}>
+    <article id={chapter.slug} className={`syllabus-row ${chapter.number === 1 ? "is-current" : ""} ${available ? "" : "is-coming-next"}`}>
       <span className="syllabus-number">{pad(chapter.number)}</span>
-      <InternalLink className="syllabus-copy" href={chapterHref(chapter)} navigate={navigate}>
-        <strong>{chapter.title}</strong>
-        <span>{chapter.summary}</span>
-      </InternalLink>
+      {available
+        ? <InternalLink className="syllabus-copy" href={chapterHref(chapter)} navigate={navigate}>{copy}</InternalLink>
+        : <div className="syllabus-copy">{copy}</div>}
       <span className="syllabus-difficulty">{labels?.difficulty ?? "Important"}</span>
       <span className="syllabus-duration">{chapter.duration}</span>
-      <button
-        className="row-progress"
-        type="button"
-        onClick={() => onToggle(chapter.slug)}
-        aria-label={`Mark chapter ${chapter.number} ${complete ? "incomplete" : "complete"}`}
-        aria-pressed={complete}
-      >
-        <ProgressSegments complete={complete} />
-        <span>{complete ? "100%" : "0%"}</span>
-      </button>
-      <InternalLink className="row-arrow" href={chapterHref(chapter)} navigate={navigate} aria-label={`Open ${chapter.title}`}><ChevronRight size={18} /></InternalLink>
+      {available ? (
+        <button
+          className="row-progress"
+          type="button"
+          onClick={() => onToggle(chapter.slug)}
+          aria-label={`Mark chapter ${chapter.number} ${complete ? "incomplete" : "complete"}`}
+          aria-pressed={complete}
+        >
+          <ProgressSegments complete={complete} />
+          <span>{complete ? "100%" : "0%"}</span>
+        </button>
+      ) : <span className="syllabus-availability">Coming next</span>}
+      {available
+        ? <InternalLink className="row-arrow" href={chapterHref(chapter)} navigate={navigate} aria-label={`Open ${chapter.title}`}><ChevronRight size={18} /></InternalLink>
+        : <span className="row-arrow row-arrow--muted" aria-hidden="true" />}
     </article>
   );
 }
@@ -215,7 +226,9 @@ function CatalogPage({
   onOpenNotes: () => void;
   navigate: (href: string) => void;
 }) {
-  const progress = Math.round((completed.size / publishedChapters.length) * 100);
+  const publishedCount = publishedChapters.length;
+  const comingNextCount = launchChapters.filter((chapter) => chapter.status === "coming-next").length;
+  const progress = publishedCount === 0 ? 0 : Math.round((completed.size / publishedCount) * 100);
 
   return (
     <main className="catalog-layout" id="main-content">
@@ -225,8 +238,8 @@ function CatalogPage({
         <p className="intro-copy">Understand the systems behind reliable backend software—protocols, boundaries, data, security, resilience, and production delivery.</p>
         <LearningStreakPanel streak={streak} />
         <section className="progress-panel" aria-labelledby="progress-heading">
-          <div className="progress-heading"><span id="progress-heading">Reading progress</span><strong>{completed.size} <small>of 6</small></strong><b>{progress}%</b></div>
-          <div className="progress-track" role="progressbar" aria-label="Launch chapter progress" aria-valuemin={0} aria-valuemax={6} aria-valuenow={completed.size}><i style={{ width: `${progress}%` }} /></div>
+          <div className="progress-heading"><span id="progress-heading">Reading progress</span><strong>{completed.size} <small>of {publishedCount}</small></strong><b>{progress}%</b></div>
+          <div className="progress-track" role="progressbar" aria-label="Published chapter progress" aria-valuemin={0} aria-valuemax={publishedCount} aria-valuenow={completed.size}><i style={{ width: `${progress}%` }} /></div>
         </section>
         <section className="continue-panel" aria-labelledby="continue-heading">
           <span>Currently reading</span>
@@ -247,7 +260,7 @@ function CatalogPage({
           <span>Difficulty</span><span>Est. time</span><span>Progress</span>
         </header>
         <div className="syllabus-list">
-          {publishedChapters.map((chapter) => <SyllabusRow key={chapter.slug} chapter={chapter} complete={completed.has(chapter.slug)} onToggle={onToggle} navigate={navigate} />)}
+          {launchChapters.map((chapter) => <SyllabusRow key={chapter.slug} chapter={chapter} complete={completed.has(chapter.slug)} onToggle={onToggle} navigate={navigate} />)}
         </div>
         <details className="roadmap-band" open>
           <summary>
@@ -260,7 +273,7 @@ function CatalogPage({
             <InternalLink href="/roadmap/" navigate={navigate}>View all 18 roadmap topics <ArrowRight size={15} /></InternalLink>
           </div>
         </details>
-        <footer className="catalog-footnote"><span>Six complete launch chapters. Eighteen more on the roadmap.</span><span>By <a href="https://therakibul.me">Rakibul Islam</a></span></footer>
+        <footer className="catalog-footnote"><span>{publishedCount} complete chapters. {comingNextCount} coming next. {roadmapChapters.length} on the roadmap.</span><span>By <a href="https://therakibul.me">Rakibul Islam</a></span></footer>
       </section>
     </main>
   );
@@ -305,8 +318,8 @@ function CodeBlock({ filename, source }: { filename: string; source: string }) {
 
 function LessonPage({ chapter, navigate }: { chapter: Chapter; navigate: (href: string) => void }) {
   const [contentsOpen, setContentsOpen] = useState(false);
-  const previous = chapters.find((item) => item.number === chapter.number - 1);
-  const next = chapters.find((item) => item.number === chapter.number + 1);
+  const previous = publishedChapters.find((item) => item.number === chapter.number - 1);
+  const next = publishedChapters.find((item) => item.number === chapter.number + 1);
 
   if (!chapter.sections?.length) {
     return (
@@ -346,6 +359,12 @@ function LessonPage({ chapter, navigate }: { chapter: Chapter; navigate: (href: 
               {section.callout ? <aside className="lesson-callout"><strong>{section.callout.label}</strong><p>{section.callout.body}</p></aside> : null}
               {section.code ? <CodeBlock filename={section.code.filename} source={section.code.source} /> : null}
               {section.checklist ? <ul className="lesson-checklist">{section.checklist.map((item) => <li key={item}><Check size={16} />{item}</li>)}</ul> : null}
+              {section.references ? (
+                <div className="lesson-references">
+                  <h3>Primary references</h3>
+                  <ul>{section.references.map((reference) => <li key={reference.url}><a href={reference.url} target="_blank" rel="noreferrer">{reference.title}<ArrowRight size={14} aria-hidden="true" /></a></li>)}</ul>
+                </div>
+              ) : null}
             </section>
           ))}
         </div>
@@ -369,7 +388,7 @@ function SearchDialog({ onClose, navigate }: { onClose: () => void; navigate: (h
         <div className="search-results" aria-live="polite">
           {!query ? <p className="search-helper">Search every published chapter and planned topic.</p> : null}
           {query && !results.length ? <p className="search-helper">No topic matches “{query}”. Try a protocol, system, or tool name.</p> : null}
-          {results.map(({ chapter }) => <button key={chapter.slug} type="button" onClick={() => { navigate(chapterHref(chapter)); onClose(); }}><span className="search-result-number">{pad(chapter.number)}</span><span><strong>{chapter.title}</strong><small>{chapter.status === "published" ? chapter.duration : "Roadmap"}</small></span><ArrowRight size={17} aria-hidden="true" /></button>)}
+          {results.map(({ chapter }) => <button key={chapter.slug} type="button" onClick={() => { navigate(chapterHref(chapter)); onClose(); }}><span className="search-result-number">{pad(chapter.number)}</span><span><strong>{chapter.title}</strong><small>{chapter.status === "published" ? chapter.duration : chapter.status === "coming-next" ? "Coming next" : "Roadmap"}</small></span><ArrowRight size={17} aria-hidden="true" /></button>)}
         </div>
       </section>
     </div>

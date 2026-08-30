@@ -14,7 +14,7 @@ type Chapter = {
   summary: string;
   learningPromise: string;
   durationMinutes: number;
-  status: "draft" | "roadmap" | "published";
+  status: "draft" | "coming-next" | "roadmap" | "published";
   tags: string[];
   prerequisites: string[];    // chapter slugs
   languages: "typescript"[];

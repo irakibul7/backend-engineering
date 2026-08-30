@@ -7,7 +7,7 @@ The product uses an original engineering-notebook interface, original writing, a
 ## Current phase
 
 - Phase: staged implementation
-- Implementation: catalog, roadmap, study tools, and first complete lesson available for review
+- Implementation: catalog, roadmap, study tools, and two complete lessons available; four launch chapters are clearly marked coming next
 - Intended production host: Vercel
 - Intended domain: `backend.therakibul.me` (confirmed 2026-08-30)
 - Inspiration studied: <https://backend-from-first-principle.vercel.app/> (interaction research only; not a visual target)

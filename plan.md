@@ -13,7 +13,7 @@ Rule: One focused task at a time. Each task ends with passing evidence and human
 - Exclusions: no scaffold, dependencies, or UI code
 - Commit: `docs: approve product specification`
 
-Decision: Complete on 2026-08-30 and refined after design review. Confirmed domain, six-chapter staged launch, language-neutral product positioning, and approval to proceed with an extensible example model.
+Decision: Complete on 2026-08-30 and refined after design review. Confirmed domain, two-chapter first release with four coming-next entries, language-neutral product positioning, and approval to proceed with an extensible example model.
 
 ## Slice 1 — Prove the architecture
 
@@ -149,20 +149,27 @@ Review gate: second security review for sanitizer, local storage, and export cod
 
 ## Slice 6 — Complete original content
 
-### T-601 Author chapters 02–06
+### T-601 Author chapter 02
 
 - Requirements: content section of `spec.md`
-- Acceptance: editorial checklist, primary references, schema validation, TypeScript code tests, and diagram alternatives pass for each chapter.
-- Files in scope: chapters 02–06 and original diagrams
+- Acceptance: routing mental model, production implications, ambiguity and method-dispatch failures, debugging checklist, primary references, and TypeScript routing tests pass.
+- Files in scope: chapter 02 content, lesson-reference renderer, publication-state model, and routing example/tests
 - Exclusions: later chapters
+- Status: Complete. Chapters 01–02 are published; chapters 03–06 are visible as coming next without lesson links.
 
-### T-602 Publish roadmap chapters 07–15
+### T-602 Author chapters 03–06
+
+- Acceptance: editorial checklist, primary references, schema validation, TypeScript code tests, and diagram alternatives pass for each chapter.
+- Files in scope: chapters 03–06 and original diagrams
+- Exclusions: roadmap chapters
+
+### T-603 Publish roadmap chapters 07–15
 
 - Acceptance: roadmap entries show promise, planned evidence, and status without generating finished lesson routes or sitemap URLs.
 
-### T-603 Publish roadmap chapters 16–24
+### T-604 Publish roadmap chapters 16–24
 
-- Same contract as T-602 for chapters 16–24.
+- Same contract as T-603 for chapters 16–24.
 
 Each chapter or coherent two-chapter pair should be its own human-reviewed commit. Do not generate all chapters in one task.
 

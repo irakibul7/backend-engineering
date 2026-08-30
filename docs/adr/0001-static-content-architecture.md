@@ -9,7 +9,7 @@ The product is primarily 24 long-form technical documents. It needs canonical ro
 
 ## Decision
 
-Use the protected Product Design Vite/React starter with strict TypeScript. Store chapters as validated typed content data and render them through semantic React block components. Add a post-build prerender step that emits route-specific HTML and metadata for the catalog, roadmap, glossary, about page, and six published lessons. Deploy the static output to Vercel.
+Use the protected Product Design Vite/React starter with strict TypeScript. Store chapters as validated typed content data and render them through semantic React block components. Add a post-build prerender step that emits route-specific HTML and metadata for the catalog, roadmap, glossary, about page, and every published lesson. Deploy the static output to Vercel.
 
 ## Consequences
 
