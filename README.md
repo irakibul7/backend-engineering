@@ -12,6 +12,8 @@ The product uses an original engineering-notebook interface, original writing, a
 - Intended domain: `backend.therakibul.me` (confirmed 2026-08-30)
 - Inspiration studied: <https://backend-from-first-principle.vercel.app/> (interaction research only; not a visual target)
 
+Vercel publishes `dist/client` and rewrites application routes to `index.html` using the checked-in `vercel.json` configuration.
+
 ## Read first
 
 1. [`spec.md`](./spec.md) defines the product and acceptance criteria.

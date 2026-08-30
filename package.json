@@ -11,8 +11,9 @@
     "test:watch": "vitest",
     "build": "vite build && node scripts/prepare-sites-build.mjs",
     "preview": "vite preview",
-    "test:sites": "node --test tests/sites-worker.test.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run test:sites"
+    "test:hosting": "node --test tests/sites-worker.test.mjs tests/vercel-config.hosting.mjs",
+    "test:sites": "npm run test:hosting",
+    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run test:hosting"
   },
   "dependencies": {
     "@fontsource/fraunces": "5.3.0",
