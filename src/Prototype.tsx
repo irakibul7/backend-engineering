@@ -2,7 +2,7 @@ import "@fontsource/jetbrains-mono/500.css";
 import "@fontsource/spline-sans/400.css";
 import "@fontsource/spline-sans/500.css";
 import "@fontsource/spline-sans/600.css";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -33,10 +33,12 @@ import {
   type Chapter,
 } from "./content/chapters";
 import { searchChapters } from "./lib/search";
-import { readNote, readProgress, readTheme, recordLearningVisit, toLocalDateKey, writeNote, writeProgress, writeTheme, type LearningStreak, type Theme } from "./lib/storage";
+import { readNote, readReadingProgress, readTheme, recordLearningVisit, toLocalDateKey, writeNote, writeProgress, writeReadingProgress, writeTheme, type LearningStreak, type ReadingProgress, type Theme } from "./lib/storage";
 import { applyDocumentMetadata } from "./lib/seo";
 
 const knownPublishedSlugs = new Set(publishedChapters.map((chapter) => chapter.slug));
+const publishedSectionsBySlug = new Map(publishedChapters.map((chapter) => [chapter.slug, new Set(chapter.sections?.map((section) => section.id) ?? [])]));
+const emptySectionIds = new Set<string>();
 const themes: Theme[] = ["light", "original", "dark"];
 const MarkdownPreview = lazy(() => import("./MarkdownPreview"));
 
@@ -135,23 +137,24 @@ function AppHeader({
   );
 }
 
-function ProgressSegments({ complete }: { complete: boolean }) {
-  return <span className="progress-segments" aria-hidden="true">{[0, 1, 2, 3].map((segment) => <i className={complete ? "is-filled" : ""} key={segment} />)}</span>;
+function ProgressSegments({ progress }: { progress: number }) {
+  return <span className="progress-segments" aria-hidden="true">{[0, 1, 2, 3].map((segment) => <i className={progress > segment * 25 ? "is-filled" : ""} key={segment} />)}</span>;
 }
 
 function SyllabusRow({
   chapter,
-  complete,
+  progress,
   onToggle,
   navigate,
 }: {
   chapter: Chapter;
-  complete: boolean;
+  progress: number;
   onToggle: (slug: string) => void;
   navigate: (href: string) => void;
 }) {
   const labels = chapterLabels[chapter.number];
   const available = chapter.status === "published";
+  const complete = progress === 100;
   const copy = <><strong>{chapter.title}</strong><span>{chapter.summary}</span></>;
 
   return (
@@ -167,11 +170,11 @@ function SyllabusRow({
           className="row-progress"
           type="button"
           onClick={() => onToggle(chapter.slug)}
-          aria-label={`Mark chapter ${chapter.number} ${complete ? "incomplete" : "complete"}`}
+          aria-label={complete ? `Reset chapter ${chapter.number} reading progress` : `Mark chapter ${chapter.number} complete`}
           aria-pressed={complete}
         >
-          <ProgressSegments complete={complete} />
-          <span>{complete ? "100%" : "0%"}</span>
+          <ProgressSegments progress={progress} />
+          <span>{progress}%</span>
         </button>
       ) : <span className="syllabus-availability">Coming next</span>}
       {available
@@ -213,13 +216,13 @@ function LearningStreakPanel({ streak }: { streak: LearningStreak }) {
 }
 
 function CatalogPage({
-  completed,
+  readingProgress,
   streak,
   onToggle,
   onOpenNotes,
   navigate,
 }: {
-  completed: Set<string>;
+  readingProgress: ReadingProgress;
   streak: LearningStreak;
   onToggle: (slug: string) => void;
   onOpenNotes: () => void;
@@ -227,7 +230,10 @@ function CatalogPage({
 }) {
   const publishedCount = publishedChapters.length;
   const comingNextCount = launchChapters.filter((chapter) => chapter.status === "coming-next").length;
-  const progress = publishedCount === 0 ? 0 : Math.round((completed.size / publishedCount) * 100);
+  const totalSections = publishedChapters.reduce((total, chapter) => total + (chapter.sections?.length ?? 0), 0);
+  const readSections = publishedChapters.reduce((total, chapter) => total + (readingProgress.get(chapter.slug)?.size ?? 0), 0);
+  const progress = totalSections === 0 ? 0 : Math.round((readSections / totalSections) * 100);
+  const completed = new Set(publishedChapters.filter((chapter) => (chapter.sections?.length ?? 0) > 0 && readingProgress.get(chapter.slug)?.size === chapter.sections?.length).map((chapter) => chapter.slug));
 
   return (
     <main className="catalog-layout" id="main-content">
@@ -238,7 +244,7 @@ function CatalogPage({
         <LearningStreakPanel streak={streak} />
         <section className="progress-panel" aria-labelledby="progress-heading">
           <div className="progress-heading"><span id="progress-heading">Reading progress</span><strong>{completed.size} <small>of {publishedCount}</small></strong><b>{progress}%</b></div>
-          <div className="progress-track" role="progressbar" aria-label="Published chapter progress" aria-valuemin={0} aria-valuemax={publishedCount} aria-valuenow={completed.size}><i style={{ width: `${progress}%` }} /></div>
+          <div className="progress-track" role="progressbar" aria-label="Overall reading progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><i style={{ width: `${progress}%` }} /></div>
         </section>
         <section className="continue-panel" aria-labelledby="continue-heading">
           <span>Currently reading</span>
@@ -259,7 +265,11 @@ function CatalogPage({
           <span>Difficulty</span><span>Est. time</span><span>Progress</span>
         </header>
         <div className="syllabus-list">
-          {launchChapters.map((chapter) => <SyllabusRow key={chapter.slug} chapter={chapter} complete={completed.has(chapter.slug)} onToggle={onToggle} navigate={navigate} />)}
+          {launchChapters.map((chapter) => {
+            const total = chapter.sections?.length ?? 0;
+            const chapterProgress = total === 0 ? 0 : Math.round(((readingProgress.get(chapter.slug)?.size ?? 0) / total) * 100);
+            return <SyllabusRow key={chapter.slug} chapter={chapter} progress={chapterProgress} onToggle={onToggle} navigate={navigate} />;
+          })}
         </div>
         <details className="roadmap-band" open>
           <summary>
@@ -315,10 +325,36 @@ function CodeBlock({ filename, source }: { filename: string; source: string }) {
   return <figure className="code-block"><figcaption><span>{filename}</span><button type="button" onClick={copy}>{copied ? "Copied" : "Copy"}</button></figcaption><pre><code>{source}</code></pre></figure>;
 }
 
-function LessonPage({ chapter, navigate }: { chapter: Chapter; navigate: (href: string) => void }) {
+function LessonPage({
+  chapter,
+  readSectionIds,
+  onReadSections,
+  navigate,
+}: {
+  chapter: Chapter;
+  readSectionIds: Set<string>;
+  onReadSections: (slug: string, sectionIds: string[]) => void;
+  navigate: (href: string) => void;
+}) {
   const [contentsOpen, setContentsOpen] = useState(false);
   const previous = publishedChapters.find((item) => item.number === chapter.number - 1);
   const next = publishedChapters.find((item) => item.number === chapter.number + 1);
+  const totalSections = chapter.sections?.length ?? 0;
+  const lessonProgress = totalSections === 0 ? 0 : Math.round((readSectionIds.size / totalSections) * 100);
+
+  useEffect(() => {
+    if (!chapter.sections?.length || typeof IntersectionObserver === "undefined") return;
+    const sentinels = document.querySelectorAll<HTMLElement>(`[data-chapter-read="${chapter.slug}"]`);
+    const observer = new IntersectionObserver((entries) => {
+      const newlyRead = entries
+        .filter((entry) => entry.isIntersecting)
+        .map((entry) => (entry.target as HTMLElement).dataset.sectionRead)
+        .filter((sectionId): sectionId is string => Boolean(sectionId));
+      if (newlyRead.length) onReadSections(chapter.slug, newlyRead);
+    }, { rootMargin: "0px 0px -20% 0px", threshold: 0 });
+    sentinels.forEach((sentinel) => observer.observe(sentinel));
+    return () => observer.disconnect();
+  }, [chapter.sections, chapter.slug, onReadSections]);
 
   if (!chapter.sections?.length) {
     return (
@@ -338,7 +374,7 @@ function LessonPage({ chapter, navigate }: { chapter: Chapter; navigate: (href: 
       {contentsOpen ? <button className="drawer-backdrop" type="button" aria-label="Close contents" onClick={() => setContentsOpen(false)} /> : null}
       <aside className={`lesson-toc ${contentsOpen ? "lesson-toc--open" : ""}`} aria-label="Chapter contents">
         <InternalLink className="toc-back" href="/" navigate={navigate}><ArrowLeft size={15} /> Library</InternalLink>
-        <div className="toc-brand"><strong>Chapter {pad(chapter.number)}</strong><span>{chapter.title}</span><small>{chapter.duration} · {chapter.sections.length} sections</small></div>
+        <div className="toc-brand"><strong>Chapter {pad(chapter.number)}</strong><span>{chapter.title}</span><small>{chapter.duration} · {chapter.sections.length} sections · {lessonProgress}% read</small></div>
         <nav>{chapter.sections.map((section) => <a key={section.id} href={`#${section.id}`} onClick={() => setContentsOpen(false)}><span>{section.number}</span>{section.title}</a>)}</nav>
       </aside>
       <main className="lesson-main" id="main-content">
@@ -346,7 +382,7 @@ function LessonPage({ chapter, navigate }: { chapter: Chapter; navigate: (href: 
           <p className="eyebrow">Backend Engineering · Field guide {pad(chapter.number)}</p>
           <h1>{chapter.title}</h1>
           <p>{chapter.promise} This chapter connects protocol behavior to the decisions a production service must make.</p>
-          <div className="lesson-meta"><span>Application layer</span><span>{chapter.sections.length} sections</span><span>{chapter.duration}</span></div>
+          <div className="lesson-meta"><span>Application layer</span><span>{chapter.sections.length} sections</span><span>{chapter.duration}</span><span aria-live="polite">{lessonProgress}% read</span></div>
         </section>
         <div className="lesson-content">
           {chapter.sections.map((section) => (
@@ -364,6 +400,7 @@ function LessonPage({ chapter, navigate }: { chapter: Chapter; navigate: (href: 
                   <ul>{section.references.map((reference) => <li key={reference.url}><a href={reference.url} target="_blank" rel="noreferrer">{reference.title}<ArrowRight size={14} aria-hidden="true" /></a></li>)}</ul>
                 </div>
               ) : null}
+              <span className="section-read-sentinel" data-chapter-read={chapter.slug} data-section-read={section.id} aria-hidden="true" />
             </section>
           ))}
         </div>
@@ -431,7 +468,7 @@ function NotesPanel({ scope, onClose }: { scope: string; onClose: () => void }) 
 
 export function Prototype() {
   const { path, navigate } = useRoute();
-  const [completed, setCompleted] = useState(() => readProgress(knownPublishedSlugs));
+  const [readingProgress, setReadingProgress] = useState<ReadingProgress>(() => readReadingProgress(publishedSectionsBySlug));
   const [streak] = useState(() => recordLearningVisit());
   const [theme, setTheme] = useState<Theme>(() => readTheme());
   const [searchOpen, setSearchOpen] = useState(false);
@@ -455,22 +492,48 @@ export function Prototype() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const toggleComplete = (slug: string) => {
-    if (!knownPublishedSlugs.has(slug)) return;
-    setCompleted((current) => {
-      const next = new Set(current);
-      if (next.has(slug)) next.delete(slug); else next.add(slug);
-      writeProgress(next);
+  useEffect(() => {
+    writeReadingProgress(readingProgress);
+    const completed = new Set(
+      [...knownPublishedSlugs].filter((slug) => {
+        const total = publishedSectionsBySlug.get(slug)?.size ?? 0;
+        return total > 0 && readingProgress.get(slug)?.size === total;
+      }),
+    );
+    writeProgress(completed);
+  }, [readingProgress]);
+
+  const markSectionsRead = useCallback((slug: string, sectionIds: string[]) => {
+    const knownSections = publishedSectionsBySlug.get(slug);
+    if (!knownSections) return;
+    setReadingProgress((current) => {
+      const currentSections = current.get(slug) ?? emptySectionIds;
+      const validNewSections = sectionIds.filter((sectionId) => knownSections.has(sectionId) && !currentSections.has(sectionId));
+      if (!validNewSections.length) return current;
+      const next = new Map(current);
+      next.set(slug, new Set([...currentSections, ...validNewSections]));
       return next;
     });
-  };
+  }, []);
+
+  const toggleComplete = useCallback((slug: string) => {
+    if (!knownPublishedSlugs.has(slug)) return;
+    const knownSections = publishedSectionsBySlug.get(slug);
+    if (!knownSections?.size) return;
+    setReadingProgress((current) => {
+      const next = new Map(current);
+      if (current.get(slug)?.size === knownSections.size) next.delete(slug);
+      else next.set(slug, new Set(knownSections));
+      return next;
+    });
+  }, []);
   const cycleTheme = () => setTheme((current) => themes[(themes.indexOf(current) + 1) % themes.length]);
 
   return (
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
       <AppHeader path={path} theme={theme} navigate={navigate} onOpenSearch={() => setSearchOpen(true)} onOpenNotes={() => setNotesOpen(true)} onCycleTheme={cycleTheme} />
-      {lesson ? <LessonPage chapter={lesson} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage completed={completed} streak={streak} onToggle={toggleComplete} onOpenNotes={() => setNotesOpen(true)} navigate={navigate} />}
+      {lesson ? <LessonPage chapter={lesson} readSectionIds={readingProgress.get(lesson.slug) ?? emptySectionIds} onReadSections={markSectionsRead} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage readingProgress={readingProgress} streak={streak} onToggle={toggleComplete} onOpenNotes={() => setNotesOpen(true)} navigate={navigate} />}
       {searchOpen ? <SearchDialog onClose={() => setSearchOpen(false)} navigate={navigate} /> : null}
       {notesOpen ? <NotesPanel scope={noteScope} onClose={() => setNotesOpen(false)} /> : null}
     </>

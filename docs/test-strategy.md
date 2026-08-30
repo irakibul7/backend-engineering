@@ -30,7 +30,7 @@ The full gate adds Playwright, accessibility, performance, link, and security ch
 
 - search tokenization, ranking, aliases, and empty input;
 - storage parsing, migration, repair, unknown IDs, and quota errors;
-- progress counts and toggles;
+- section progress calculation, migration, persistence, counts, and toggles;
 - theme resolution and bootstrap serialization;
 - Markdown sanitization and URL allowlist;
 - export filename and UTF-8 content;

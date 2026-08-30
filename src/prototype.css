@@ -1192,6 +1192,13 @@ button.feature-line {
   text-underline-offset: 3px;
 }
 
+.section-read-sentinel {
+  width: 1px;
+  height: 1px;
+  display: block;
+  pointer-events: none;
+}
+
 .chapter-navigation {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Prototype } from "./Prototype";
 
 describe("Backend Engineering prototype", () => {
@@ -39,9 +39,29 @@ describe("Backend Engineering prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByRole("progressbar", { name: "Published chapter progress" })).toHaveAttribute("aria-valuenow", "1");
-    expect(screen.getByRole("progressbar", { name: "Published chapter progress" })).toHaveAttribute("aria-valuemax", "2");
-    expect(screen.getByRole("button", { name: "Mark chapter 1 incomplete" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "46");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuemax", "100");
+    expect(screen.getByRole("button", { name: "Reset chapter 1 reading progress" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("records section progress when a reader reaches the end of a lesson section", () => {
+    let observerCallback: IntersectionObserverCallback | undefined;
+    vi.stubGlobal("IntersectionObserver", class {
+      constructor(callback: IntersectionObserverCallback) { observerCallback = callback; }
+      observe() {}
+      disconnect() {}
+    });
+    window.history.replaceState({}, "", "/chapters/http-as-a-state-machine");
+    const { container } = render(<Prototype />);
+    const sentinel = container.querySelector('[data-section-read="protocol-contract"]');
+
+    act(() => observerCallback?.([{ isIntersecting: true, target: sentinel } as IntersectionObserverEntry], {} as IntersectionObserver));
+
+    expect(screen.getAllByText("17% read").length).toBeGreaterThan(0);
+    expect(JSON.parse(window.localStorage.getItem("backend-engineering:reading-progress:v1") ?? "null")).toMatchObject({
+      chapterSections: { "http-as-a-state-machine": ["protocol-contract"] },
+    });
+    vi.unstubAllGlobals();
   });
 
   it("cycles and persists the editorial theme", async () => {

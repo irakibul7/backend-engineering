@@ -27,20 +27,25 @@ Invariants:
 - closing restores focus to the opener;
 - search query is not persisted or transmitted.
 
-## 2. Chapter completion
+## 2. Chapter reading progress
 
 ```text
-unknown -> incomplete (valid default)
-incomplete -> complete (user toggles)
-complete -> incomplete (user toggles)
-malformed stored value -> incomplete + repaired storage
+unknown -> unread(0%) (valid default)
+unread | partial(n) -> partial(n + 1) (a new section end enters the reading area)
+partial(last section) -> complete(100%)
+unread | partial -> complete(100%) (user marks complete)
+complete -> unread(0%) (user resets progress)
+malformed stored value -> unread(0%)
 ```
 
 Invariants:
 
-- only known published chapter IDs contribute to the count;
-- toggling does not navigate;
-- accessible name and pressed/checked state match the visual state.
+- only known published chapter and section IDs contribute to progress;
+- reading a section is idempotent and cannot reduce progress;
+- percentages are derived from read sections, not scroll pixels or elapsed time;
+- manual completion/reset does not navigate;
+- accessible names, percentages, and pressed state match the stored state;
+- progress remains local to the browser and is never included in analytics.
 
 ## 3. Learning streak
 

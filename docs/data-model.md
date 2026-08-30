@@ -107,6 +107,20 @@ type ProgressV1 = {
 };
 ```
 
+The completed-chapter record remains for compatibility. Granular reading progress is stored separately and locally.
+
+Key: `backend-engineering:reading-progress:v1`
+
+```ts
+type ReadingProgressV1 = {
+  schemaVersion: 1;
+  chapterSections: Record<string, string[]>; // chapter slug to read section IDs
+  updatedAt: string;
+};
+```
+
+A section becomes read when its end marker reaches the reading area. Percentages are derived from read sections divided by total published sections. Existing completed chapters migrate to all of their known sections. Unknown chapter and section IDs are discarded when the schema is read.
+
 ### Notes
 
 Key prefix: `backend-engineering:notes:v1:` followed by `master` or a known chapter slug. Reads fall back to the former `bfp:*` keys so existing local progress and notes survive the product rename.

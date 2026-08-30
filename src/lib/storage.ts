@@ -7,7 +7,10 @@ export type LearningStreak = {
   activeDates: string[];
 };
 
+export type ReadingProgress = Map<string, Set<string>>;
+
 const PROGRESS_KEY = "backend-engineering:progress:v1";
+const READING_PROGRESS_KEY = "backend-engineering:reading-progress:v1";
 const THEME_KEY = "backend-engineering:preferences:v1";
 const NOTES_PREFIX = "backend-engineering:notes:v1:";
 const STREAK_KEY = "backend-engineering:streak:v1";
@@ -100,6 +103,52 @@ export function writeProgress(completed: Set<string>) {
     window.localStorage.setItem(
       PROGRESS_KEY,
       JSON.stringify({ schemaVersion: 1, completedChapterSlugs: [...completed].sort(), updatedAt: new Date().toISOString() }),
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function readReadingProgress(knownSectionsByChapter: Map<string, Set<string>>): ReadingProgress {
+  const empty = new Map<string, Set<string>>();
+  if (!canUseStorage()) return empty;
+
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(READING_PROGRESS_KEY) ?? "null") as { chapterSections?: unknown } | null;
+    if (parsed?.chapterSections && typeof parsed.chapterSections === "object") {
+      const progress = new Map<string, Set<string>>();
+      for (const [slug, sectionIds] of Object.entries(parsed.chapterSections)) {
+        const knownSections = knownSectionsByChapter.get(slug);
+        if (!knownSections || !Array.isArray(sectionIds)) continue;
+        const validSections = sectionIds.filter((value): value is string => typeof value === "string" && knownSections.has(value));
+        if (validSections.length) progress.set(slug, new Set(validSections));
+      }
+      return progress;
+    }
+  } catch {
+    return empty;
+  }
+
+  const legacyCompleted = readProgress(new Set(knownSectionsByChapter.keys()));
+  for (const slug of legacyCompleted) {
+    const knownSections = knownSectionsByChapter.get(slug);
+    if (knownSections?.size) empty.set(slug, new Set(knownSections));
+  }
+  return empty;
+}
+
+export function writeReadingProgress(progress: ReadingProgress) {
+  if (!canUseStorage()) return false;
+  try {
+    const chapterSections = Object.fromEntries(
+      [...progress.entries()]
+        .filter(([, sectionIds]) => sectionIds.size > 0)
+        .map(([slug, sectionIds]) => [slug, [...sectionIds].sort()]),
+    );
+    window.localStorage.setItem(
+      READING_PROGRESS_KEY,
+      JSON.stringify({ schemaVersion: 1, chapterSections, updatedAt: new Date().toISOString() }),
     );
     return true;
   } catch {

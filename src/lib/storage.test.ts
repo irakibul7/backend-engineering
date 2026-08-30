@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { readLearningStreak, readNote, readProgress, readTheme, recordLearningVisit, writeNote, writeProgress, writeTheme } from "./storage";
+import { readLearningStreak, readNote, readProgress, readReadingProgress, readTheme, recordLearningVisit, writeNote, writeProgress, writeReadingProgress, writeTheme } from "./storage";
 
 describe("browser storage", () => {
   beforeEach(() => window.localStorage.clear());
@@ -16,6 +16,32 @@ describe("browser storage", () => {
 
     expect(readProgress(new Set(["http-as-a-state-machine"])).size).toBe(0);
     expect(readTheme()).toBe("light");
+  });
+
+  it("persists only known section-level reading progress", () => {
+    const knownSections = new Map([
+      ["http-as-a-state-machine", new Set(["protocol-contract", "request-lifecycle"])],
+    ]);
+    const progress = new Map([
+      ["http-as-a-state-machine", new Set(["protocol-contract", "unknown-section"])],
+      ["unknown-chapter", new Set(["section"])],
+    ]);
+
+    expect(writeReadingProgress(progress)).toBe(true);
+    expect([...(readReadingProgress(knownSections).get("http-as-a-state-machine") ?? [])]).toEqual(["protocol-contract"]);
+    expect(readReadingProgress(knownSections).has("unknown-chapter")).toBe(false);
+  });
+
+  it("migrates a legacy completed chapter to all of its known sections", () => {
+    const knownSections = new Map([
+      ["http-as-a-state-machine", new Set(["protocol-contract", "request-lifecycle"])],
+    ]);
+    writeProgress(new Set(["http-as-a-state-machine"]));
+
+    expect([...(readReadingProgress(knownSections).get("http-as-a-state-machine") ?? [])]).toEqual([
+      "protocol-contract",
+      "request-lifecycle",
+    ]);
   });
 
   it("round-trips theme and private Markdown notes", () => {
