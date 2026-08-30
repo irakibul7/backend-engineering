@@ -24,7 +24,7 @@ npm run preview -- --host 127.0.0.1 --port 4176
 npm run verify:links
 ```
 
-The dated launch record, including Lighthouse, accessibility, responsive, console, link, and production checks, lives in [`docs/validation/launch-readiness.md`](./docs/validation/launch-readiness.md).
+The dated launch record, including Lighthouse, accessibility, responsive, console, link, and production checks, lives in [`docs/validation/launch-readiness.md`](./docs/validation/launch-readiness.md). The first live Analytics and Speed Insights baseline, privacy boundary, and review thresholds live in [`docs/validation/observability-baseline.md`](./docs/validation/observability-baseline.md).
 
 ## Read first
 
