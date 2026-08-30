@@ -56,6 +56,8 @@ The checker verified all four public routes, every launch asset, sitemap, robots
 - A live browser visit rendered the expected heading and canonical URL, loaded both Vercel telemetry scripts, and logged zero console warnings or errors.
 - Web Analytics was enabled on the included Hobby plan. Speed Insights was already enabled and its project dashboard is active.
 
-## Remaining external action
+## Search Console
 
-- Submit `https://backend.therakibul.me/sitemap.xml` in the `therakibul.me` Search Console domain property.
+`https://backend.therakibul.me/sitemap.xml` was submitted to the `therakibul.me` domain property on 2026-08-30. Google read it successfully and reported all four canonical pages as discovered.
+
+Final result: passed. No launch-readiness actions remain.
