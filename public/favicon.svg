@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Backend Engineering BE monogram</title>
+  <rect width="512" height="512" rx="92" fill="#18212b"/>
+  <path fill="#ff5a0a" d="M105 120h144c83 0 126 34 126 96 0 34-17 60-50 77 46 15 69 46 69 92 0 72-50 107-150 107H105V120Zm73 62v82h67c36 0 54-13 54-41s-18-41-54-41h-67Zm0 140v108h73c44 0 66-18 66-54s-22-54-66-54h-73Z"/>
+  <path fill="#fff" d="M311 120h96v62h-96zm0 248h96v62h-96z" opacity=".94"/>
+</svg>

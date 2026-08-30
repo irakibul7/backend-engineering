@@ -4,11 +4,11 @@
   --paper-soft: #f5f6f7;
   --ink: #18202e;
   --muted: #637083;
-  --quiet: #8d96a3;
+  --quiet: #657083;
   --line: #e0e3e7;
   --line-strong: #cbd0d7;
   --accent: #ff5a0a;
-  --accent-strong: #dc4300;
+  --accent-strong: #c43f00;
   --accent-soft: #fff0e7;
   --nav: #18212b;
   --progress: #ff5a0a;
@@ -24,7 +24,7 @@
   --paper-soft: #efe9df;
   --ink: #22262d;
   --muted: #6d6a65;
-  --quiet: #969087;
+  --quiet: #6f6a63;
   --line: #ddd6cc;
   --line-strong: #c9c0b5;
   --accent: #e95515;
@@ -477,9 +477,9 @@ kbd {
   justify-content: center;
   gap: 9px;
   margin-top: 19px;
-  border: 1px solid var(--accent);
+  border: 1px solid #c43f00;
   border-radius: 4px;
-  background: var(--accent);
+  background: #c43f00;
   color: white;
   font-family: "JetBrains Mono", monospace;
   font-size: 12px;
@@ -487,7 +487,7 @@ kbd {
 }
 
 .continue-action:hover {
-  background: var(--accent-strong);
+  background: #a93200;
 }
 
 .feature-list {

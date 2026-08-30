@@ -1,6 +1,7 @@
 node_modules/
 dist/
 coverage/
+reports/
 .vercel/
 
 .env
@@ -10,4 +11,3 @@ coverage/
 *.log
 .DS_Store
 *.tsbuildinfo
-

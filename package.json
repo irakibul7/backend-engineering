@@ -9,16 +9,19 @@
     "lint": "eslint . --max-warnings 0",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build": "vite build && node scripts/prepare-sites-build.mjs",
+    "build": "vite build && node --experimental-strip-types scripts/generate-seo.mjs && node scripts/prepare-sites-build.mjs",
     "preview": "vite preview",
-    "test:hosting": "node --test tests/sites-worker.test.mjs tests/vercel-config.hosting.mjs",
+    "test:hosting": "node --test tests/sites-worker.test.mjs tests/vercel-config.hosting.mjs tests/launch-assets.hosting.mjs",
     "test:sites": "npm run test:hosting",
+    "verify:links": "node --experimental-strip-types scripts/check-links.mjs",
     "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run test:hosting"
   },
   "dependencies": {
     "@fontsource/fraunces": "5.3.0",
     "@fontsource/jetbrains-mono": "5.3.0",
     "@fontsource/spline-sans": "5.3.0",
+    "@vercel/analytics": "2.0.1",
+    "@vercel/speed-insights": "2.0.0",
     "@vitejs/plugin-react": "5.0.4",
     "lucide-react": "1.37.0",
     "react": "19.2.0",
@@ -29,6 +32,7 @@
     "vite": "6.4.2"
   },
   "devDependencies": {
+    "@axe-core/cli": "4.13.0",
     "@eslint/js": "9.39.1",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
@@ -40,6 +44,7 @@
     "eslint-plugin-react-refresh": "0.5.5",
     "globals": "16.5.0",
     "jsdom": "29.0.1",
+    "lighthouse": "13.4.1",
     "typescript": "5.9.3",
     "typescript-eslint": "8.68.0",
     "vitest": "4.1.11"

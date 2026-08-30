@@ -62,7 +62,7 @@ describe("Backend Engineering prototype", () => {
     await user.type(screen.getByRole("textbox", { name: "Study notes Markdown editor" }), "# Safe\n\n<script>alert(1)</script>");
     await user.click(screen.getByRole("tab", { name: "Preview" }));
 
-    expect(screen.getByRole("heading", { name: "Safe" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Safe" })).toBeInTheDocument();
     expect(container.querySelector("script")).toBeNull();
     await waitFor(() => expect(screen.getByText("Saved")).toBeInTheDocument());
   });

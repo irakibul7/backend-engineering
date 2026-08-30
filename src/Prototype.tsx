@@ -2,10 +2,7 @@ import "@fontsource/jetbrains-mono/500.css";
 import "@fontsource/spline-sans/400.css";
 import "@fontsource/spline-sans/500.css";
 import "@fontsource/spline-sans/600.css";
-import { useEffect, useMemo, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeSanitize from "rehype-sanitize";
-import remarkGfm from "remark-gfm";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -37,9 +34,11 @@ import {
 } from "./content/chapters";
 import { searchChapters } from "./lib/search";
 import { readNote, readProgress, readTheme, recordLearningVisit, toLocalDateKey, writeNote, writeProgress, writeTheme, type LearningStreak, type Theme } from "./lib/storage";
+import { applyDocumentMetadata } from "./lib/seo";
 
 const knownPublishedSlugs = new Set(publishedChapters.map((chapter) => chapter.slug));
 const themes: Theme[] = ["light", "original", "dark"];
+const MarkdownPreview = lazy(() => import("./MarkdownPreview"));
 
 const chapterLabels: Record<number, { difficulty: "Fundamental" | "Important" }> = {
   1: { difficulty: "Fundamental" },
@@ -423,7 +422,7 @@ function NotesPanel({ scope, onClose }: { scope: string; onClose: () => void }) 
         <header><div><h2>Study notes</h2><span className={saved ? "saved-state" : "saving-state"}>{saved ? "Saved" : "Saving"}</span></div><button type="button" onClick={onClose} aria-label="Close study notes"><X size={18} /></button></header>
         <p className="note-scope">{scope === "master" ? "All launch chapters" : scope.replaceAll("-", " ")}</p>
         <div className="note-tabs" role="tablist" aria-label="Note view"><button type="button" role="tab" aria-selected={mode === "edit"} onClick={() => setMode("edit")}>Edit</button><button type="button" role="tab" aria-selected={mode === "preview"} onClick={() => setMode("preview")}>Preview</button></div>
-        {mode === "edit" ? <textarea value={markdown} onChange={(event) => { setMarkdown(event.target.value); setSaved(false); }} placeholder="# Study notes\n\nWrite private Markdown notes here…" aria-label="Study notes Markdown editor" /> : <div className="note-preview"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{markdown || "_Nothing to preview yet._"}</ReactMarkdown></div>}
+        {mode === "edit" ? <textarea value={markdown} onChange={(event) => { setMarkdown(event.target.value); setSaved(false); }} placeholder="# Study notes\n\nWrite private Markdown notes here…" aria-label="Study notes Markdown editor" /> : <div className="note-preview"><Suspense fallback={<p>Preparing preview…</p>}><MarkdownPreview markdown={markdown} /></Suspense></div>}
         <footer><span>{markdown.trim() ? markdown.trim().split(/\s+/).length : 0} words</span><button type="button" onClick={exportNote} disabled={!markdown}>Export Markdown</button></footer>
       </aside>
     </div>
@@ -442,6 +441,7 @@ export function Prototype() {
   const noteScope = lesson?.slug ?? "master";
 
   useEffect(() => { document.documentElement.dataset.theme = theme; writeTheme(theme); }, [theme]);
+  useEffect(() => { applyDocumentMetadata(path, publishedChapters); }, [path]);
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;

@@ -6,13 +6,25 @@ The product uses an original engineering-notebook interface, original writing, a
 
 ## Current phase
 
-- Phase: staged implementation
+- Phase: public launch
 - Implementation: catalog, roadmap, study tools, and two complete lessons available; four launch chapters are clearly marked coming next
-- Intended production host: Vercel
-- Intended domain: `backend.therakibul.me` (confirmed 2026-08-30)
+- Production host: Vercel
+- Production domain: <https://backend.therakibul.me/>
 - Inspiration studied: <https://backend-from-first-principle.vercel.app/> (interaction research only; not a visual target)
 
-Vercel publishes `dist/client` and rewrites application routes to `index.html` using the checked-in `vercel.json` configuration.
+Vercel publishes `dist/client`. The build creates one indexable HTML document per public route, plus the manifest, icons, social image, sitemap, and robots file. Unknown document routes preserve a real 404.
+
+Vercel Web Analytics and Speed Insights are mounted only on the production domain and Vercel preview deployments, preventing expected telemetry-endpoint errors during local previews.
+
+## Verification
+
+```sh
+npm run check
+npm run preview -- --host 127.0.0.1 --port 4176
+npm run verify:links
+```
+
+The dated launch record, including Lighthouse, accessibility, responsive, console, link, and production checks, lives in [`docs/validation/launch-readiness.md`](./docs/validation/launch-readiness.md).
 
 ## Read first
 
