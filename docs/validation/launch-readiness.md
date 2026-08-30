@@ -48,8 +48,14 @@ Tests used a local production build so network variance from deployment routing 
 
 The checker verified all four public routes, every launch asset, sitemap, robots, and the five primary technical references with HTTP 200 responses. The separate portfolio link `https://therakibul.me/` returned HTTP 200 from Vercel when checked against the domain's configured Vercel edge address; this machine's default DNS path intermittently timed out and was not treated as a content defect.
 
-## Remaining external actions
+## Production verification
 
-- Confirm the current Git commit is deployed to `backend.therakibul.me`.
-- Enable Web Analytics and Speed Insights in the Vercel project dashboard if their project toggles are not already active.
-- Submit `https://backend.therakibul.me/sitemap.xml` in the `therakibul.me` Search Console domain property after production verification.
+- Git commit `b5cca3e` completed its Vercel production deployment successfully.
+- The library, roadmap, both lessons, sitemap, robots, manifest, social cover, favicon, Analytics script, and Speed Insights script return HTTP 200 from `backend.therakibul.me`.
+- The live roadmap HTML contains its route-specific title, canonical URL, and Open Graph URL before JavaScript runs.
+- A live browser visit rendered the expected heading and canonical URL, loaded both Vercel telemetry scripts, and logged zero console warnings or errors.
+- Web Analytics was enabled on the included Hobby plan. Speed Insights was already enabled and its project dashboard is active.
+
+## Remaining external action
+
+- Submit `https://backend.therakibul.me/sitemap.xml` in the `therakibul.me` Search Console domain property.
