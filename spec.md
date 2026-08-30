@@ -3,12 +3,12 @@
 Status: Approved for staged implementation  
 Owner: Rakibul Islam  
 Prepared: 2026-08-30  
-Working title: Backend from First Principles  
-Reference: <https://backend-from-first-principle.vercel.app/>
+Product title: Backend Engineering
+Interaction research source: <https://backend-from-first-principle.vercel.app/>
 
 ## 1. Decision summary
 
-Build a responsive, content-first backend engineering field guide that closely matches the reference site's editorial layout and study interactions. The implementation, writing, diagrams, and branding will be original. The MVP is statically generated, works without an account, stores progress and notes only in the learner's browser, and is deployable to Vercel.
+Build a responsive, content-first backend engineering field guide with an original engineering-notebook interface. Research from the supplied site informs useful study interactions only; its layout, visual system, branding, and composition are not implementation targets. The MVP is statically generated, works without an account, stores progress and notes only in the learner's browser, and is deployable to Vercel.
 
 The confirmed canonical production domain is `https://backend.therakibul.me`, matching the existing `therakibul.me` portfolio domain.
 
@@ -43,7 +43,7 @@ A visitor should be able to:
 - Reading remains primary; study controls stay quiet and optional.
 - No account is required for personal progress or notes.
 - Every technical claim should be reviewable against primary documentation.
-- The interface should feel editorial, precise, and calm rather than dashboard-like.
+- The interface should feel like a precise engineer's field notebook: structured, calm, and practical without becoming a generic dashboard.
 
 ## 6. Scope
 
@@ -83,13 +83,11 @@ A visitor should be able to:
 
 ### Home composition
 
-1. Series eyebrow and editorial hero.
-2. One-paragraph value proposition.
-3. Metadata chips: chapter count, implementation languages, content type, completion summary.
-4. Search action.
-5. Chapter list with externalized completion checkbox.
-6. Author/contribution panel.
-7. Editorial footer and floating study controls.
+1. Compact product header with Library, Roadmap, Notes, search, and theme actions.
+2. Left notebook rail with the product promise, local progress, continue action, and study-tool explanation.
+3. Syllabus-style launch chapter index with difficulty, duration, progress, and current-reading state.
+4. Expandable public-roadmap band.
+5. Quiet author attribution and portfolio link.
 
 ### Lesson composition
 
@@ -98,7 +96,7 @@ A visitor should be able to:
 3. Semantic sections with stable anchor IDs.
 4. Code examples, tables, diagrams, callouts, references, and debugging checklist.
 5. Previous/next chapter navigation.
-6. Floating theme, notes, and scroll-to-top controls.
+6. Persistent product header for search, notes, and theme controls.
 
 ## 8. Functional requirements
 
@@ -107,7 +105,7 @@ A visitor should be able to:
 - `CAT-001`: Render all published chapters in deterministic numeric order.
 - `CAT-002`: Show number, title, estimated duration, short summary, and tags for each chapter.
 - `CAT-003`: Make the complete card keyboard and pointer navigable while keeping completion a separate control.
-- `CAT-004`: Show completed count as `n of 24 completed` and update it immediately.
+- `CAT-004`: Show launch progress as `n of 6` and update it immediately. Roadmap topics do not count as completed lessons until they are published.
 - `CAT-005`: Preserve a quiet editorial hierarchy at 320 px through wide desktop layouts.
 - `CAT-006`: Distinguish published lessons from roadmap entries in text and accessible state, not color alone.
 
@@ -196,8 +194,8 @@ A visitor should be able to:
 ## 9. Content requirements
 
 - The initial release includes six complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 07–24 are public roadmap entries.
-- Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, TypeScript examples, failure cases, debugging checklist, glossary links, and primary references.
-- TypeScript is the only implementation language in the first release. Other languages require a later content decision and must not delay launch.
+- Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, practical examples, failure cases, debugging checklist, glossary links, and primary references.
+- Product navigation and positioning remain implementation-language neutral. Initial examples are authored in the current repository language, while the content model must allow additional languages later without renaming the product or restructuring the curriculum.
 - Content must not be bulk-copied or lightly paraphrased from the reference.
 - Every diagram is created specifically for this project and has a text alternative.
 
@@ -219,7 +217,7 @@ The release is ready only when:
 2. Chapters 01–06 are fully authored; roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
 3. Search, progress, theme, and notes pass keyboard and mobile Playwright coverage.
 4. All repository quality gates in `docs/test-strategy.md` pass.
-5. Design QA compares desktop and mobile captures against the reference and records `final result: passed`.
+5. Design QA compares desktop and mobile captures against the approved original mock and records `final result: passed`.
 6. Production metadata uses the confirmed domain.
 7. Vercel preview and production return correct status codes, headers, sitemap, robots, and social images.
 8. The portfolio adds the project only after the production route is verified.
@@ -230,7 +228,7 @@ Confirmed 2026-08-30:
 
 1. Canonical domain: `backend.therakibul.me`.
 2. Staged launch: six complete foundation chapters plus a public roadmap for chapters 07–24.
-3. Implementation examples: TypeScript only for the first release.
+3. Public positioning is language-neutral. Initial examples use the current repository language; additional language variants may be added later.
 4. Specification approved; proceed through technical validation and small reviewed slices.
 
 Still governed by the existing contract:

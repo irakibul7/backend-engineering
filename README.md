@@ -1,16 +1,16 @@
-# Backend from First Principles
+# Backend Engineering
 
 A specification-first, long-form backend engineering field guide for Rakibul Islam's portfolio.
 
-The product will reproduce the reference site's information architecture and interaction model while using original code, writing, diagrams, and personal branding. The current repository intentionally contains planning artifacts only. Application implementation starts after human review of `spec.md` and `plan.md`.
+The product uses an original engineering-notebook interface, original writing, and personal branding. Its curriculum is language-neutral at the product level so implementation examples can expand over time.
 
 ## Current phase
 
-- Phase: technical validation, approved to implement
-- Implementation: not started
+- Phase: staged implementation
+- Implementation: catalog, roadmap, study tools, and first complete lesson available for review
 - Intended production host: Vercel
 - Intended domain: `backend.therakibul.me` (confirmed 2026-08-30)
-- Reference experience: <https://backend-from-first-principle.vercel.app/>
+- Inspiration studied: <https://backend-from-first-principle.vercel.app/> (interaction research only; not a visual target)
 
 ## Read first
 

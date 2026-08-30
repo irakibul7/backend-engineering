@@ -1,8 +1,11 @@
 export type Theme = "light" | "original" | "dark";
 
-const PROGRESS_KEY = "bfp:progress:v1";
-const THEME_KEY = "bfp:preferences:v1";
-const NOTES_PREFIX = "bfp:notes:v1:";
+const PROGRESS_KEY = "backend-engineering:progress:v1";
+const THEME_KEY = "backend-engineering:preferences:v1";
+const NOTES_PREFIX = "backend-engineering:notes:v1:";
+const LEGACY_PROGRESS_KEY = "bfp:progress:v1";
+const LEGACY_THEME_KEY = "bfp:preferences:v1";
+const LEGACY_NOTES_PREFIX = "bfp:notes:v1:";
 
 function canUseStorage() {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
@@ -12,7 +15,7 @@ export function readProgress(knownSlugs: Set<string>) {
   if (!canUseStorage()) return new Set<string>();
 
   try {
-    const parsed = JSON.parse(window.localStorage.getItem(PROGRESS_KEY) ?? "null") as unknown;
+    const parsed = JSON.parse(window.localStorage.getItem(PROGRESS_KEY) ?? window.localStorage.getItem(LEGACY_PROGRESS_KEY) ?? "null") as unknown;
     if (!parsed || typeof parsed !== "object") return new Set<string>();
     const completed = (parsed as { completedChapterSlugs?: unknown }).completedChapterSlugs;
     if (!Array.isArray(completed)) return new Set<string>();
@@ -38,7 +41,7 @@ export function writeProgress(completed: Set<string>) {
 export function readTheme(): Theme {
   if (!canUseStorage()) return "light";
   try {
-    const parsed = JSON.parse(window.localStorage.getItem(THEME_KEY) ?? "null") as { theme?: unknown } | null;
+    const parsed = JSON.parse(window.localStorage.getItem(THEME_KEY) ?? window.localStorage.getItem(LEGACY_THEME_KEY) ?? "null") as { theme?: unknown } | null;
     return parsed?.theme === "original" || parsed?.theme === "dark" || parsed?.theme === "light" ? parsed.theme : "light";
   } catch {
     return "light";
@@ -58,7 +61,7 @@ export function writeTheme(theme: Theme) {
 export function readNote(scope: string) {
   if (!canUseStorage()) return "";
   try {
-    const parsed = JSON.parse(window.localStorage.getItem(`${NOTES_PREFIX}${scope}`) ?? "null") as { markdown?: unknown } | null;
+    const parsed = JSON.parse(window.localStorage.getItem(`${NOTES_PREFIX}${scope}`) ?? window.localStorage.getItem(`${LEGACY_NOTES_PREFIX}${scope}`) ?? "null") as { markdown?: unknown } | null;
     return typeof parsed?.markdown === "string" ? parsed.markdown : "";
   } catch {
     return "";

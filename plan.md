@@ -13,7 +13,7 @@ Rule: One focused task at a time. Each task ends with passing evidence and human
 - Exclusions: no scaffold, dependencies, or UI code
 - Commit: `docs: approve product specification`
 
-Decision: Complete on 2026-08-30. Confirmed domain, six-chapter staged launch, TypeScript-only examples, and approval to proceed.
+Decision: Complete on 2026-08-30 and refined after design review. Confirmed domain, six-chapter staged launch, language-neutral product positioning, and approval to proceed with an extensible example model.
 
 ## Slice 1 — Prove the architecture
 

@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Backend from First Principles API Boundary
+  title: Backend Engineering API Boundary
   version: 0.1.0
   description: >-
     The MVP is a statically generated learning site with no runtime HTTP API.

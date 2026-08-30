@@ -1,4 +1,4 @@
-# Reference capture
+# Interaction reference capture
 
 Captured: 2026-08-30  
 Source: <https://backend-from-first-principle.vercel.app/>  
@@ -6,7 +6,11 @@ Source repository: <https://github.com/DsThakurRawat/Backend-from-first-Principl
 
 ## Rights boundary
 
-The source repository is public, but no license file was visible in the repository root during review. Public visibility does not grant permission to copy or redistribute prose, code, diagrams, or branding. This project will create original assets and content while using the observed product pattern as design evidence unless permission is documented.
+The source repository is public, but no license file was visible in the repository root during review. Public visibility does not grant permission to copy or redistribute prose, code, diagrams, or branding. This project uses the source only to study the learning flow and interaction model. It does not use the source as its visual target.
+
+## Approved visual direction
+
+The approved implementation target is the original notebook-style concept at `docs/qa/backend-engineering-approved-desktop.png`. Its identity is deliberately distinct: an offset two-column syllabus, ruled-paper rhythm, orange progress marks, a `BE` monogram, and a language-neutral product title.
 
 ## Homepage — desktop evidence
 
@@ -35,7 +39,7 @@ Visual language:
 
 Captured at 390 x 844. The hero becomes a single column. Metadata pills wrap into two rows, search occupies its own row, and chapter cards use a compact number tile plus two-line title. The completion checkbox remains outside the card. The floating theme/notes/top controls overlap the lower-right reading area only when scrolling.
 
-The new implementation must preserve the hierarchy while improving one observed issue: no horizontal overflow or browser-level horizontal scrollbar at 320–390 px.
+The new implementation preserves the useful study-flow concepts while using its own information architecture and visual system. It must have no horizontal overflow or browser-level horizontal scrollbar at 320–390 px.
 
 ## Catalog interactions
 
@@ -98,4 +102,4 @@ Observed external or shared assets:
 - inline SVG icons for search, checks, arrows, notes, editor tools, and GitHub;
 - lesson-specific diagrams embedded in page content.
 
-The implementation will package its own font files where licensing permits, use an open-source icon package, and create original diagrams. It will not hotlink source assets.
+The implementation uses its own typography, an open-source icon package, and original visual assets. It does not hotlink source assets.

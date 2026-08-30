@@ -30,7 +30,7 @@ const httpSections: LessonSection[] = [
     title: "A protocol is a shared contract",
     introduction: "HTTP works because two programs agree on the meaning of a message before either program knows how the other is implemented.",
     paragraphs: [
-      "A browser, mobile application, reverse proxy, and TypeScript service can all exchange requests because HTTP defines a common vocabulary: method, target, headers, body, and status. TCP carries ordered bytes. HTTP explains what those bytes mean.",
+      "A browser, mobile application, reverse proxy, and application service can all exchange requests because HTTP defines a common vocabulary: method, target, headers, body, and status. TCP carries ordered bytes. HTTP explains what those bytes mean.",
       "That separation is the first useful backend boundary. Transport answers whether bytes arrive. The application protocol answers what operation was requested, how metadata should be interpreted, and whether the result may be cached or retried.",
     ],
     callout: {

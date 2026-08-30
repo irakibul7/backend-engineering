@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { Prototype } from "./Prototype";
 
-describe("Backend from First Principles prototype", () => {
+describe("Backend Engineering prototype", () => {
   beforeEach(() => {
     window.localStorage.clear();
     window.history.replaceState({}, "", "/");
@@ -13,10 +13,9 @@ describe("Backend from First Principles prototype", () => {
   it("presents six launch chapters and a visible public roadmap", () => {
     render(<Prototype />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend from First Principles");
-    expect(screen.getByText((_, element) => element?.textContent === "6 launch chapters")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "The foundations" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "What comes next" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
+    expect(screen.getByRole("heading", { name: "Launch chapters" })).toBeInTheDocument();
+    expect(screen.getByText((_, element) => element?.textContent === "Roadmap (18 topics)")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /View all 18 roadmap topics/ })).toHaveAttribute("href", "/roadmap/");
   });
 
@@ -37,7 +36,7 @@ describe("Backend from First Principles prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByText("1 of 6 completed")).toBeInTheDocument();
+    expect(screen.getByRole("progressbar", { name: "Launch chapter progress" })).toHaveAttribute("aria-valuenow", "1");
     expect(screen.getByRole("button", { name: "Mark chapter 1 incomplete" })).toHaveAttribute("aria-pressed", "true");
   });
 
@@ -48,7 +47,7 @@ describe("Backend from First Principles prototype", () => {
     await user.click(screen.getByRole("button", { name: "Switch color theme" }));
 
     expect(document.documentElement).toHaveAttribute("data-theme", "original");
-    expect(window.localStorage.getItem("bfp:preferences:v1")).toContain("original");
+    expect(window.localStorage.getItem("backend-engineering:preferences:v1")).toContain("original");
   });
 
   it("sanitizes Markdown when previewing private notes", async () => {
@@ -68,6 +67,6 @@ describe("Backend from First Principles prototype", () => {
     window.history.replaceState({}, "", "/chapters/http-as-a-state-machine");
     render(<Prototype />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("HTTP as a state machine.");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("HTTP as a State Machine");
   });
 });

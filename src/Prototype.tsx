@@ -1,5 +1,3 @@
-import "@fontsource/fraunces/600.css";
-import "@fontsource/fraunces/600-italic.css";
 import "@fontsource/jetbrains-mono/500.css";
 import "@fontsource/spline-sans/400.css";
 import "@fontsource/spline-sans/500.css";
@@ -11,13 +9,20 @@ import remarkGfm from "remark-gfm";
 import {
   ArrowLeft,
   ArrowRight,
-  ArrowUp,
+  BadgeCheck,
+  BookOpen,
   Check,
+  ChevronDown,
   ChevronRight,
-  ExternalLink,
+  Clock3,
+  Code2,
   FileText,
+  LockKeyhole,
   Menu,
+  Monitor,
+  Moon,
   Search,
+  Sun,
   X,
 } from "lucide-react";
 import {
@@ -33,6 +38,15 @@ import { readNote, readProgress, readTheme, writeNote, writeProgress, writeTheme
 
 const knownPublishedSlugs = new Set(publishedChapters.map((chapter) => chapter.slug));
 const themes: Theme[] = ["light", "original", "dark"];
+
+const chapterLabels: Record<number, { difficulty: "Fundamental" | "Important" }> = {
+  1: { difficulty: "Fundamental" },
+  2: { difficulty: "Fundamental" },
+  3: { difficulty: "Fundamental" },
+  4: { difficulty: "Important" },
+  5: { difficulty: "Important" },
+  6: { difficulty: "Important" },
+};
 
 function pad(number: number) {
   return String(number).padStart(2, "0");
@@ -77,7 +91,50 @@ function InternalLink({ href, navigate, onClick, ...props }: InternalLinkProps) 
   );
 }
 
-function ChapterCard({
+function AppHeader({
+  path,
+  theme,
+  navigate,
+  onOpenSearch,
+  onOpenNotes,
+  onCycleTheme,
+}: {
+  path: string;
+  theme: Theme;
+  navigate: (href: string) => void;
+  onOpenSearch: () => void;
+  onOpenNotes: () => void;
+  onCycleTheme: () => void;
+}) {
+  const ThemeIcon = theme === "dark" ? Moon : theme === "original" ? Monitor : Sun;
+
+  return (
+    <header className="app-header">
+      <InternalLink className="brand-mark" href="/" navigate={navigate} aria-label="Backend Engineering home">BE</InternalLink>
+      <nav className="primary-nav" aria-label="Primary navigation">
+        <InternalLink className={path === "/" ? "is-active" : ""} href="/" navigate={navigate}>Library</InternalLink>
+        <InternalLink className={path.startsWith("/roadmap") ? "is-active" : ""} href="/roadmap/" navigate={navigate}>Roadmap</InternalLink>
+        <button type="button" onClick={onOpenNotes} aria-label="Open study notes">Notes</button>
+      </nav>
+      <button className="header-search" type="button" onClick={onOpenSearch} aria-label="Search topics, chapters, and notes">
+        <Search size={18} aria-hidden="true" />
+        <span>Search topics, chapters, notes…</span>
+        <kbd>⌘ K</kbd>
+      </button>
+      <div className="header-actions">
+        <button className="mobile-note-action" type="button" onClick={onOpenNotes} aria-label="Open study notes from mobile header"><FileText size={18} /></button>
+        <button type="button" onClick={onCycleTheme} aria-label="Switch color theme" title={`Theme: ${theme}`}><ThemeIcon size={18} /></button>
+        <a className="profile-link" href="https://therakibul.me" target="_blank" rel="noreferrer" aria-label="Visit Rakibul Islam's portfolio">RI</a>
+      </div>
+    </header>
+  );
+}
+
+function ProgressSegments({ complete }: { complete: boolean }) {
+  return <span className="progress-segments" aria-hidden="true">{[0, 1, 2, 3].map((segment) => <i className={complete ? "is-filled" : ""} key={segment} />)}</span>;
+}
+
+function SyllabusRow({
   chapter,
   complete,
   onToggle,
@@ -88,144 +145,115 @@ function ChapterCard({
   onToggle: (slug: string) => void;
   navigate: (href: string) => void;
 }) {
-  const published = chapter.status === "published";
+  const labels = chapterLabels[chapter.number];
   return (
-    <article className={`chapter-row ${published ? "" : "chapter-row--roadmap"}`} id={chapter.slug}>
+    <article className={`syllabus-row ${chapter.number === 1 ? "is-current" : ""}`}>
+      <span className="syllabus-number">{pad(chapter.number)}</span>
+      <InternalLink className="syllabus-copy" href={chapterHref(chapter)} navigate={navigate}>
+        <strong>{chapter.title}</strong>
+        <span>{chapter.summary}</span>
+      </InternalLink>
+      <span className="syllabus-difficulty">{labels?.difficulty ?? "Important"}</span>
+      <span className="syllabus-duration">{chapter.duration}</span>
       <button
-        className={`completion-button ${complete ? "completion-button--done" : ""}`}
+        className="row-progress"
         type="button"
+        onClick={() => onToggle(chapter.slug)}
         aria-label={`Mark chapter ${chapter.number} ${complete ? "incomplete" : "complete"}`}
         aria-pressed={complete}
-        disabled={!published}
-        onClick={() => onToggle(chapter.slug)}
       >
-        {complete ? <Check size={16} strokeWidth={2.8} aria-hidden="true" /> : null}
+        <ProgressSegments complete={complete} />
+        <span>{complete ? "100%" : "0%"}</span>
       </button>
-      <InternalLink className="chapter-card" href={chapterHref(chapter)} navigate={navigate}>
-        <span className="chapter-number">{pad(chapter.number)}</span>
-        <span className="chapter-copy">
-          <strong>{chapter.title}</strong>
-          <span>{chapter.summary}</span>
-        </span>
-        <span className={`chapter-status ${published ? "chapter-status--published" : ""}`}>
-          {published ? chapter.duration : "Roadmap"}
-        </span>
-        <ChevronRight size={18} strokeWidth={1.7} aria-hidden="true" />
-      </InternalLink>
+      <InternalLink className="row-arrow" href={chapterHref(chapter)} navigate={navigate} aria-label={`Open ${chapter.title}`}><ChevronRight size={18} /></InternalLink>
     </article>
   );
+}
+
+function FeatureLine({ icon: Icon, title, body, action }: { icon: typeof Code2; title: string; body: string; action?: () => void }) {
+  const content = <><span className="feature-icon"><Icon size={17} aria-hidden="true" /></span><span><strong>{title}</strong><small>{body}</small></span></>;
+  return action ? <button className="feature-line" type="button" onClick={action}>{content}</button> : <div className="feature-line">{content}</div>;
 }
 
 function CatalogPage({
   completed,
   onToggle,
-  onOpenSearch,
+  onOpenNotes,
   navigate,
 }: {
   completed: Set<string>;
   onToggle: (slug: string) => void;
-  onOpenSearch: () => void;
+  onOpenNotes: () => void;
   navigate: (href: string) => void;
 }) {
+  const progress = Math.round((completed.size / publishedChapters.length) * 100);
+
   return (
-    <main className="catalog-shell" id="main-content">
-      <section className="catalog-hero" aria-labelledby="series-title">
-        <p className="kicker">A 24-topic backend reference series</p>
-        <h1 id="series-title">
-          Backend from <em>First Principles.</em>
-        </h1>
-        <p className="hero-lead">
-          A TypeScript-first field guide to the systems behind backend frameworks: protocols, data boundaries, reliability,
-          security, and production delivery. Six complete foundation chapters launch first; eighteen more are public on the roadmap.
-        </p>
-        <div className="hero-tools" aria-label="Series summary and search">
-          <span className="meta-pill"><strong>24</strong> topics</span>
-          <span className="meta-pill"><strong>6</strong> launch chapters</span>
-          <span className="meta-pill">TypeScript</span>
-          <span className="meta-pill meta-pill--progress">{completed.size} of 6 completed</span>
-          <button className="search-trigger" type="button" onClick={onOpenSearch}>
-            <Search size={17} aria-hidden="true" />
-            <span>Search…</span>
-            <kbd>Ctrl K</kbd>
-          </button>
+    <main className="catalog-layout" id="main-content">
+      <aside className="catalog-intro">
+        <p className="eyebrow">Engineer’s field notebook</p>
+        <h1>Backend <br />Engineering</h1>
+        <p className="intro-copy">Understand the systems behind reliable backend software—protocols, boundaries, data, security, resilience, and production delivery.</p>
+        <section className="progress-panel" aria-labelledby="progress-heading">
+          <div className="progress-heading"><span id="progress-heading">Reading progress</span><strong>{completed.size} <small>of 6</small></strong><b>{progress}%</b></div>
+          <div className="progress-track" role="progressbar" aria-label="Launch chapter progress" aria-valuemin={0} aria-valuemax={6} aria-valuenow={completed.size}><i style={{ width: `${progress}%` }} /></div>
+        </section>
+        <section className="continue-panel" aria-labelledby="continue-heading">
+          <span>Currently reading</span>
+          <h2 id="continue-heading">HTTP as a State Machine</h2>
+          <small>Chapter 01</small>
+          <InternalLink className="continue-action" href={chapterHref(publishedChapters[0])} navigate={navigate}><BookOpen size={17} /> Continue HTTP</InternalLink>
+        </section>
+        <div className="feature-list">
+          <FeatureLine icon={Code2} title="Practical examples" body="Concepts connected to working systems" />
+          <FeatureLine icon={LockKeyhole} title="Private study notes" body="Your notes stay local to this device" action={onOpenNotes} />
+          <FeatureLine icon={Clock3} title="Focused lessons" body="Designed for deliberate reading" />
+          <FeatureLine icon={BadgeCheck} title="Built for engineers" body="Written, tested, and reviewed" />
         </div>
-        <div className="section-rule" aria-hidden="true" />
-      </section>
-
-      <section className="chapter-section" aria-labelledby="launch-heading">
-        <div className="chapter-section-heading">
-          <div>
-            <p className="kicker">Launch collection</p>
-            <h2 id="launch-heading">The foundations</h2>
+      </aside>
+      <section className="curriculum-panel" aria-labelledby="launch-heading">
+        <header className="syllabus-header">
+          <h2 id="launch-heading">Launch chapters</h2>
+          <span>Difficulty</span><span>Est. time</span><span>Progress</span>
+        </header>
+        <div className="syllabus-list">
+          {publishedChapters.map((chapter) => <SyllabusRow key={chapter.slug} chapter={chapter} complete={completed.has(chapter.slug)} onToggle={onToggle} navigate={navigate} />)}
+        </div>
+        <details className="roadmap-band" open>
+          <summary>
+            <span className="roadmap-symbol"><BookOpen size={19} /></span>
+            <span><strong>Roadmap <em>(18 topics)</em></strong><small>The curriculum beyond the launch chapters—protocols, data, reliability, security, and production delivery.</small></span>
+            <ChevronDown size={18} aria-hidden="true" />
+          </summary>
+          <div className="roadmap-band-content">
+            <p>{roadmapChapters.slice(0, 8).map((chapter) => chapter.title).join(" · ")} · 10 more</p>
+            <InternalLink href="/roadmap/" navigate={navigate}>View all 18 roadmap topics <ArrowRight size={15} /></InternalLink>
           </div>
-          <p>Complete lessons, written and tested as one connected path.</p>
-        </div>
-        <div className="chapter-list">
-          {publishedChapters.map((chapter) => (
-            <ChapterCard key={chapter.slug} chapter={chapter} complete={completed.has(chapter.slug)} onToggle={onToggle} navigate={navigate} />
-          ))}
-        </div>
+        </details>
+        <footer className="catalog-footnote"><span>Six complete launch chapters. Eighteen more on the roadmap.</span><span>By <a href="https://therakibul.me">Rakibul Islam</a></span></footer>
       </section>
-
-      <section className="chapter-section roadmap-preview" aria-labelledby="roadmap-heading">
-        <div className="chapter-section-heading">
-          <div>
-            <p className="kicker">Public roadmap</p>
-            <h2 id="roadmap-heading">What comes next</h2>
-          </div>
-          <p>Every planned field manual is visible. Nothing unfinished is presented as published.</p>
-        </div>
-        <div className="chapter-list">
-          {roadmapChapters.slice(0, 6).map((chapter) => (
-            <ChapterCard key={chapter.slug} chapter={chapter} complete={false} onToggle={onToggle} navigate={navigate} />
-          ))}
-        </div>
-        <InternalLink className="roadmap-link" href="/roadmap/" navigate={navigate}>
-          View all 18 roadmap topics <ArrowRight size={17} aria-hidden="true" />
-        </InternalLink>
-      </section>
-
-      <section className="author-card" aria-labelledby="author-heading">
-        <p className="kicker">Built in public</p>
-        <h2 id="author-heading">A field guide by Rakibul Islam</h2>
-        <p>
-          Written from production experience across cloud systems, APIs, AI platforms, and blockchain infrastructure. Technical claims are grounded in primary standards and official documentation.
-        </p>
-        <div className="author-actions">
-          <a className="primary-action" href="https://therakibul.me" target="_blank" rel="noreferrer">
-            Visit portfolio <ExternalLink size={16} aria-hidden="true" />
-          </a>
-          <a className="secondary-action" href="https://github.com/irakibul7" target="_blank" rel="noreferrer">
-            GitHub <ExternalLink size={15} aria-hidden="true" />
-          </a>
-        </div>
-      </section>
-
-      <footer className="editorial-footer">
-        <p className="footer-quote">“Understand the boundary, and the framework becomes a choice.”</p>
-        <p>Backend from First Principles · TypeScript field manual series.</p>
-        <p>Written and maintained by <a href="https://therakibul.me">Rakibul Islam</a>.</p>
-      </footer>
     </main>
   );
 }
 
-function RoadmapPage({ navigate }: { navigate: (href: string) => void }) {
+function RoadmapPage() {
   return (
-    <main className="catalog-shell inner-page" id="main-content">
-      <InternalLink className="back-link" href="/" navigate={navigate}><ArrowLeft size={16} /> Back to the series</InternalLink>
-      <section className="catalog-hero compact-hero">
-        <p className="kicker">Public roadmap · chapters 07–24</p>
-        <h1>Built deliberately, <em>not all at once.</em></h1>
-        <p className="hero-lead">The next eighteen field manuals will ship as complete, reviewed chapters. Their order follows the dependency path from API contracts and durable data to distributed systems and real-time delivery.</p>
-        <div className="section-rule" aria-hidden="true" />
-      </section>
-      <section className="chapter-section" aria-label="Roadmap chapters">
-        <div className="chapter-list">
-          {roadmapChapters.map((chapter) => (
-            <ChapterCard key={chapter.slug} chapter={chapter} complete={false} onToggle={() => undefined} navigate={navigate} />
-          ))}
-        </div>
+    <main className="roadmap-page" id="main-content">
+      <header className="page-intro">
+        <p className="eyebrow">Public curriculum</p>
+        <h1>What comes after<br />the foundations.</h1>
+        <p>Eighteen planned field guides connect API contracts and durable data to distributed systems and real-time delivery. A topic becomes a lesson only after it is complete and reviewed.</p>
+      </header>
+      <section className="roadmap-index" aria-label="Roadmap chapters">
+        <div className="roadmap-index-head"><span>Topic</span><span>System focus</span><span>Status</span></div>
+        {roadmapChapters.map((chapter) => (
+          <article className="roadmap-row" id={chapter.slug} key={chapter.slug}>
+            <span>{pad(chapter.number)}</span>
+            <div><strong>{chapter.title}</strong><small>{chapter.promise}</small></div>
+            <span>{chapter.tags.slice(0, 2).join(" · ")}</span>
+            <b>Planned</b>
+          </article>
+        ))}
       </section>
     </main>
   );
@@ -242,59 +270,41 @@ function CodeBlock({ filename, source }: { filename: string; source: string }) {
       setCopied(false);
     }
   };
-
-  return (
-    <figure className="code-block">
-      <figcaption><span>{filename}</span><button type="button" onClick={copy}>{copied ? "Copied" : "Copy"}</button></figcaption>
-      <pre><code>{source}</code></pre>
-    </figure>
-  );
+  return <figure className="code-block"><figcaption><span>{filename}</span><button type="button" onClick={copy}>{copied ? "Copied" : "Copy"}</button></figcaption><pre><code>{source}</code></pre></figure>;
 }
 
 function LessonPage({ chapter, navigate }: { chapter: Chapter; navigate: (href: string) => void }) {
   const [contentsOpen, setContentsOpen] = useState(false);
   const previous = chapters.find((item) => item.number === chapter.number - 1);
   const next = chapters.find((item) => item.number === chapter.number + 1);
-  const lessonTitleLead = chapter.title.replace(/\s+as a state machine$/i, "");
 
   if (!chapter.sections?.length) {
     return (
-      <main className="catalog-shell inner-page" id="main-content">
-        <InternalLink className="back-link" href="/" navigate={navigate}><ArrowLeft size={16} /> Back to the series</InternalLink>
-        <section className="catalog-hero compact-hero">
-          <p className="kicker">Launch collection · chapter {pad(chapter.number)}</p>
-          <h1>{chapter.title}</h1>
-          <p className="hero-lead">{chapter.promise}</p>
-          <div className="section-rule" aria-hidden="true" />
-          <p className="lesson-status-note">This chapter is in the approved launch collection. Its complete editorial and technical review is scheduled after the catalog slice.</p>
-        </section>
+      <main className="placeholder-lesson" id="main-content">
+        <InternalLink className="back-link" href="/" navigate={navigate}><ArrowLeft size={16} /> Library</InternalLink>
+        <p className="eyebrow">Launch chapter {pad(chapter.number)}</p>
+        <h1>{chapter.title}</h1>
+        <p>{chapter.promise}</p>
+        <aside>This lesson is in the approved launch collection. Its full editorial and technical review follows the catalog checkpoint.</aside>
       </main>
     );
   }
 
   return (
-    <div className="lesson-layout">
-      <button className="mobile-contents-button" type="button" onClick={() => setContentsOpen(true)} aria-expanded={contentsOpen}>
-        <Menu size={17} /> Contents
-      </button>
+    <div className="lesson-workspace">
+      <button className="mobile-contents-button" type="button" onClick={() => setContentsOpen(true)} aria-expanded={contentsOpen}><Menu size={17} /> Contents</button>
       {contentsOpen ? <button className="drawer-backdrop" type="button" aria-label="Close contents" onClick={() => setContentsOpen(false)} /> : null}
       <aside className={`lesson-toc ${contentsOpen ? "lesson-toc--open" : ""}`} aria-label="Chapter contents">
-        <div className="toc-brand"><strong>Backend /</strong><em>first principles</em><span>Chapter {pad(chapter.number)} · Field manual</span></div>
-        <nav>
-          {chapter.sections.map((section) => (
-            <a key={section.id} href={`#${section.id}`} onClick={() => setContentsOpen(false)}>
-              <span>{section.number}</span>{section.title}
-            </a>
-          ))}
-        </nav>
+        <InternalLink className="toc-back" href="/" navigate={navigate}><ArrowLeft size={15} /> Library</InternalLink>
+        <div className="toc-brand"><strong>Chapter {pad(chapter.number)}</strong><span>{chapter.title}</span><small>{chapter.duration} · {chapter.sections.length} sections</small></div>
+        <nav>{chapter.sections.map((section) => <a key={section.id} href={`#${section.id}`} onClick={() => setContentsOpen(false)}><span>{section.number}</span>{section.title}</a>)}</nav>
       </aside>
       <main className="lesson-main" id="main-content">
         <section className="lesson-hero">
-          <p className="kicker">A detailed TypeScript backend reference</p>
-          <h1>{lessonTitleLead} <em>as a state machine.</em></h1>
-          <p>{chapter.promise} This chapter connects protocol behavior to the decisions a production TypeScript service must make.</p>
-          <div className="lesson-meta"><span>Application layer</span><span>TypeScript 5+</span><span>{chapter.sections.length} sections</span><span>{chapter.duration}</span></div>
-          <div className="section-rule" aria-hidden="true" />
+          <p className="eyebrow">Backend Engineering · Field guide {pad(chapter.number)}</p>
+          <h1>{chapter.title}</h1>
+          <p>{chapter.promise} This chapter connects protocol behavior to the decisions a production service must make.</p>
+          <div className="lesson-meta"><span>Application layer</span><span>{chapter.sections.length} sections</span><span>{chapter.duration}</span></div>
         </section>
         <div className="lesson-content">
           {chapter.sections.map((section) => (
@@ -322,25 +332,14 @@ function SearchDialog({ onClose, navigate }: { onClose: () => void; navigate: (h
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const results = useMemo(() => searchChapters(chapters, query), [query]);
-
   return (
     <div className="modal-layer" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <section className="search-dialog" role="dialog" aria-modal="true" aria-label="Search chapters">
-        <div className="search-field">
-          <Search size={20} aria-hidden="true" />
-          <input ref={inputRef} autoFocus value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === "Escape" && onClose()} placeholder="Search chapters, topics…" aria-label="Search chapters and topics" />
-          <kbd>ESC</kbd>
-        </div>
+        <div className="search-field"><Search size={20} aria-hidden="true" /><input ref={inputRef} autoFocus value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === "Escape" && onClose()} placeholder="Search chapters, topics…" aria-label="Search chapters and topics" /><kbd>ESC</kbd></div>
         <div className="search-results" aria-live="polite">
-          {!query ? <p className="search-helper">Type to search all published and roadmap topics.</p> : null}
+          {!query ? <p className="search-helper">Search every published chapter and planned topic.</p> : null}
           {query && !results.length ? <p className="search-helper">No topic matches “{query}”. Try a protocol, system, or tool name.</p> : null}
-          {results.map(({ chapter }) => (
-            <button key={chapter.slug} type="button" onClick={() => { navigate(chapterHref(chapter)); onClose(); }}>
-              <span className="chapter-number">{pad(chapter.number)}</span>
-              <span><strong>{chapter.title}</strong><small>{chapter.status === "published" ? chapter.duration : "Roadmap"}</small></span>
-              <ArrowRight size={17} aria-hidden="true" />
-            </button>
-          ))}
+          {results.map(({ chapter }) => <button key={chapter.slug} type="button" onClick={() => { navigate(chapterHref(chapter)); onClose(); }}><span className="search-result-number">{pad(chapter.number)}</span><span><strong>{chapter.title}</strong><small>{chapter.status === "published" ? chapter.duration : "Roadmap"}</small></span><ArrowRight size={17} aria-hidden="true" /></button>)}
         </div>
       </section>
     </div>
@@ -363,7 +362,7 @@ function NotesPanel({ scope, onClose }: { scope: string; onClose: () => void }) 
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `backend-first-principles-${scope}.md`;
+    anchor.download = `backend-engineering-${scope}.md`;
     anchor.click();
     URL.revokeObjectURL(url);
   };
@@ -372,17 +371,10 @@ function NotesPanel({ scope, onClose }: { scope: string; onClose: () => void }) 
     <div className="notes-layer" role="presentation">
       <button className="notes-backdrop" type="button" aria-label="Close study notes" onClick={onClose} />
       <aside className="notes-panel" role="dialog" aria-modal="true" aria-label="Study notes">
-        <header><div><h2>Study Notes</h2><span className={saved ? "saved-state" : "saving-state"}>{saved ? "Saved" : "Saving"}</span></div><button type="button" onClick={onClose} aria-label="Close study notes"><X size={18} /></button></header>
+        <header><div><h2>Study notes</h2><span className={saved ? "saved-state" : "saving-state"}>{saved ? "Saved" : "Saving"}</span></div><button type="button" onClick={onClose} aria-label="Close study notes"><X size={18} /></button></header>
         <p className="note-scope">{scope === "master" ? "All launch chapters" : scope.replaceAll("-", " ")}</p>
-        <div className="note-tabs" role="tablist" aria-label="Note view">
-          <button type="button" role="tab" aria-selected={mode === "edit"} onClick={() => setMode("edit")}>Edit</button>
-          <button type="button" role="tab" aria-selected={mode === "preview"} onClick={() => setMode("preview")}>Preview</button>
-        </div>
-        {mode === "edit" ? (
-          <textarea value={markdown} onChange={(event) => { setMarkdown(event.target.value); setSaved(false); }} placeholder="# Study notes\n\nWrite private Markdown notes here…" aria-label="Study notes Markdown editor" />
-        ) : (
-          <div className="note-preview"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{markdown || "_Nothing to preview yet._"}</ReactMarkdown></div>
-        )}
+        <div className="note-tabs" role="tablist" aria-label="Note view"><button type="button" role="tab" aria-selected={mode === "edit"} onClick={() => setMode("edit")}>Edit</button><button type="button" role="tab" aria-selected={mode === "preview"} onClick={() => setMode("preview")}>Preview</button></div>
+        {mode === "edit" ? <textarea value={markdown} onChange={(event) => { setMarkdown(event.target.value); setSaved(false); }} placeholder="# Study notes\n\nWrite private Markdown notes here…" aria-label="Study notes Markdown editor" /> : <div className="note-preview"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{markdown || "_Nothing to preview yet._"}</ReactMarkdown></div>}
         <footer><span>{markdown.trim() ? markdown.trim().split(/\s+/).length : 0} words</span><button type="button" onClick={exportNote} disabled={!markdown}>Export Markdown</button></footer>
       </aside>
     </div>
@@ -395,34 +387,19 @@ export function Prototype() {
   const [theme, setTheme] = useState<Theme>(() => readTheme());
   const [searchOpen, setSearchOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
-
   const lessonSlug = path.startsWith("/chapters/") ? path.split("/").filter(Boolean).at(-1) : undefined;
   const lesson = lessonSlug ? chapterBySlug(lessonSlug) : undefined;
   const noteScope = lesson?.slug ?? "master";
-  const noteCount = readNote(noteScope).trim() ? 1 : 0;
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    writeTheme(theme);
-  }, [theme]);
-
+  useEffect(() => { document.documentElement.dataset.theme = theme; writeTheme(theme); }, [theme]);
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
       const editable = target instanceof Element && target.matches("input, textarea, [contenteditable='true']");
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setSearchOpen(true);
-      } else if (event.key === "/" && !editable) {
-        event.preventDefault();
-        setSearchOpen(true);
-      } else if (event.altKey && event.key.toLowerCase() === "n") {
-        event.preventDefault();
-        setNotesOpen(true);
-      } else if (event.key === "Escape") {
-        setSearchOpen(false);
-        setNotesOpen(false);
-      }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); }
+      else if (event.key === "/" && !editable) { event.preventDefault(); setSearchOpen(true); }
+      else if (event.altKey && event.key.toLowerCase() === "n") { event.preventDefault(); setNotesOpen(true); }
+      else if (event.key === "Escape") { setSearchOpen(false); setNotesOpen(false); }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -432,28 +409,20 @@ export function Prototype() {
     if (!knownPublishedSlugs.has(slug)) return;
     setCompleted((current) => {
       const next = new Set(current);
-      if (next.has(slug)) next.delete(slug);
-      else next.add(slug);
+      if (next.has(slug)) next.delete(slug); else next.add(slug);
       writeProgress(next);
       return next;
     });
   };
-
-  const cycleTheme = () => {
-    setTheme((current) => themes[(themes.indexOf(current) + 1) % themes.length]);
-  };
+  const cycleTheme = () => setTheme((current) => themes[(themes.indexOf(current) + 1) % themes.length]);
 
   return (
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
-      {lesson ? <LessonPage chapter={lesson} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage navigate={navigate} /> : <CatalogPage completed={completed} onToggle={toggleComplete} onOpenSearch={() => setSearchOpen(true)} navigate={navigate} />}
-      <nav className="study-controls" aria-label="Study controls and quick navigation">
-        <button type="button" onClick={cycleTheme} aria-label="Switch color theme"><span>{theme[0].toUpperCase() + theme.slice(1)}</span></button>
-        <button type="button" onClick={() => setNotesOpen(true)} aria-label="Open study notes"><FileText size={14} /><span>Notes</span><strong>{noteCount}</strong></button>
-        <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Scroll to top"><ArrowUp size={16} /></button>
-      </nav>
+      <AppHeader path={path} theme={theme} navigate={navigate} onOpenSearch={() => setSearchOpen(true)} onOpenNotes={() => setNotesOpen(true)} onCycleTheme={cycleTheme} />
+      {lesson ? <LessonPage chapter={lesson} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage completed={completed} onToggle={toggleComplete} onOpenNotes={() => setNotesOpen(true)} navigate={navigate} />}
       {searchOpen ? <SearchDialog onClose={() => setSearchOpen(false)} navigate={navigate} /> : null}
-      {notesOpen ? <NotesPanel key={noteScope} scope={noteScope} onClose={() => setNotesOpen(false)} /> : null}
+      {notesOpen ? <NotesPanel scope={noteScope} onClose={() => setNotesOpen(false)} /> : null}
     </>
   );
 }

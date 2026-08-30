@@ -2,83 +2,92 @@
 
 ## Comparison target
 
-- Source visual truth: `https://backend-from-first-principle.vercel.app/`
-- Source lesson truth: `https://backend-from-first-principle.vercel.app/1.HTTP-AND-CORS/html_notes/notes.html`
+- Approved visual truth: `docs/qa/backend-engineering-approved-desktop.png`
+- Density-normalized truth: `docs/qa/backend-engineering-approved-desktop-normalized.png`
 - Implementation: `http://127.0.0.1:5173/`
-- State: Original theme; catalog with chapter 01 completed; first lesson at its top; mobile contents drawer also exercised separately.
-- Density normalization: source and implementation were captured in the same in-app browser at device scale factor 1. Desktop CSS viewport was 1440 × 900 and produced 1425 × 891 PNG captures after browser scrollbar/chrome exclusion. Mobile CSS viewport was 390 × 844 and produced 375 × 812 PNG captures after the same exclusion. No image rescaling was used.
+- State: light theme; catalog with chapter 01 incomplete; roadmap expanded; mobile catalog and lesson contents drawer exercised separately.
+- Density normalization: the approved concept was normalized to the browser capture dimensions of 1425 × 1013 before comparison. The desktop implementation was captured from a 1440 × 1024 CSS viewport and produced a 1425 × 1013 PNG after scrollbar exclusion. Mobile captures used a 390 × 844 CSS viewport and produced 375 × 812 PNGs. No implementation screenshot was stretched.
 
 ## Evidence
 
-Full-view catalog comparisons:
+Full-view desktop comparison:
 
-- `docs/qa/catalog-reference-desktop.png`
-- `docs/qa/catalog-implementation-desktop.png`
-- `docs/qa/catalog-reference-mobile.png`
-- `docs/qa/catalog-implementation-mobile.png`
+- `docs/qa/backend-engineering-approved-desktop-normalized.png`
+- `docs/qa/backend-engineering-implementation-desktop.png`
 
-Focused lesson/hero comparison:
+Responsive and focused interaction evidence:
 
-- `docs/qa/lesson-reference-mobile.png`
-- `docs/qa/lesson-implementation-mobile.png`
+- `docs/qa/backend-engineering-implementation-mobile.png`
+- `docs/qa/backend-engineering-lesson-mobile-drawer.png`
 
-The catalog full view is sufficient for card, pill, hero, typography, spacing, color, and fixed-control review. The focused lesson comparison was necessary because the contents control, lesson typography, metadata, and start of the reading flow are too small to judge in the desktop catalog capture.
+The desktop pair was viewed together in the same browser comparison input. The mobile captures were inspected independently because the approved concept is desktop-only and does not define a mobile composition.
 
 ## Findings
 
-No actionable P0, P1, or P2 findings remain for the approved first checkpoint.
+No actionable P0, P1, or P2 findings remain for the approved checkpoint.
 
-- [Expected] Product-content differences
-  - Location: catalog hero, section heading, and chapter cards.
-  - Evidence: the source describes 24 finished Go/Python chapters; the implementation truthfully presents six TypeScript launch chapters and eighteen roadmap topics, with original titles and summaries.
-  - Classification: required by the approved product scope, not visual drift.
+- [Expected] Real progress replaces a decorative streak.
+  - Location: left study rail.
+  - Evidence: the concept includes a seven-day streak; the product does not track streaks. The implementation exposes truthful local reading progress and a Continue action instead.
+  - Classification: intentional product-integrity decision, not visual drift.
 
-- [Expected] Launch-collection grouping
-  - Location: catalog after the accent rule.
-  - Evidence: the implementation adds `The foundations` and its short explanation before the cards, so the first card sits lower than in the source, especially on mobile.
-  - Classification: acceptable information-architecture change needed to distinguish published work from the public roadmap.
+- [Expected] Binary completion replaces invented partial progress.
+  - Location: syllabus progress column.
+  - Evidence: the concept shows partial row progress, but the current product records only complete or incomplete. The UI therefore shows 0% or 100% and does not imply scroll tracking that does not exist.
+  - Classification: intentional data-model constraint.
 
-- [P3] Mobile first-card visibility
-  - Location: 390 px catalog, below the accent rule.
-  - Evidence: the source exposes part of chapter 01 above the fold; the implementation exposes the launch-collection label and heading while the card begins below the fold.
-  - Impact: a small reduction in immediate content density, with no blocked action or broken hierarchy.
-  - Follow-up: after chapter 02–06 content is complete, test a tighter mobile gap between `.section-rule` and `.chapter-section` without removing the published/roadmap distinction.
+- [P3] Utility cluster is simpler than the concept.
+  - Location: desktop header, right edge.
+  - Evidence: the concept includes several adjacent utilities; the implementation retains one theme control plus search, profile, and the core navigation.
+  - Impact: slightly less visual density with no lost core workflow.
+
+- [P3] Chapter copy creates small row-height variation.
+  - Location: syllabus rows.
+  - Evidence: original chapter titles and summaries are longer than the concept placeholders.
+  - Impact: the ruled rhythm remains consistent and all labels remain readable.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: Fraunces, Spline Sans, and JetBrains Mono match the source’s editorial display/body/utility roles. Weights, tight display tracking, line height, and mobile wrapping are coherent. The lesson-title connector duplication found in the first pass was fixed.
-- Spacing and layout rhythm: centered reading column, large hero breathing room, pill rhythm, card spacing, floating controls, desktop contents rail, and mobile drawer match the source pattern. The lower first card on mobile is documented as P3.
-- Colors and tokens: Original theme maps the warm paper, red accent, muted borders, and dark text closely. Light and Dark are deliberate additional states and use the same semantic token structure.
-- Image quality and asset fidelity: neither reference screen uses photographic or illustrative assets. No placeholder, CSS-drawn illustration, custom SVG, emoji, or hotlinked visual asset was introduced. UI icons use Lucide consistently.
-- Copy and content: all project copy is original, coherent, and accurately distinguishes six published chapters from eighteen roadmap topics. TypeScript is the only example language.
-- Interaction and accessibility: search, completion, theme, notes, drawer, Escape handling, semantic labels, focus-visible styles, and reduced-motion CSS are present. Automated tests and browser checks found no console warnings or errors.
+- Typography: Spline Sans carries editorial/interface hierarchy and JetBrains Mono carries metadata, labels, shortcuts, and progress values. The result matches the approved modern notebook tone without copying the inspiration site's serif-led presentation.
+- Layout rhythm: offset left study rail, wide syllabus table, ruled separators, chapter numbering, difficulty badges, durations, progress marks, and expanded roadmap band match the approved composition.
+- Colors and tokens: warm paper, ink, muted rule lines, and orange accent are consistent across desktop, mobile, lessons, search, notes, and themes. No gradients or unrelated decorative effects were introduced.
+- Asset fidelity: the target contains no photographic or illustrative art. Interface symbols use Lucide outline icons; no placeholder images, handcrafted SVGs, CSS illustrations, or hotlinked assets were introduced.
+- Copy and positioning: the public title is `Backend Engineering`. Public-facing product copy is language-neutral. Current examples may use TypeScript, while the information architecture can later incorporate other languages.
+- Responsive behavior: the catalog collapses cleanly to one column, keeps chapters near the first viewport, and has no horizontal overflow at 390 px. The lesson contents becomes an accessible off-canvas drawer.
+- Interaction and accessibility: search, completion, notes, theme cycling, roadmap disclosure, lesson navigation, Escape handling, semantic labels, focus-visible styles, and reduced-motion behavior are present.
 
 ## Comparison history
 
 ### Pass 1
 
-- Finding: [P2] the lesson heading rendered `HTTP as a as a state machine.` because the template removed a differently cased substring.
-- Fix: normalized the terminal phrase with a case-insensitive expression and added a regression test.
-- Post-fix evidence: `docs/qa/lesson-implementation-mobile.png` now renders `HTTP as a state machine.` and `npm run check` passes 12 tests.
+- Finding: [P2] an incomplete chapter displayed one orange progress segment while its numeric label said 0%.
+- Fix: inactive progress segments now remain neutral until the chapter is completed.
+
+- Finding: [P2] the mobile header grid exceeded the viewport.
+- Fix: constrained the title track with `minmax(0, 1fr)` and reduced the action tracks. Browser measurement after the fix reported a 390 px viewport with a 375 px document width and no horizontal overflow.
 
 ### Pass 2
 
-- Recompared catalog desktop, catalog mobile, and lesson mobile against the reference in matched browser states.
-- Result: no actionable P0/P1/P2 visual or interaction findings remain for this checkpoint.
+- Recompared the normalized approved concept and desktop implementation at matched dimensions.
+- Inspected the responsive catalog and lesson drawer at 390 × 844.
+- Result: no actionable P0/P1/P2 visual or interaction findings remain.
 
 ## Primary interactions tested
 
-- marked chapter 01 complete and observed `1 of 6 completed`
+- marked chapter 01 complete and observed progress update to `1`
 - searched `Kafka` and found `Messaging and Event Streams`
 - cycled the theme to Original
-- opened notes, edited Markdown, previewed sanitized output, and observed autosave
-- opened the mobile contents drawer and verified all six anchors
-- checked browser console logs after interaction; warnings and errors: 0
+- opened notes, entered Markdown containing a script, and confirmed the preview remained sanitized
+- opened the mobile lesson contents drawer and verified all six section links
+- checked a fresh browser tab after interaction; console warnings and errors: 0
 
-## Follow-up polish
+## Automated verification
 
-- Reassess the mobile catalog’s first-card position after real chapter summaries settle.
-- Add active-section tracking and focus restoration during the complete lesson slice.
-- Run automated contrast, 320 px overflow, and visual regression checks before launch.
+- strict TypeScript check
+- ESLint with zero warnings
+- 12 unit tests
+- production build
+- 4 hosting tests
+- repository whitespace check
 
 final result: passed

@@ -86,7 +86,7 @@ All keys are namespaced and versioned. Data is local to one browser profile.
 
 ### Preferences
 
-Key: `bfp:preferences:v1`
+Key: `backend-engineering:preferences:v1`
 
 ```ts
 type PreferencesV1 = {
@@ -97,7 +97,7 @@ type PreferencesV1 = {
 
 ### Progress
 
-Key: `bfp:progress:v1`
+Key: `backend-engineering:progress:v1`
 
 ```ts
 type ProgressV1 = {
@@ -109,7 +109,7 @@ type ProgressV1 = {
 
 ### Notes
 
-Key prefix: `bfp:notes:v1:` followed by `master` or a known chapter slug.
+Key prefix: `backend-engineering:notes:v1:` followed by `master` or a known chapter slug. Reads fall back to the former `bfp:*` keys so existing local progress and notes survive the product rename.
 
 ```ts
 type NoteV1 = {
