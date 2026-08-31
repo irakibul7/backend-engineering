@@ -10,12 +10,12 @@ describe("Backend Engineering prototype", () => {
     document.documentElement.removeAttribute("data-theme");
   });
 
-  it("presents three published chapters, three coming-next chapters, and a visible public roadmap", () => {
+  it("presents four published chapters, two coming-next chapters, and a visible public roadmap", () => {
     render(<Prototype />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
     expect(screen.getByRole("heading", { name: "Launch chapters" })).toBeInTheDocument();
-    expect(screen.getAllByText("Coming next")).toHaveLength(3);
+    expect(screen.getAllByText("Coming next")).toHaveLength(2);
     expect(screen.getByRole("link", { name: "Open Routing and Request Dispatch" })).toHaveAttribute("href", "/chapters/routing-and-request-dispatch/");
     expect(screen.getByRole("link", { name: "Open Representation and Serialization" })).toHaveAttribute("href", "/chapters/representation-and-serialization/");
     expect(screen.getByText((_, element) => element?.textContent === "Roadmap (18 topics)")).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe("Backend Engineering prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "29");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "21");
     expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuemax", "100");
     expect(screen.getByRole("button", { name: "Reset chapter 1 reading progress" })).toHaveAttribute("aria-pressed", "true");
   });
@@ -108,12 +108,27 @@ describe("Backend Engineering prototype", () => {
   });
 
   it("does not expose an unfinished chapter as a lesson", () => {
-    window.history.replaceState({}, "", "/chapters/identity-authentication-authorization");
+    window.history.replaceState({}, "", "/chapters/validation-at-trust-boundaries");
     render(<Prototype />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
-    expect(screen.queryByRole("heading", { level: 1, name: "Identity, Authentication, and Authorization" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1, name: "Validation at Trust Boundaries" })).not.toBeInTheDocument();
     expect(screen.queryByText(/approved launch collection/i)).not.toBeInTheDocument();
+  });
+
+  it("renders Chapter 04 with three visuals, policy examples, and primary references", () => {
+    window.history.replaceState({}, "", "/chapters/identity-authentication-authorization");
+    render(<Prototype />);
+
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Identity, Authentication, and Authorization");
+    expect(screen.getByRole("figure", { name: "Four decisions on one request" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "A session changes state over time" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "Authorization narrows toward allow" })).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: /Executable authorization matrix/ })).toBeInTheDocument();
+    expect(screen.getByText("session-policy.ts")).toBeInTheDocument();
+    expect(screen.getByText("authorization.ts")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /RFC 8725/ })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc8725.html");
+    expect(screen.queryByText("Next")).not.toBeInTheDocument();
   });
 
   it("renders the complete serialization chapter with annotated visuals, compatibility table, questions, and references", () => {
@@ -127,7 +142,7 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByRole("table", { name: "Compatibility matrix for common schema changes" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Design questions" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /RFC 8259/ })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc8259.html");
-    expect(screen.queryByText("Next")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /NextIdentity, Authentication, and Authorization/ })).toHaveAttribute("href", "/chapters/identity-authentication-authorization/");
   });
 
   it("renders two explanatory visuals in the HTTP chapter", () => {

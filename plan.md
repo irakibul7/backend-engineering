@@ -162,7 +162,7 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Acceptance: editorial checklist, primary references, schema validation, TypeScript code tests, and diagram alternatives pass for each chapter.
 - Files in scope: chapters 03–06 and original diagrams
 - Exclusions: roadmap chapters
-- Status: In progress. Chapter 03 is complete and published; Chapters 04–06 remain coming next.
+- Status: In progress. Chapters 03–04 are complete and published; Chapters 05–06 remain coming next.
 
 ### T-602A Add the published-chapter visual learning system
 
@@ -171,6 +171,22 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, typed chapter visual data, lesson visual renderers/styles/tests, and visual-system validation evidence
 - Exclusions: new chapters, fabricated benchmark data, animations, handcrafted SVGs, reference-site prose or artwork, and changes to progress persistence
 - Status: Complete and awaiting human review. Direction 2, Annotated Comparisons, was selected and verified on 2026-08-30; evidence is recorded in `docs/validation/chapter-visual-system.md` and `design-qa.md`.
+
+### T-602B Specify Chapter 04 security boundaries
+
+- Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `CON-004`
+- Acceptance: `docs/chapter-04-identity-spec.md` defines the lesson contract, glossary, fictional service boundaries, session state machine, data model, authorization matrix, token-validation boundary, threat hypotheses, original visuals, TypeScript example seams, primary sources, acceptance tests, and ADR impact; it explicitly preserves the static site's no-auth/no-API boundary.
+- Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, `docs/chapter-04-identity-spec.md`
+- Exclusions: chapter implementation, product authentication, login UI, runtime API, identity provider, secrets, dependencies, styles, routes, sitemap changes, and publication-state changes
+- Status: Complete and awaiting human review. No public route or product behavior changes in this slice.
+
+### T-602C Implement and publish Chapter 04
+
+- Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `CON-004`
+- Acceptance: the approved eight-section chapter, three original visuals, session-policy example, executable authorization matrix, primary references, glossary/search integration, route metadata, sitemap entry, and validation evidence pass the full repository quality gate at desktop, 390 px, and 320 px; the homepage denominator becomes four published chapters without invalidating existing local progress.
+- Files in scope: Chapter 04 typed content; session and authorization example modules/tests; glossary entries; only the renderer/style changes proven necessary for the approved visuals; validation and design-QA evidence; generated static discovery output
+- Exclusions: real product authentication, accounts, database, login UI, OAuth provider integration, auth SDK, hand-written cryptography, runtime API, remote progress/notes, analytics changes, and Chapters 05–24
+- Status: Complete and awaiting human review. The specification was approved, implementation verified, and the final fail-closed session/time-claim review fixed on 2026-08-31; evidence is recorded in `docs/validation/chapter-04-identity.md`.
 
 ### T-603 Publish roadmap chapters 07–15
 

@@ -1,5 +1,7 @@
 # Design QA: annotated chapter visuals
 
+Chapter 04 extension reviewed: 2026-08-31. The identity/authentication/authorization lesson adds three original figures through the approved flow, timeline, and decision renderers. Desktop, 390 × 844, and 320 × 700 checks found no page overflow, visual overflow, error overlay, or console warning/error. The mobile contents drawer exposed all eight section anchors. Axe reported zero automated violations; Lighthouse scored 0.98 performance and 1.00 accessibility, best practices, and SEO at both narrow viewports. Detailed evidence is in `docs/validation/chapter-04-identity.md`.
+
 ## Comparison target
 
 - Source visual truth: `/Users/swoptechnologies/.codex/generated_images/01a03c60-8815-76b2-b6d9-72252e947379/exec-997c0863-920f-4348-8a28-1deba1a44c1a.png`
@@ -21,8 +23,8 @@ No actionable P0, P1, or P2 differences remain.
   - Classification: intentional implementation and accessibility constraint.
 
 - [Expected] The production visual follows the existing lesson width and typography.
-  - Location: all six chapter visuals.
-  - Evidence: the source concept is a full alternate lesson composition; the implementation applies its annotated-comparison language inside the approved Backend Engineering notebook shell.
+  - Location: all nine chapter visuals.
+  - Evidence: the source concept is a full alternate lesson composition; the implementation applies its annotated-comparison language inside the approved Backend Engineering notebook shell. Chapter 04 extends the same system without adding a competing visual style.
   - Impact: the site remains original and visually consistent rather than becoming a copy of either inspiration site.
   - Classification: required product constraint.
 
@@ -36,7 +38,7 @@ No actionable P0, P1, or P2 differences remain.
 - Spacing and layout rhythm: figures use the lesson's 820-pixel reading column, thin rules, 8–14 pixel internal gaps, and a consistent caption/content/text-view sequence. Flow, decision, ladder, and timeline variants share the same frame.
 - Colors and tokens: ink, muted text, rule lines, paper surfaces, and orange accent use the existing theme variables. Selected states include text, so color is not the only signal.
 - Image quality and asset fidelity: the selected visual contains interface-native diagrams rather than photography or illustrative assets. Production uses semantic lists, text, and the project's existing Lucide arrow icon; no reference artwork, placeholder image, hotlink, custom SVG, or decorative raster was introduced.
-- Copy and content: all six visuals use original chapter-specific explanations. No invented performance measurement or benchmark value is presented.
+- Copy and content: all nine visuals use original chapter-specific explanations. No invented performance measurement or benchmark value is presented.
 - Responsiveness and accessibility: the same data reads in source order, alternatives remain visible, arrows are decorative, captions name every figure, and mobile layouts stack at the existing lesson breakpoint. Automated axe scans found zero violations on all three routes.
 
 ## Full-view and focused evidence
@@ -56,8 +58,8 @@ No actionable P0, P1, or P2 differences remain.
 
 ## Primary interactions and browser checks
 
-- Opened all three published routes in the in-app browser and confirmed exactly two named visual figures on each.
-- Measured zero document overflow on all three routes at the desktop browser viewport.
+- Opened all four published routes in the in-app browser. Chapters 01–03 retain two named figures each; Chapter 04 contains three named figures.
+- Measured zero document overflow on all four routes at the desktop browser viewport.
 - Inspected the flow renderer and rollout timeline in the responsive lesson shell at 742 × 844 with zero document overflow.
 - Lighthouse emulation passed at 390 × 844 and 320 × 700 with accessibility, best-practices, and SEO scores of 1.00, performance 0.97, and no console errors.
 - In-app browser console logs: zero warnings or errors.
@@ -65,10 +67,10 @@ No actionable P0, P1, or P2 differences remain.
 ## Automated verification
 
 - strict TypeScript and ESLint with zero warnings
-- 7 test files and 41 passing tests
-- production build with 87.70 kB gzip initial JavaScript, under the 100 kB budget
+- 9 test files and 88 passing tests
+- production build with 93.80 kB gzip initial JavaScript, under the 100 kB budget
 - 12 hosting tests
-- 27 verified links with no failures
-- axe-core 4.13.0: zero automated violations on Chapters 01–03
+- 34 verified links with no failures
+- axe-core 4.13.0: zero automated violations on Chapter 04; previous evidence covers Chapters 01–03
 
 final result: passed

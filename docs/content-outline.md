@@ -2,14 +2,14 @@
 
 The sequence intentionally covers the same general backend learning journey as the reference, but every chapter will use original structure, prose, examples, diagrams, and citations.
 
-Publication status: chapters 01–03 are fully authored. Chapters 04–06 are visible as coming next without lesson routes. Chapters 07–24 form the public roadmap.
+Publication status: chapters 01–04 are fully authored. Chapters 05–06 are visible as coming next without lesson routes. Chapters 07–24 form the public roadmap.
 
 | No. | Status | Working title | First-principles promise | Core evidence |
 | --- | --- | --- | --- | --- |
 | 01 | Published | HTTP as a State Machine | Trace a request from bytes to semantics and explain HTTP properties without framework vocabulary. | RFC 9110/9112 and TypeScript server |
 | 02 | Published | Routing and Request Dispatch | Derive routing from path matching, method dispatch, precedence, and request context. | TypeScript router implementation and ambiguity tests |
 | 03 | Published | Representation and Serialization | Explain how data crosses process boundaries and where JSON, Protobuf, and schema evolution fail. | TypeScript encoders and compatibility matrix |
-| 04 | Coming next | Identity, Authentication, and Authorization | Separate identity proof, session state, and policy decisions. | TypeScript session/JWT flows and authorization matrix |
+| 04 | Published | Identity, Authentication, and Authorization | Separate identity proof, session state, token validation, and per-resource policy decisions. | Session state machine, safe JWT validation boundary, executable authorization matrix, and threat hypotheses |
 | 05 | Coming next | Validation at Trust Boundaries | Model parsing, validation, normalization, and safe transformation as distinct steps. | TypeScript failure taxonomy and schema tests |
 | 06 | Coming next | Layered Request Handling | Derive handlers, services, repositories, middleware, and request-scoped context from change boundaries. | TypeScript dependency flow and tracing example |
 | 07 | Roadmap | Resource-Oriented API Design | Design predictable REST APIs from resources, invariants, idempotency, and evolution constraints. | OpenAPI examples and contract tests |

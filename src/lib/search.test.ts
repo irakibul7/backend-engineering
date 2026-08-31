@@ -23,6 +23,13 @@ describe("searchChapters", () => {
     expect(results[0]?.chapter.status).toBe("published");
   });
 
+  it("finds Chapter 04 by a security concept inside the lesson", () => {
+    const results = searchChapters(chapters, "step-up authentication");
+
+    expect(results[0]?.chapter.title).toBe("Identity, Authentication, and Authorization");
+    expect(results[0]?.chapter.status).toBe("published");
+  });
+
   it("returns no results for an empty query", () => {
     expect(searchChapters(chapters, "   ")).toEqual([]);
   });

@@ -58,8 +58,8 @@ A visitor should be able to:
 - Responsive behavior at desktop, tablet, and mobile.
 - Author/community card, portfolio link, GitHub link, and project attribution.
 - SEO, social preview, sitemap, robots, structured data, analytics hooks, and Vercel deployment configuration.
-- Three fully written chapters: HTTP, routing, and serialization.
-- Three visible coming-next chapters: authentication/authorization, validation, and layered request handling. These do not link to lesson routes until complete.
+- Four fully written chapters: HTTP, routing, serialization, and identity/authentication/authorization.
+- Two visible coming-next chapters: validation and layered request handling. These do not link to lesson routes until complete.
 - A public roadmap for chapters 07–24. Roadmap entries remain visible but are not presented as finished lessons.
 
 ### Explicitly out of scope for MVP
@@ -196,11 +196,12 @@ A visitor should be able to:
 
 ## 9. Content requirements
 
-- The current release includes three complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 04–06 are coming next and chapters 07–24 are public roadmap entries.
+- The current release includes four complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 05–06 are coming next and chapters 07–24 are public roadmap entries.
 - Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, practical examples, failure cases, debugging checklist, glossary links, and primary references.
 - Product navigation and positioning remain implementation-language neutral. Initial examples are authored in the current repository language, while the content model must allow additional languages later without renaming the product or restructuring the curriculum.
 - Content must not be bulk-copied or lightly paraphrased from the reference.
 - Every published chapter contains at least two diagrams or graphs created specifically for this project, and every visual has a visible caption and equivalent text explanation.
+- `CON-004`: Before Chapter 04 is published, its reviewed specification must separate identity, authentication, session/token validation, and per-resource authorization; include an executable authorization matrix and session-lifecycle tests; and make clear that the educational examples do not add authentication or a runtime API to this website.
 
 ## 10. Architecture
 
@@ -216,8 +217,8 @@ If Vercel Web Analytics and Speed Insights are enabled, only route and performan
 
 The release is ready only when:
 
-1. All 24 catalog entries exist; only complete chapters have canonical lesson routes, chapters 04–06 are labeled coming next, and chapters 07–24 link to the roadmap.
-2. Chapters 01–03 are fully authored; coming-next and roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
+1. All 24 catalog entries exist; only complete chapters have canonical lesson routes, chapters 05–06 are labeled coming next, and chapters 07–24 link to the roadmap.
+2. Chapters 01–04 are fully authored; coming-next and roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
 3. Search, progress, theme, and notes pass keyboard and mobile Playwright coverage.
 4. All repository quality gates in `docs/test-strategy.md` pass.
 5. Design QA compares desktop and mobile captures against the approved original mock and records `final result: passed`.
@@ -230,7 +231,7 @@ The release is ready only when:
 Confirmed 2026-08-30:
 
 1. Canonical domain: `backend.therakibul.me`.
-2. Staged growth: three complete foundation chapters, three visible coming-next chapters, and a public roadmap for chapters 07–24.
+2. Staged growth: four complete foundation chapters, two visible coming-next chapters, and a public roadmap for chapters 07–24.
 3. Public positioning is language-neutral. Initial examples use the current repository language; additional language variants may be added later.
 4. Specification approved; proceed through technical validation and small reviewed slices.
 
