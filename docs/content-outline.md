@@ -2,9 +2,11 @@
 
 The sequence intentionally covers the same general backend learning journey as the reference, but every chapter will use original structure, prose, examples, diagrams, and citations.
 
-Publication status: chapters 01–05 are fully authored. Chapter 06 is visible as coming next without a lesson route. Chapters 07–24 form the public roadmap.
+Publication status: chapters 01–06 are fully authored. Chapters 07–24 form the public roadmap.
 
 Chapter 05 follows the approved implementation contract in `docs/chapter-05-validation-spec.md`; verification evidence is recorded in `docs/validation/chapter-05-validation.md`.
+
+Chapter 06 follows the approved implementation contract in `docs/chapter-06-layered-handling-spec.md`; verification evidence is recorded in `docs/validation/chapter-06-layered-handling.md`.
 
 | No. | Status | Working title | First-principles promise | Core evidence |
 | --- | --- | --- | --- | --- |
@@ -13,7 +15,7 @@ Chapter 05 follows the approved implementation contract in `docs/chapter-05-vali
 | 03 | Published | Representation and Serialization | Explain how data crosses process boundaries and where JSON, Protobuf, and schema evolution fail. | TypeScript encoders and compatibility matrix |
 | 04 | Published | Identity, Authentication, and Authorization | Separate identity proof, session state, token validation, and per-resource policy decisions. | Session state machine, safe JWT validation boundary, executable authorization matrix, and threat hypotheses |
 | 05 | Published | Validation at Trust Boundaries | Model parsing, validation, normalization, and safe transformation as distinct steps. | TypeScript failure taxonomy and schema tests |
-| 06 | Coming next | Layered Request Handling | Derive handlers, services, repositories, middleware, and request-scoped context from change boundaries. | TypeScript dependency flow and tracing example |
+| 06 | Published | Layered Request Handling | Derive handlers, services, repositories, middleware, and request-scoped context from change boundaries. | TypeScript dependency flow and tracing example |
 | 07 | Roadmap | Resource-Oriented API Design | Design predictable REST APIs from resources, invariants, idempotency, and evolution constraints. | OpenAPI examples and contract tests |
 | 08 | Roadmap | Durable Data and Transactions | Explain indexes, isolation, consistency, and transactions from storage guarantees. | PostgreSQL plans and concurrency cases |
 | 09 | Roadmap | Caching as Controlled Staleness | Treat caching as a consistency trade-off, not a speed switch. | Cache-aside, invalidation, stampede control |

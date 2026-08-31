@@ -162,7 +162,7 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Acceptance: editorial checklist, primary references, schema validation, TypeScript code tests, and diagram alternatives pass for each chapter.
 - Files in scope: chapters 03–06 and original diagrams
 - Exclusions: roadmap chapters
-- Status: In progress. Chapters 03–05 are complete and published; Chapter 06 remains coming next.
+- Status: Complete. Chapters 03–06 are complete and published.
 
 ### T-602A Add the published-chapter visual learning system
 
@@ -178,7 +178,7 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Acceptance: `docs/chapter-04-identity-spec.md` defines the lesson contract, glossary, fictional service boundaries, session state machine, data model, authorization matrix, token-validation boundary, threat hypotheses, original visuals, TypeScript example seams, primary sources, acceptance tests, and ADR impact; it explicitly preserves the static site's no-auth/no-API boundary.
 - Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, `docs/chapter-04-identity-spec.md`
 - Exclusions: chapter implementation, product authentication, login UI, runtime API, identity provider, secrets, dependencies, styles, routes, sitemap changes, and publication-state changes
-- Status: Complete and awaiting human review. No public route or product behavior changes in this slice.
+- Status: Complete and human-reviewed. No public route or product behavior changed in this slice.
 
 ### T-602C Implement and publish Chapter 04
 
@@ -194,7 +194,7 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Acceptance: `docs/chapter-05-validation-spec.md` defines the lesson contract, glossary, fictional request boundary, validation state machine, data model, failure taxonomy, threat hypotheses, original visuals, TypeScript example seams, primary sources, acceptance tests, and ADR impact; it explicitly preserves the static site's no-API boundary and distinguishes validation from parsing, coercion, sanitization, authorization, and database enforcement.
 - Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, `docs/chapter-05-validation-spec.md`
 - Exclusions: chapter implementation, product forms, runtime API, request parser, schema library, database, dependencies, styles, routes, sitemap changes, and publication-state changes
-- Status: Complete and awaiting human review. No public route or product behavior changes in this slice.
+- Status: Complete and human-reviewed. No public route or product behavior changed in this slice.
 
 ### T-602E Implement and publish Chapter 05
 
@@ -202,11 +202,28 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Acceptance: the approved ten-section chapter, original responsive visuals, pure TypeScript validation example, executable failure taxonomy, primary references, glossary/search integration, route metadata, sitemap entry, and validation evidence pass the full repository quality gate at desktop, 390 px, and 320 px; the homepage denominator becomes five published chapters without invalidating existing local progress.
 - Files in scope: Chapter 05 typed content; validation example modules/tests; glossary entries; only renderer/style changes proven necessary for approved visuals; validation and design-QA evidence; generated static discovery output
 - Exclusions: product forms, runtime API, request parser integration, schema-library dependency, database, authorization implementation, remote progress/notes, analytics changes, and Chapters 06–24
-- Status: Complete and awaiting human review. The specification was approved and implementation verified on 2026-08-31; evidence is recorded in `docs/validation/chapter-05-validation.md`. No commit has been created for this slice.
+- Status: Complete, human-reviewed, committed, and published on 2026-08-31; evidence is recorded in `docs/validation/chapter-05-validation.md`.
+
+### T-602F Specify Chapter 06 layered request handling
+
+- Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `A11Y-004`, `CON-006`
+- Acceptance: `docs/chapter-06-layered-handling-spec.md` defines the learning contract, running request, glossary, role matrix, lifecycle state machine, type model, dependency direction, middleware contract, request-context rules, failure ownership, threat hypotheses, original visuals, TypeScript example seams, primary sources, acceptance tests, OpenAPI/threat-model impact, ADR impact, and small implementation slices.
+- Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, `docs/chapter-06-layered-handling-spec.md`
+- Exclusions: chapter implementation, publication state, React/CSS changes, product middleware, runtime API, server, database, DI container, tracing SDK, dependencies, routes, metadata, sitemap, and Chapter 07
+- Status: Complete and human-reviewed. The user approved the specification on 2026-08-31.
+
+### T-602G Implement and publish Chapter 06
+
+- Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `A11Y-004`, `CON-006`
+- Acceptance: the approved ten-section chapter, three original responsive visuals, dependency-free TypeScript request-layer example, executable responsibility and middleware contracts, primary references, glossary/search integration, route metadata, sitemap entry, and validation evidence pass the full repository quality gate at desktop, 390 px, and 320 px; the homepage denominator becomes six published chapters without invalidating existing local progress.
+- Files in scope: approved Chapter 06 content; layered request example/tests; glossary entries; only renderer/style changes proven necessary; validation and design-QA evidence; generated static discovery output
+- Exclusions: runtime API, server framework, database, ORM, DI container, tracing SDK, remote progress/notes, analytics changes, and Chapters 07–24
+- Status: Complete, human-reviewed, and approved for commit on 2026-08-31. Content, examples, discovery integration, quality gates, responsive browser checks, accessibility, and performance evidence passed; evidence is recorded in `docs/validation/chapter-06-layered-handling.md`. The temporary bundle exception is accepted in ADR-0005.
 
 ### T-603 Publish roadmap chapters 07–15
 
 - Acceptance: roadmap entries show promise, planned evidence, and status without generating finished lesson routes or sitemap URLs.
+- Prerequisite: accept and complete the per-chapter content split required by `docs/adr/0005-bounded-content-bundle-growth.md` before publishing Chapter 07.
 
 ### T-604 Publish roadmap chapters 16–24
 

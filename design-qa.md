@@ -137,4 +137,8 @@ No actionable P0, P1, or P2 differences remain.
 - 34 verified links with no failures
 - axe-core 4.13.0: zero automated violations on Chapter 04; previous evidence covers Chapters 01–03
 
+## Latest extension: Chapter 06 layered request handling
+
+Chapter 06 reviewed: 2026-08-31. The lesson adds three original figures through the existing extended-flow, timeline, and decision renderers. Desktop, 390 x 844, and 320 x 700 checks found no page overflow, diagram overflow, error overlay, or console warning/error. At 390 px each figure measured 335 px within the content viewport; at 320 px each measured 265 px. The mobile contents drawer exposed all ten section anchors, diagram transcripts remained collapsed, and the conditionally loaded search and notes overlays remained operable. Axe found zero automated violations; Lighthouse scored 97 performance and 100 accessibility, best practices, and SEO. No actionable P0, P1, or P2 visual finding remains. Detailed evidence is in `docs/validation/chapter-06-layered-handling.md`.
+
 final result: passed

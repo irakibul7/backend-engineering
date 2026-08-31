@@ -10,15 +10,16 @@ describe("Backend Engineering prototype", () => {
     document.documentElement.removeAttribute("data-theme");
   });
 
-  it("presents five published chapters, one coming-next chapter, and a visible public roadmap", () => {
+  it("presents six published chapters and a visible public roadmap", () => {
     render(<Prototype />);
 
     expect(screen.getByRole("link", { name: "Backend Engineering home" }).querySelector("img")).toHaveAttribute("src", "/icon-192.png?v=2");
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
     expect(screen.getByRole("heading", { name: "Launch chapters" })).toBeInTheDocument();
-    expect(screen.getAllByText("Coming next")).toHaveLength(1);
+    expect(screen.queryByText("Coming next")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open Routing and Request Dispatch" })).toHaveAttribute("href", "/chapters/routing-and-request-dispatch/");
     expect(screen.getByRole("link", { name: "Open Representation and Serialization" })).toHaveAttribute("href", "/chapters/representation-and-serialization/");
+    expect(screen.getByRole("link", { name: "Open Layered Request Handling" })).toHaveAttribute("href", "/chapters/layered-request-handling/");
     expect(screen.getByText((_, element) => element?.textContent === "Roadmap (18 topics)")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /View all 18 roadmap topics/ })).toHaveAttribute("href", "/roadmap/");
   });
@@ -48,7 +49,7 @@ describe("Backend Engineering prototype", () => {
     render(<Prototype />);
 
     fireEvent.keyDown(window, { key: "k", ctrlKey: true });
-    const input = screen.getByRole("textbox", { name: "Search chapters and topics" });
+    const input = await screen.findByRole("textbox", { name: "Search chapters and topics" });
     await user.type(input, "Kafka");
 
     expect(screen.getByRole("button", { name: /Messaging and Event Streams/ })).toBeInTheDocument();
@@ -60,7 +61,7 @@ describe("Backend Engineering prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "15");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "12");
     expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuemax", "100");
     expect(screen.getByRole("button", { name: "Reset chapter 1 reading progress" })).toHaveAttribute("aria-pressed", "true");
   });
@@ -100,7 +101,7 @@ describe("Backend Engineering prototype", () => {
     const { container } = render(<Prototype />);
 
     await user.click(screen.getByRole("button", { name: "Open study notes" }));
-    await user.type(screen.getByRole("textbox", { name: "Study notes Markdown editor" }), "# Safe\n\n<script>alert(1)</script>");
+    await user.type(await screen.findByRole("textbox", { name: "Study notes Markdown editor" }), "# Safe\n\n<script>alert(1)</script>");
     await user.click(screen.getByRole("tab", { name: "Preview" }));
 
     expect(await screen.findByRole("heading", { name: "Safe" })).toBeInTheDocument();
@@ -128,12 +129,12 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByRole("figure", { name: "Preserving 404 and 405 during dispatch" })).toBeInTheDocument();
   });
 
-  it("does not expose an unfinished chapter as a lesson", () => {
-    window.history.replaceState({}, "", "/chapters/layered-request-handling");
+  it("does not expose a roadmap chapter as a lesson", () => {
+    window.history.replaceState({}, "", "/chapters/resource-oriented-api-design");
     render(<Prototype />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
-    expect(screen.queryByRole("heading", { level: 1, name: "Layered Request Handling" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1, name: "Resource-Oriented API Design" })).not.toBeInTheDocument();
     expect(screen.queryByText(/approved launch collection/i)).not.toBeInTheDocument();
   });
 
@@ -168,6 +169,21 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByText("02 / Parse")).toBeInTheDocument();
     expect(screen.getAllByText("Read diagram as text")[0].closest("details")).not.toHaveAttribute("open");
     expect(screen.getByRole("link", { name: /RFC 9457/ })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc9457.html");
+    expect(screen.getByRole("link", { name: /NextLayered Request Handling/ })).toHaveAttribute("href", "/chapters/layered-request-handling/");
+  });
+
+  it("renders Chapter 06 with layered boundaries, responsive visuals, and primary references", () => {
+    window.history.replaceState({}, "", "/chapters/layered-request-handling");
+    render(<Prototype />);
+
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Layered Request Handling");
+    expect(screen.getByRole("figure", { name: "One request, six ownership boundaries" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "Middleware enters inward and unwinds outward" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "Where should this responsibility live?" })).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: /Failure ownership/ })).toBeInTheDocument();
+    expect(screen.getByText("publish-document.ts")).toBeInTheDocument();
+    expect(screen.getByText("middleware.ts")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Node.js: Asynchronous context tracking" })).toHaveAttribute("href", "https://nodejs.org/api/async_context.html");
     expect(screen.queryByText("Next")).not.toBeInTheDocument();
   });
 

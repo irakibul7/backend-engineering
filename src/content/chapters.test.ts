@@ -1,18 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { chapterBySlug, chapterHref, launchChapters, publishedChapters } from "./chapters";
+import { chapterBySlug, chapterHref, chapters, launchChapters, publishedChapters } from "./chapters";
 
 describe("chapter publication model", () => {
   it("keeps all six launch entries while exposing only complete lessons", () => {
     expect(launchChapters).toHaveLength(6);
-    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4, 5]);
+    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4, 5, 6]);
     expect(publishedChapters.every((chapter) => chapter.sections?.length)).toBe(true);
   });
 
   it("does not resolve an unfinished chapter as a lesson route", () => {
-    const upcoming = launchChapters.find((chapter) => chapter.number === 6);
+    const upcoming = chapters.find((chapter) => chapter.number === 7);
     expect(upcoming).toBeDefined();
-    expect(chapterHref(upcoming!)).toBe("/#layered-request-handling");
-    expect(chapterBySlug("layered-request-handling")).toBeUndefined();
+    expect(chapterHref(upcoming!)).toBe("/roadmap/#resource-oriented-api-design");
+    expect(chapterBySlug("resource-oriented-api-design")).toBeUndefined();
   });
 
   it("publishes Chapter 03 with the complete editorial contract", () => {
@@ -59,6 +59,22 @@ describe("chapter publication model", () => {
 
     const references = chapter?.sections?.flatMap((section) => section.references ?? []) ?? [];
     expect(references).toHaveLength(9);
+    expect(references.every((reference) => reference.url.startsWith("https://"))).toBe(true);
+  });
+
+  it("publishes Chapter 06 with its reviewed request-layer contract", () => {
+    const chapter = chapterBySlug("layered-request-handling");
+
+    expect(chapter).toBeDefined();
+    expect(chapter?.sections).toHaveLength(10);
+    expect(chapter?.sections?.flatMap((section) => section.visuals ?? [])).toHaveLength(3);
+    expect(chapter?.sections?.some((section) => section.table?.caption.includes("Failure ownership"))).toBe(true);
+    expect(chapter?.sections?.some((section) => section.code?.filename === "publish-document.ts")).toBe(true);
+    expect(chapter?.sections?.some((section) => section.code?.filename === "middleware.ts")).toBe(true);
+    expect(chapter?.sections?.flatMap((section) => section.questions ?? [])).toHaveLength(5);
+
+    const references = chapter?.sections?.flatMap((section) => section.references ?? []) ?? [];
+    expect(references).toHaveLength(10);
     expect(references.every((reference) => reference.url.startsWith("https://"))).toBe(true);
   });
 

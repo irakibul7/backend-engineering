@@ -16,12 +16,13 @@ describe("SEO metadata", () => {
       "/chapters/representation-and-serialization/",
       "/chapters/identity-authentication-authorization/",
       "/chapters/validation-at-trust-boundaries/",
+      "/chapters/layered-request-handling/",
     ]);
     expect(routes.every((route) => route.robots.startsWith("index"))).toBe(true);
   });
 
   it("marks unknown and unfinished lesson routes noindex", () => {
-    expect(getSeoMetadata("/chapters/layered-request-handling", publishedChapters)).toMatchObject({
+    expect(getSeoMetadata("/chapters/resource-oriented-api-design", publishedChapters)).toMatchObject({
       robots: "noindex, nofollow",
       title: "Page not found — Backend Engineering",
     });

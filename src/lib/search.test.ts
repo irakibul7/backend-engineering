@@ -37,6 +37,13 @@ describe("searchChapters", () => {
     expect(results[0]?.chapter.status).toBe("published");
   });
 
+  it("finds Chapter 06 by a middleware safety concept inside the lesson", () => {
+    const results = searchChapters(chapters, "middleware");
+
+    expect(results[0]?.chapter.title).toBe("Layered Request Handling");
+    expect(results[0]?.chapter.status).toBe("published");
+  });
+
   it("returns no results for an empty query", () => {
     expect(searchChapters(chapters, "   ")).toEqual([]);
   });

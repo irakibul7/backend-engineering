@@ -2,7 +2,7 @@ import "@fontsource/jetbrains-mono/500.css";
 import "@fontsource/spline-sans/400.css";
 import "@fontsource/spline-sans/500.css";
 import "@fontsource/spline-sans/600.css";
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -21,12 +21,10 @@ import {
   Moon,
   Search,
   Sun,
-  X,
 } from "lucide-react";
 import {
   chapterBySlug,
   chapterHref,
-  chapters,
   launchChapters,
   publishedChapters,
   roadmapChapters,
@@ -34,15 +32,15 @@ import {
   type LessonSection,
   type LessonVisual,
 } from "./content/chapters";
-import { searchChapters } from "./lib/search";
-import { readNote, readReadingProgress, readTheme, recordLearningVisit, toLocalDateKey, writeNote, writeProgress, writeReadingProgress, writeTheme, type LearningStreak, type ReadingProgress, type Theme } from "./lib/storage";
+import { readReadingProgress, readTheme, recordLearningVisit, toLocalDateKey, writeProgress, writeReadingProgress, writeTheme, type LearningStreak, type ReadingProgress, type Theme } from "./lib/storage";
 import { applyDocumentMetadata } from "./lib/seo";
 
 const knownPublishedSlugs = new Set(publishedChapters.map((chapter) => chapter.slug));
 const publishedSectionsBySlug = new Map(publishedChapters.map((chapter) => [chapter.slug, new Set(chapter.sections?.map((section) => section.id) ?? [])]));
 const emptySectionIds = new Set<string>();
 const themes: Theme[] = ["light", "original", "dark"];
-const MarkdownPreview = lazy(() => import("./MarkdownPreview"));
+const SearchDialog = lazy(() => import("./SearchDialog"));
+const NotesPanel = lazy(() => import("./NotesPanel"));
 
 const chapterLabels: Record<number, { difficulty: "Fundamental" | "Important" }> = {
   1: { difficulty: "Fundamental" },
@@ -526,59 +524,6 @@ function LessonPage({
   );
 }
 
-function SearchDialog({ onClose, navigate }: { onClose: () => void; navigate: (href: string) => void }) {
-  const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-  const results = useMemo(() => searchChapters(chapters, query), [query]);
-  return (
-    <div className="modal-layer" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <section className="search-dialog" role="dialog" aria-modal="true" aria-label="Search chapters">
-        <div className="search-field"><Search size={20} aria-hidden="true" /><input ref={inputRef} autoFocus value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === "Escape" && onClose()} placeholder="Search chapters, topics…" aria-label="Search chapters and topics" /><kbd>ESC</kbd></div>
-        <div className="search-results" aria-live="polite">
-          {!query ? <p className="search-helper">Search every published chapter and planned topic.</p> : null}
-          {query && !results.length ? <p className="search-helper">No topic matches “{query}”. Try a protocol, system, or tool name.</p> : null}
-          {results.map(({ chapter }) => <button key={chapter.slug} type="button" onClick={() => { navigate(chapterHref(chapter)); onClose(); }}><span className="search-result-number">{pad(chapter.number)}</span><span><strong>{chapter.title}</strong><small>{chapter.status === "published" ? chapter.duration : chapter.status === "coming-next" ? "Coming next" : "Roadmap"}</small></span><ArrowRight size={17} aria-hidden="true" /></button>)}
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function NotesPanel({ scope, onClose }: { scope: string; onClose: () => void }) {
-  const [mode, setMode] = useState<"edit" | "preview">("edit");
-  const [markdown, setMarkdown] = useState(() => readNote(scope));
-  const [saved, setSaved] = useState(true);
-
-  useEffect(() => {
-    if (saved) return;
-    const timer = window.setTimeout(() => setSaved(writeNote(scope, markdown)), 350);
-    return () => window.clearTimeout(timer);
-  }, [markdown, saved, scope]);
-
-  const exportNote = () => {
-    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `backend-engineering-${scope}.md`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-  };
-
-  return (
-    <div className="notes-layer" role="presentation">
-      <button className="notes-backdrop" type="button" aria-label="Close study notes" onClick={onClose} />
-      <aside className="notes-panel" role="dialog" aria-modal="true" aria-label="Study notes">
-        <header><div><h2>Study notes</h2><span className={saved ? "saved-state" : "saving-state"}>{saved ? "Saved" : "Saving"}</span></div><button type="button" onClick={onClose} aria-label="Close study notes"><X size={18} /></button></header>
-        <p className="note-scope">{scope === "master" ? "All launch chapters" : scope.replaceAll("-", " ")}</p>
-        <div className="note-tabs" role="tablist" aria-label="Note view"><button type="button" role="tab" aria-selected={mode === "edit"} onClick={() => setMode("edit")}>Edit</button><button type="button" role="tab" aria-selected={mode === "preview"} onClick={() => setMode("preview")}>Preview</button></div>
-        {mode === "edit" ? <textarea value={markdown} onChange={(event) => { setMarkdown(event.target.value); setSaved(false); }} placeholder="# Study notes\n\nWrite private Markdown notes here…" aria-label="Study notes Markdown editor" /> : <div className="note-preview"><Suspense fallback={<p>Preparing preview…</p>}><MarkdownPreview markdown={markdown} /></Suspense></div>}
-        <footer><span>{markdown.trim() ? markdown.trim().split(/\s+/).length : 0} words</span><button type="button" onClick={exportNote} disabled={!markdown}>Export Markdown</button></footer>
-      </aside>
-    </div>
-  );
-}
-
 export function Prototype() {
   const { path, navigate } = useRoute();
   const [readingProgress, setReadingProgress] = useState<ReadingProgress>(() => readReadingProgress(publishedSectionsBySlug));
@@ -647,8 +592,8 @@ export function Prototype() {
       <a className="skip-link" href="#main-content">Skip to content</a>
       <AppHeader path={path} theme={theme} navigate={navigate} onOpenSearch={() => setSearchOpen(true)} onOpenNotes={() => setNotesOpen(true)} onCycleTheme={cycleTheme} />
       {lesson ? <LessonPage chapter={lesson} readSectionIds={readingProgress.get(lesson.slug) ?? emptySectionIds} onReadSections={markSectionsRead} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage readingProgress={readingProgress} streak={streak} onToggle={toggleComplete} onOpenNotes={() => setNotesOpen(true)} navigate={navigate} />}
-      {searchOpen ? <SearchDialog onClose={() => setSearchOpen(false)} navigate={navigate} /> : null}
-      {notesOpen ? <NotesPanel scope={noteScope} onClose={() => setNotesOpen(false)} /> : null}
+      {searchOpen ? <Suspense fallback={null}><SearchDialog onClose={() => setSearchOpen(false)} navigate={navigate} /></Suspense> : null}
+      {notesOpen ? <Suspense fallback={null}><NotesPanel scope={noteScope} onClose={() => setNotesOpen(false)} /></Suspense> : null}
     </>
   );
 }
