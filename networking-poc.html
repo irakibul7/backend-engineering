@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Networking Observatory · Technical Proof</title>
+  </head>
+  <body>
+    <div id="networking-poc-root"></div>
+    <noscript>
+      <main style="max-width: 760px; margin: 48px auto; padding: 24px; font-family: sans-serif">
+        <h1>Networking and Packet Routing</h1>
+        <p>This technical proof uses a fixed request from 192.0.2.10 to 203.0.113.42.</p>
+        <ol>
+          <li>Application data is wrapped in a TCP segment.</li>
+          <li>The segment is wrapped in an IPv4 packet with TTL 64.</li>
+          <li>The host identifies its gateway as the next hop.</li>
+          <li>ARP resolves the gateway's local link-layer address.</li>
+          <li>An Ethernet frame carries the packet across one link.</li>
+          <li>The router selects 203.0.113.42/32 by longest-prefix match.</li>
+          <li>The router decrements TTL to 63 and creates a new frame.</li>
+          <li>The destination removes each envelope and delivers the request upward.</li>
+        </ol>
+        <table>
+          <caption>Fixed routing-table evidence</caption>
+          <thead><tr><th>Destination</th><th>Next hop</th><th>Interface</th></tr></thead>
+          <tbody>
+            <tr><td>0.0.0.0/0</td><td>192.0.2.1</td><td>eth0</td></tr>
+            <tr><td>203.0.113.0/24</td><td>198.51.100.1</td><td>eth1</td></tr>
+            <tr><td>203.0.113.42/32</td><td>198.51.100.254</td><td>eth2</td></tr>
+          </tbody>
+        </table>
+      </main>
+    </noscript>
+    <script type="module" src="/src/pocs/networking/main.tsx"></script>
+  </body>
+</html>

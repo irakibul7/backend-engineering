@@ -217,17 +217,39 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `A11Y-004`, `CON-006`
 - Acceptance: the approved ten-section chapter, three original responsive visuals, dependency-free TypeScript request-layer example, executable responsibility and middleware contracts, primary references, glossary/search integration, route metadata, sitemap entry, and validation evidence pass the full repository quality gate at desktop, 390 px, and 320 px; the homepage denominator becomes six published chapters without invalidating existing local progress.
 - Files in scope: approved Chapter 06 content; layered request example/tests; glossary entries; only renderer/style changes proven necessary; validation and design-QA evidence; generated static discovery output
-- Exclusions: runtime API, server framework, database, ORM, DI container, tracing SDK, remote progress/notes, analytics changes, and Chapters 07–24
+- Exclusions: runtime API, server framework, database, ORM, DI container, tracing SDK, remote progress/notes, analytics changes, and Chapters 07–25
 - Status: Complete, human-reviewed, and approved for commit on 2026-08-31. Content, examples, discovery integration, quality gates, responsive browser checks, accessibility, and performance evidence passed; evidence is recorded in `docs/validation/chapter-06-layered-handling.md`. The temporary bundle exception is accepted in ADR-0005.
 
-### T-603 Publish roadmap chapters 07–15
+### T-602H Specify Chapter 07 networking and packet routing
+
+- Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `A11Y-004`, `PERF-002`, `PERF-003`, `CON-007`
+- Acceptance: `docs/chapter-07-networking-spec.md` defines curriculum position, learning contract, two running topologies, glossary, sixteen-section outline, explicit coverage gate, deterministic packet and scenario state, data model, longest-prefix-match contract, the selected 3D centerpiece and seven supporting visual modules, renderer lifecycle, responsive and accessibility behavior, performance budget, threat hypotheses, PoCs, test strategy, sources, architecture impact, and small implementation slices.
+- Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, `docs/chapter-07-networking-spec.md`, and the selected concept image under validation screenshots
+- Exclusions: chapter implementation, dependencies, React/CSS changes, Three.js, routes, publication state, sitemap, metadata, storage, analytics, and renumbering the current runtime catalog
+- Status: Complete and human-approved on 2026-08-31. The approved amendment requires sixteen sections, eight visual modules, TCP/UDP-neutral examples, route repair, Internet reachability, and operations evidence before publication.
+
+### T-602I Validate Chapter 07 networking and 3D boundaries
+
+- Acceptance: PoC-NET-01 through PoC-NET-03 prove routing correctness, deterministic scene state, protocol-layer and bounded routed-topology 3D fidelity, TCP/UDP-neutral encapsulation, readable mobile hop timelines, bounded renderer lifecycle, context loss, reduced motion, keyboard operation, no-WebGL equivalence, responsive behavior, and bundle budgets before public implementation.
+- Files in scope: isolated PoC modules/tests/fixture, dependency ADR, and validation evidence approved after `T-602H`
+- Exclusions: public lesson route, catalog publication, sitemap, metadata, and unrelated chapters
+- Status: Complete and human-approved on 2026-08-31. The expanded proof covers eight modules and forty deterministic states, passes model/component/lifecycle tests, responsive checks, normal and no-WebGL accessibility scans, production build and bundle budgets, renderer lifecycle/context recovery, and repository regression gates. ADR-0006 is Accepted. No public lesson route or catalog publication occurred in this slice.
+
+### T-602J Implement and publish Chapter 07
+
+- Acceptance: ADR-0005 content splitting, the approved original sixteen-section static chapter, all required responsive visual modules, protocol-layer and routed-topology interactions, dependency-free semantic fallback, glossary/search/progress/SEO/sitemap integration, primary references, and complete accessibility/responsive/performance/design-QA evidence pass before commit.
+- Files in scope: approved Chapter 07 implementation and the prerequisite route-size architecture
+- Exclusions: network inspection, runtime API, sockets, live topology, user network data, telemetry changes, and Chapters 08–25
+- Status: Ready. `T-602H` and `T-602I` are approved; begin with the ADR-0005 route-size architecture prerequisite before authoring and publishing the sixteen-section lesson.
+
+### T-603 Publish roadmap chapters 08–15
 
 - Acceptance: roadmap entries show promise, planned evidence, and status without generating finished lesson routes or sitemap URLs.
 - Prerequisite: accept and complete the per-chapter content split required by `docs/adr/0005-bounded-content-bundle-growth.md` before publishing Chapter 07.
 
-### T-604 Publish roadmap chapters 16–24
+### T-604 Publish roadmap chapters 16–25
 
-- Same contract as T-603 for chapters 16–24.
+- Same contract as T-603 for chapters 16–25.
 
 Each chapter or coherent two-chapter pair should be its own human-reviewed commit. Do not generate all chapters in one task.
 

@@ -2,7 +2,7 @@
 
 ## Scope
 
-Static public pages, client-side search, local completion tracking, theme storage, Markdown notes/preview/export, external links, build pipeline, and Vercel hosting.
+Static public pages, client-side search, local completion tracking, theme storage, Markdown notes/preview/export, bounded chapter visualizations, external links, build pipeline, and Vercel hosting.
 
 ## Assets to protect
 
@@ -20,6 +20,7 @@ Static public pages, client-side search, local completion tracking, theme storag
 4. Browser storage crosses from untrusted persisted bytes into typed UI state.
 5. External links leave Rakibul's origin.
 6. GitHub-to-Vercel deployment crosses a privileged CI boundary.
+7. A fixed educational packet fixture crosses into a chapter-only WebGL renderer.
 
 ## Threats and controls
 
@@ -37,6 +38,9 @@ Static public pages, client-side search, local completion tracking, theme storag
 | TM-10 | Stale technical guidance | Learner harm and trust loss | Primary sources, review date, visible correction path | Content validation and scheduled review |
 | TM-11 | Clickjacking or MIME confusion | UI abuse/content misinterpretation | `frame-ancestors 'none'`, `X-Content-Type-Options: nosniff` | Header tests |
 | TM-12 | Denial of service | Site unavailable | Static CDN hosting, cache immutable assets, small client bundle | Load/hosting checks |
+| TM-13 | Hidden or abandoned WebGL work consumes device resources | Battery drain, heat, or degraded reading | Lazy initialization, fixed scene limits, on-demand frames, visibility/intersection pause, disposal on unmount | Lifecycle tests and browser performance observation |
+| TM-14 | A visualization implies that it inspected the reader's network | Privacy confusion or accidental future data collection | Fixed RFC documentation addresses, no socket/device/network APIs, no route input or third-party topology calls | Source review and network-request audit |
+| TM-15 | Motion or context loss makes networking content inaccessible | Disorientation or unavailable lesson evidence | User-controlled transitions, reduced-motion snap states, semantic HTML equivalence, and context-loss fallback | Keyboard, reduced-motion, axe, and forced-failure checks |
 
 ## Security headers target
 

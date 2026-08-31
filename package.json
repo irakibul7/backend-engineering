@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:poc:networking": "vite --open /networking-poc.html",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "test": "vitest run",
     "test:watch": "vitest",
     "build": "vite build && node --experimental-strip-types scripts/generate-seo.mjs && node scripts/prepare-sites-build.mjs",
+    "build:poc:networking": "vite build --config vite.networking-poc.config.ts",
     "preview": "vite preview",
     "test:hosting": "node --test tests/sites-worker.test.mjs tests/vercel-config.hosting.mjs tests/launch-assets.hosting.mjs",
     "test:sites": "npm run test:hosting",
@@ -29,6 +31,7 @@
     "react-markdown": "10.1.0",
     "rehype-sanitize": "6.0.0",
     "remark-gfm": "4.0.1",
+    "three": "0.185.1",
     "vite": "6.4.2"
   },
   "devDependencies": {
@@ -39,6 +42,7 @@
     "@testing-library/user-event": "14.6.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
+    "@types/three": "0.185.4",
     "eslint": "9.39.1",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.5",

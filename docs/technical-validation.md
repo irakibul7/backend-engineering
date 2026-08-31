@@ -51,6 +51,30 @@ Build these as isolated proofs of concept before the product scaffold. Each PoC 
 - Pass: hosting test suite validates response codes/headers; preview contains no production canonical leakage; production origin is configurable.
 - Timebox: half day after domain confirmation.
 
+## PoC-NET-01 — Deterministic packet journey and route lookup
+
+- Question: Can a pure TypeScript model parse canonical IPv4 addresses, select a route by longest-prefix match, and reconstruct every packet-journey step without visual state leaking into networking decisions?
+- Requirements: `LES-001`, `LES-008`, `CON-007`
+- Pass: `/0`, `/32`, overlapping prefixes, high-bit addresses, equal-prefix metrics, malformed input, no-route behavior, next/previous/direct selection, and replay pass unit tests.
+- Exclusions: React, Three.js, CSS, runtime API, live networking, and public routes.
+- Timebox: half day.
+
+## PoC-NET-02 — Protocol-layer observatory fidelity and lifecycle
+
+- Question: Can the selected exploded-layer composition and a bounded routed-topology mode remain readable and responsive while a lazy Three.js renderer stays within explicit GPU, geometry, and animation-loop limits?
+- Requirements: `LES-004`, `A11Y-004`, `PERF-002`, `PERF-003`, `CON-007`
+- Pass: the isolated proof covers protocol layers with TCP and UDP alternatives plus same-subnet, routed-delivery, and missing-route-repair topology states; matches the selected composition at desktop; provides a readable vertical-hop alternative at 390 px and 320 px; caps device pixel ratio and drawing-buffer size; schedules animation only during a transition; pauses when hidden or offscreen; disposes resources; and reports its lazy chunk size.
+- Exclusions: public Chapter 07 route, catalog changes, external assets, camera controls, physics, WebXR, and continuous animation.
+- Timebox: one day.
+
+## PoC-NET-03 — Semantic, reduced-motion, and no-WebGL equivalence
+
+- Question: Can every interactive scene state remain understandable and operable when animation is reduced, WebGL is unavailable, or the canvas is hidden?
+- Requirements: `A11Y-001`, `A11Y-003`, `A11Y-004`, `CON-007`
+- Pass: semantic state, selected route, TTL, and explanations remain real HTML for every approved scenario; keyboard controls cover each journey; reduced motion uses snap transitions and disables auto-play; forced WebGL failure preserves the complete lesson; automated accessibility reports zero violations.
+- Exclusions: screen-reader-specific telemetry, remote preference sync, and any collection of reader network information.
+- Timebox: half day.
+
 ## Deliberately not applicable
 
 PowerPoint COM fidelity, offline synchronization across devices, 10 GB resumable upload, malware inspection, archive conversion, signed Room Agent updates, .NET tests, and infrastructure synth/diff do not map to this static educational product. They will not be built as ceremonial PoCs. If future scope introduces an equivalent risk, it must first become a requirement and ADR.

@@ -1,4 +1,80 @@
-# Design QA: responsive diagram system
+# Design QA: Chapter 07 expanded networking observatory PoC
+
+Latest review: 2026-08-31. This pass compares visual direction 2, the selected Protocol Layer Observatory, with the approved eight-module interactive proof. The implementation keeps the selected technical composition while expanding coverage beyond the original single packet-stack state.
+
+## Latest comparison target
+
+- Source visual truth: `docs/validation/screenshots/chapter-07-networking-selected-concept.png`
+- Browser-rendered implementation: `docs/validation/screenshots/chapter-07-networking-expanded-poc-desktop.png`
+- Combined comparison input: `docs/validation/screenshots/chapter-07-networking-design-qa-comparison.png`
+- Responsive evidence: `docs/validation/screenshots/chapter-07-networking-expanded-poc-390.png` and `docs/validation/screenshots/chapter-07-networking-expanded-poc-fallback-320.png`
+- Route and state: `/networking-poc.html`, light theme, Protocol layers module, step 04 `IP`, motion enabled but idle.
+- Browser viewport and pixels: 1488 × 1058 at device scale factor 1 for both source and implementation. The combined comparison is 2976 × 1058 pixels.
+
+## Latest findings
+
+No actionable P0, P1, or P2 differences remain.
+
+- [Expected] The proof adds an eight-module evidence navigator above the selected composition.
+  - Evidence: local links, subnet decisions, ARP, protocol layers, routed delivery, route repair, Internet reachability, and operations are independently selectable while the selected exploded-stack composition remains the Protocol layers module.
+  - Impact: the PoC now proves the breadth of the approved sixteen-section curriculum instead of presenting protocol encapsulation as the whole chapter.
+- [Expected] Protocol header details remain semantic HTML instead of becoming rasterized canvas text.
+  - Evidence: the concept draws TCP/IP/Ethernet header cells inside its plates; the proof aligns readable HTML layer labels beside real Three.js geometry and keeps packet fields in the explanation and routing table.
+  - Impact: zoom, screen-reader, no-WebGL, and narrow-screen experiences retain the same facts.
+- [Expected] The implementation uses original chapter copy and the reviewed RFC documentation addresses.
+  - Evidence: headings, route rows, and step names differ from generated placeholder copy while preserving the packet-layer and route-selection relationships.
+- [P3] The proof exposes renderer metrics in a collapsed technical disclosure.
+  - Impact: it is intentionally present for PoC review and should be removed or moved to development tooling before public Chapter 07 publication.
+
+## Latest required fidelity surfaces
+
+- Fonts and typography: Spline Sans and JetBrains Mono match the established Backend Engineering product. The large lesson heading, mono eyebrow, layer labels, table hierarchy, and microcopy follow the selected concept's roles while fitting original content.
+- Spacing and layout rhythm: the header, chapter rail, reading canvas, exploded stack, right-side evidence, bottom step rail, and three controls retain the source proportions. The new module navigator scrolls within its own bounded region; the 390 px and 320 px versions stack evidence below the observatory and replace the dense step rail with a named select.
+- Colors and visual tokens: white paper, dark ink, cool rules, translucent blue/violet plates, and orange active state follow the target and the existing product tokens. The light-theme text/action orange was darkened after contrast testing without changing the vivid canvas highlight.
+- Image quality and asset fidelity: the implementation uses the exact installed app icon and a real Three.js scene with crisp application-owned primitive geometry. No source raster is shipped as the scene, no hotlinked model or texture is used, and no target asset is replaced by CSS or handwritten SVG art.
+- Copy and content: all headings, descriptions, addresses, route evidence, TTL values, switch/ARP states, control-plane distinctions, and debugging prompts are original and synchronized with the deterministic TypeScript scenario model.
+- Responsiveness and accessibility: 390 px and 320 px have no document overflow; controls measure 48 px high; the table scrolls within its own labeled region; the semantic fallback preserves source, destination, TTL, route rows, and explanations. Normal and forced no-WebGL pages each report zero axe violations.
+
+## Latest full-view and focused evidence
+
+- Full view: `chapter-07-networking-design-qa-comparison.png` places the equal-size source and expanded browser capture together. Header shell, sidebar weight, exploded-stack scale, evidence hierarchy, selected layer, and step progression are readable in the same image.
+- Focused regions: no separate crop was needed because the equal-height comparison keeps all five layer states, source/destination evidence, the notice card, and active step visible.
+- Mobile: the 390 px capture proves the stacked visual/evidence layout and the 320 px capture proves the semantic fallback without page overflow.
+
+## Latest comparison history
+
+### Pass 1 — blocked
+
+- [P2] The desktop routing table retained its mobile minimum width, hiding the Interface column behind an internal scrollbar.
+- [P2] Five small orange text/control surfaces failed automated color contrast.
+- [P2] The initial desktop heading scale caused the routing-state title to wrap and pushed the control row below the selected concept's viewport composition.
+
+### Pass 2 — passed
+
+- Rebalanced the desktop visual/table columns and reduced the table minimum so all three route fields remain visible.
+- Reduced the maximum heading scale while preserving the source hierarchy and a single-line routing-state title.
+- Darkened text/action orange and muted copy; axe-core 4.13.0 reports zero violations in normal and no-WebGL states.
+- Re-captured the implementation at the same state and density, rebuilt the normalized comparison, and found no remaining P0/P1/P2 mismatch.
+
+### Pass 3 — expanded coverage passed
+
+- Added eight independently selectable modules and forty deterministic states without changing the selected product shell.
+- Reworked every evidence type for bounded internal scrolling or vertical stacking at 390 px and 320 px.
+- Re-captured the approved Protocol layers state at the source dimensions and reviewed the side-by-side comparison; no actionable P0/P1/P2 difference remains.
+
+## Latest interactions and browser checks
+
+- Auto-play advanced to Transport, Pause stopped it, and direct step selection synchronized the heading, active layer, route row, and insight.
+- The Reduce motion control changed to `On` and disabled Auto-play; unit evidence covers platform preference precedence and persisted opt-in reduction.
+- Scrolling the observatory out of view changed renderer state from `active` to `idle`.
+- Forced `WEBGL_lose_context` changed state to `context-lost` and restored it to `ready` without a console warning or error.
+- All eight modules were opened and every scenario advanced to its final deterministic state: 5, 4, 5, 5, 8, 5, 4, and 4 steps respectively.
+- Renderer evidence at desktop: 28 objects, 556 triangles, 1.0 pixel ratio, and 125,840 drawing-buffer pixels.
+- Browser console: zero warnings or errors in final desktop, mobile, interaction, fallback, and context-recovery passes.
+- axe-core 4.13.0: zero automated violations in normal and forced no-WebGL states.
+- Production Lighthouse: 99 performance, 100 accessibility, and 100 best practices for the semantic fallback path; WebGL-path synthetic performance is documented separately because SwiftShader dominates its CPU trace.
+
+## Prior review: responsive diagram system
 
 Latest responsive review: 2026-08-31. This pass responds to the supplied compressed three-column cache-decision capture and applies the result to the shared flow, decision, precedence-ladder, and timeline renderers.
 
