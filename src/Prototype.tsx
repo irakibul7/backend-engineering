@@ -340,12 +340,12 @@ function CodeBlock({ filename, source }: { filename: string; source: string }) {
       setCopied(false);
     }
   };
-  return <figure className="code-block"><figcaption><span>{filename}</span><button type="button" onClick={copy}>{copied ? "Copied" : "Copy"}</button></figcaption><pre><code>{source}</code></pre></figure>;
+  return <figure className="code-block"><figcaption><span>{filename}</span><button type="button" onClick={copy}>{copied ? "Copied" : "Copy"}</button></figcaption><pre tabIndex={0}><code>{source}</code></pre></figure>;
 }
 
 function FlowVisual({ visual }: { visual: Extract<LessonVisual, { kind: "flow" }> }) {
   return (
-    <ol className="visual-flow" aria-label="Ordered system flow">
+    <ol className={`visual-flow ${visual.stages.length > 5 ? "visual-flow--extended" : ""}`} aria-label="Ordered system flow">
       {visual.stages.map((stage, index) => (
         <li key={stage.title}>
           <span className="visual-index">{String(index + 1).padStart(2, "0")}</span>
@@ -414,14 +414,17 @@ function LessonVisualFigure({ visual }: { visual: LessonVisual }) {
       {visual.kind === "decision" ? <DecisionVisual visual={visual} /> : null}
       {visual.kind === "ladder" ? <LadderVisual visual={visual} /> : null}
       {visual.kind === "timeline" ? <TimelineVisual visual={visual} /> : null}
-      <p className="visual-alternative"><span>Text view</span>{visual.alternative}</p>
+      <details className="visual-alternative">
+        <summary>Read diagram as text</summary>
+        <p>{visual.alternative}</p>
+      </details>
     </figure>
   );
 }
 
 function LessonTable({ table }: { table: NonNullable<LessonSection["table"]> }) {
   return (
-    <div className="lesson-table-wrap" tabIndex={0} aria-label={`${table.caption}. Scroll horizontally to inspect every column.`}>
+    <div className="lesson-table-wrap" role="region" tabIndex={0} aria-label={`${table.caption}. Scroll horizontally to inspect every column.`}>
       <table>
         <caption>{table.caption}</caption>
         <thead><tr>{table.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
@@ -493,13 +496,14 @@ function LessonPage({
         <div className="lesson-content">
           {chapter.sections.map((section) => (
             <section key={section.id} id={section.id} className="lesson-section">
-              <p className="section-label">{section.number} / Foundation</p>
+              <p className="section-label">{section.number} / {section.label ?? "Foundation"}</p>
               <h2>{section.title}</h2>
               <p className="section-intro">{section.introduction}</p>
               {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              {section.codeFirst && section.code ? <CodeBlock filename={section.code.filename} source={section.code.source} /> : null}
               {section.callout ? <aside className="lesson-callout"><strong>{section.callout.label}</strong><p>{section.callout.body}</p></aside> : null}
               {section.visuals?.map((visual) => <LessonVisualFigure key={visual.label} visual={visual} />)}
-              {section.code ? <CodeBlock filename={section.code.filename} source={section.code.source} /> : null}
+              {!section.codeFirst && section.code ? <CodeBlock filename={section.code.filename} source={section.code.source} /> : null}
               {section.table ? <LessonTable table={section.table} /> : null}
               {section.checklist ? <ul className="lesson-checklist">{section.checklist.map((item) => <li key={item}><Check size={16} />{item}</li>)}</ul> : null}
               {section.questions ? <div className="lesson-questions"><h3>Design questions</h3><ol>{section.questions.map((question) => <li key={question}>{question}</li>)}</ol></div> : null}

@@ -58,8 +58,8 @@ A visitor should be able to:
 - Responsive behavior at desktop, tablet, and mobile.
 - Author/community card, portfolio link, GitHub link, and project attribution.
 - SEO, social preview, sitemap, robots, structured data, analytics hooks, and Vercel deployment configuration.
-- Four fully written chapters: HTTP, routing, serialization, and identity/authentication/authorization.
-- Two visible coming-next chapters: validation and layered request handling. These do not link to lesson routes until complete.
+- Five fully written chapters: HTTP, routing, serialization, identity/authentication/authorization, and validation at trust boundaries.
+- One visible coming-next chapter: layered request handling. It does not link to a lesson route until complete.
 - A public roadmap for chapters 07–24. Roadmap entries remain visible but are not presented as finished lessons.
 
 ### Explicitly out of scope for MVP
@@ -196,12 +196,13 @@ A visitor should be able to:
 
 ## 9. Content requirements
 
-- The current release includes four complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 05–06 are coming next and chapters 07–24 are public roadmap entries.
+- The current release includes five complete chapters and the 24-chapter outline in `docs/content-outline.md`; Chapter 06 is coming next and chapters 07–24 are public roadmap entries.
 - Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, practical examples, failure cases, debugging checklist, glossary links, and primary references.
 - Product navigation and positioning remain implementation-language neutral. Initial examples are authored in the current repository language, while the content model must allow additional languages later without renaming the product or restructuring the curriculum.
 - Content must not be bulk-copied or lightly paraphrased from the reference.
 - Every published chapter contains at least two diagrams or graphs created specifically for this project, and every visual has a visible caption and equivalent text explanation. New visual types must define and verify desktop, narrow-container, and 320 px presentations before publication.
 - `CON-004`: Before Chapter 04 is published, its reviewed specification must separate identity, authentication, session/token validation, and per-resource authorization; include an executable authorization matrix and session-lifecycle tests; and make clear that the educational examples do not add authentication or a runtime API to this website.
+- `CON-005`: Before Chapter 05 is published, its reviewed specification must separate media and resource limits, syntax parsing, structural validation, explicit normalization, semantic validation, authorization, and persistence constraints; require runtime input to enter as `unknown`; include an executable failure taxonomy and boundary-test matrix; and make clear that the educational examples do not add a runtime API to this website.
 
 ## 10. Architecture
 
@@ -217,8 +218,8 @@ If Vercel Web Analytics and Speed Insights are enabled, only route and performan
 
 The release is ready only when:
 
-1. All 24 catalog entries exist; only complete chapters have canonical lesson routes, chapters 05–06 are labeled coming next, and chapters 07–24 link to the roadmap.
-2. Chapters 01–04 are fully authored; coming-next and roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
+1. All 24 catalog entries exist; only complete chapters have canonical lesson routes, Chapter 06 is labeled coming next, and chapters 07–24 link to the roadmap.
+2. Chapters 01–05 are fully authored; coming-next and roadmap chapters are explicitly labeled and excluded from lesson sitemap entries.
 3. Search, progress, theme, and notes pass keyboard and mobile Playwright coverage.
 4. All repository quality gates in `docs/test-strategy.md` pass.
 5. Design QA compares desktop and mobile captures against the approved original mock and records `final result: passed`.
@@ -231,7 +232,7 @@ The release is ready only when:
 Confirmed 2026-08-30:
 
 1. Canonical domain: `backend.therakibul.me`.
-2. Staged growth: four complete foundation chapters, two visible coming-next chapters, and a public roadmap for chapters 07–24.
+2. Staged growth: five complete foundation chapters, one visible coming-next chapter, and a public roadmap for chapters 07–24.
 3. Public positioning is language-neutral. Initial examples use the current repository language; additional language variants may be added later.
 4. Specification approved; proceed through technical validation and small reviewed slices.
 

@@ -10,13 +10,13 @@ describe("Backend Engineering prototype", () => {
     document.documentElement.removeAttribute("data-theme");
   });
 
-  it("presents four published chapters, two coming-next chapters, and a visible public roadmap", () => {
+  it("presents five published chapters, one coming-next chapter, and a visible public roadmap", () => {
     render(<Prototype />);
 
     expect(screen.getByRole("link", { name: "Backend Engineering home" }).querySelector("img")).toHaveAttribute("src", "/icon-192.png?v=2");
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
     expect(screen.getByRole("heading", { name: "Launch chapters" })).toBeInTheDocument();
-    expect(screen.getAllByText("Coming next")).toHaveLength(2);
+    expect(screen.getAllByText("Coming next")).toHaveLength(1);
     expect(screen.getByRole("link", { name: "Open Routing and Request Dispatch" })).toHaveAttribute("href", "/chapters/routing-and-request-dispatch/");
     expect(screen.getByRole("link", { name: "Open Representation and Serialization" })).toHaveAttribute("href", "/chapters/representation-and-serialization/");
     expect(screen.getByText((_, element) => element?.textContent === "Roadmap (18 topics)")).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe("Backend Engineering prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "21");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "15");
     expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuemax", "100");
     expect(screen.getByRole("button", { name: "Reset chapter 1 reading progress" })).toHaveAttribute("aria-pressed", "true");
   });
@@ -129,11 +129,11 @@ describe("Backend Engineering prototype", () => {
   });
 
   it("does not expose an unfinished chapter as a lesson", () => {
-    window.history.replaceState({}, "", "/chapters/validation-at-trust-boundaries");
+    window.history.replaceState({}, "", "/chapters/layered-request-handling");
     render(<Prototype />);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
-    expect(screen.queryByRole("heading", { level: 1, name: "Validation at Trust Boundaries" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1, name: "Layered Request Handling" })).not.toBeInTheDocument();
     expect(screen.queryByText(/approved launch collection/i)).not.toBeInTheDocument();
   });
 
@@ -149,6 +149,25 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByText("session-policy.ts")).toBeInTheDocument();
     expect(screen.getByText("authorization.ts")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /RFC 8725/ })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc8725.html");
+    expect(screen.getByRole("link", { name: /NextValidation at Trust Boundaries/ })).toHaveAttribute("href", "/chapters/validation-at-trust-boundaries/");
+  });
+
+  it("renders Chapter 05 with responsive visuals, validation evidence, and primary references", () => {
+    window.history.replaceState({}, "", "/chapters/validation-at-trust-boundaries");
+    render(<Prototype />);
+
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Validation at Trust Boundaries");
+    expect(screen.getByRole("figure", { name: "The six questions every request must answer" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "Who owns this rejection?" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "Trust grows while client authority shrinks" })).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: /Failure ownership/ })).toBeInTheDocument();
+    expect(screen.getByText("validation-pipeline.ts")).toBeInTheDocument();
+    const requestExample = screen.getByText("incoming-request.json").closest("figure");
+    const mentalModel = screen.getByText("Mental model").closest("aside");
+    expect(requestExample?.compareDocumentPosition(mentalModel!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.getByText("02 / Parse")).toBeInTheDocument();
+    expect(screen.getAllByText("Read diagram as text")[0].closest("details")).not.toHaveAttribute("open");
+    expect(screen.getByRole("link", { name: /RFC 9457/ })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc9457.html");
     expect(screen.queryByText("Next")).not.toBeInTheDocument();
   });
 

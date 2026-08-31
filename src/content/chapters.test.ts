@@ -4,15 +4,15 @@ import { chapterBySlug, chapterHref, launchChapters, publishedChapters } from ".
 describe("chapter publication model", () => {
   it("keeps all six launch entries while exposing only complete lessons", () => {
     expect(launchChapters).toHaveLength(6);
-    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4]);
+    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4, 5]);
     expect(publishedChapters.every((chapter) => chapter.sections?.length)).toBe(true);
   });
 
   it("does not resolve an unfinished chapter as a lesson route", () => {
-    const upcoming = launchChapters.find((chapter) => chapter.number === 5);
+    const upcoming = launchChapters.find((chapter) => chapter.number === 6);
     expect(upcoming).toBeDefined();
-    expect(chapterHref(upcoming!)).toBe("/#validation-at-trust-boundaries");
-    expect(chapterBySlug("validation-at-trust-boundaries")).toBeUndefined();
+    expect(chapterHref(upcoming!)).toBe("/#layered-request-handling");
+    expect(chapterBySlug("layered-request-handling")).toBeUndefined();
   });
 
   it("publishes Chapter 03 with the complete editorial contract", () => {
@@ -44,6 +44,21 @@ describe("chapter publication model", () => {
 
     const references = chapter?.sections?.flatMap((section) => section.references ?? []) ?? [];
     expect(references).toHaveLength(6);
+    expect(references.every((reference) => reference.url.startsWith("https://"))).toBe(true);
+  });
+
+  it("publishes Chapter 05 with its reviewed validation contract", () => {
+    const chapter = chapterBySlug("validation-at-trust-boundaries");
+
+    expect(chapter).toBeDefined();
+    expect(chapter?.sections).toHaveLength(10);
+    expect(chapter?.sections?.flatMap((section) => section.visuals ?? [])).toHaveLength(3);
+    expect(chapter?.sections?.some((section) => section.table?.caption.includes("Failure ownership"))).toBe(true);
+    expect(chapter?.sections?.some((section) => section.code?.filename === "validation-pipeline.ts")).toBe(true);
+    expect(chapter?.sections?.flatMap((section) => section.questions ?? [])).toHaveLength(5);
+
+    const references = chapter?.sections?.flatMap((section) => section.references ?? []) ?? [];
+    expect(references).toHaveLength(9);
     expect(references.every((reference) => reference.url.startsWith("https://"))).toBe(true);
   });
 

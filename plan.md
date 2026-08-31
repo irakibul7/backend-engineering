@@ -162,7 +162,7 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Acceptance: editorial checklist, primary references, schema validation, TypeScript code tests, and diagram alternatives pass for each chapter.
 - Files in scope: chapters 03–06 and original diagrams
 - Exclusions: roadmap chapters
-- Status: In progress. Chapters 03–04 are complete and published; Chapters 05–06 remain coming next.
+- Status: In progress. Chapters 03–05 are complete and published; Chapter 06 remains coming next.
 
 ### T-602A Add the published-chapter visual learning system
 
@@ -187,6 +187,22 @@ Review gate: second security review for sanitizer, local storage, and export cod
 - Files in scope: Chapter 04 typed content; session and authorization example modules/tests; glossary entries; only the renderer/style changes proven necessary for the approved visuals; validation and design-QA evidence; generated static discovery output
 - Exclusions: real product authentication, accounts, database, login UI, OAuth provider integration, auth SDK, hand-written cryptography, runtime API, remote progress/notes, analytics changes, and Chapters 05–24
 - Status: Complete and awaiting human review. The specification was approved, implementation verified, and the final fail-closed session/time-claim review fixed on 2026-08-31; evidence is recorded in `docs/validation/chapter-04-identity.md`.
+
+### T-602D Specify Chapter 05 validation boundaries
+
+- Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `CON-005`
+- Acceptance: `docs/chapter-05-validation-spec.md` defines the lesson contract, glossary, fictional request boundary, validation state machine, data model, failure taxonomy, threat hypotheses, original visuals, TypeScript example seams, primary sources, acceptance tests, and ADR impact; it explicitly preserves the static site's no-API boundary and distinguishes validation from parsing, coercion, sanitization, authorization, and database enforcement.
+- Files in scope: `spec.md`, `plan.md`, `docs/content-outline.md`, `docs/chapter-05-validation-spec.md`
+- Exclusions: chapter implementation, product forms, runtime API, request parser, schema library, database, dependencies, styles, routes, sitemap changes, and publication-state changes
+- Status: Complete and awaiting human review. No public route or product behavior changes in this slice.
+
+### T-602E Implement and publish Chapter 05
+
+- Requirements: `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `CON-005`
+- Acceptance: the approved ten-section chapter, original responsive visuals, pure TypeScript validation example, executable failure taxonomy, primary references, glossary/search integration, route metadata, sitemap entry, and validation evidence pass the full repository quality gate at desktop, 390 px, and 320 px; the homepage denominator becomes five published chapters without invalidating existing local progress.
+- Files in scope: Chapter 05 typed content; validation example modules/tests; glossary entries; only renderer/style changes proven necessary for approved visuals; validation and design-QA evidence; generated static discovery output
+- Exclusions: product forms, runtime API, request parser integration, schema-library dependency, database, authorization implementation, remote progress/notes, analytics changes, and Chapters 06–24
+- Status: Complete and awaiting human review. The specification was approved and implementation verified on 2026-08-31; evidence is recorded in `docs/validation/chapter-05-validation.md`. No commit has been created for this slice.
 
 ### T-603 Publish roadmap chapters 07–15
 

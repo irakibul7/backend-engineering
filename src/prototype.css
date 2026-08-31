@@ -1116,7 +1116,6 @@ button.feature-line {
 }
 
 .lesson-visual figcaption span,
-.visual-alternative span,
 .decision-question span,
 .ladder-request span,
 .lesson-table-wrap caption,
@@ -1201,6 +1200,54 @@ button.feature-line {
   padding: 2px;
   background: var(--paper);
   color: var(--accent);
+}
+
+.visual-flow--extended {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.visual-flow--extended li {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  column-gap: 12px;
+  padding: 16px 14px;
+  border-width: 0 0 1px;
+  background: transparent;
+}
+
+.visual-flow--extended li:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.visual-flow--extended .visual-index {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  background: var(--accent-soft);
+}
+
+.visual-flow--extended strong,
+.visual-flow--extended p {
+  grid-column: 2;
+}
+
+.visual-flow--extended strong {
+  margin-top: 0;
+}
+
+.visual-flow--extended svg {
+  top: auto;
+  right: auto;
+  bottom: -10px;
+  left: 20px;
+  transform: rotate(90deg);
+  background: color-mix(in srgb, var(--paper-soft) 58%, var(--paper));
 }
 
 .visual-decision {
@@ -1458,9 +1505,20 @@ button.feature-line {
   line-height: 1.6;
 }
 
-.visual-alternative span {
-  display: block;
-  margin-bottom: 5px;
+.visual-alternative summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--accent-strong);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.visual-alternative p {
+  max-width: 72ch;
+  margin: 10px 0 0;
 }
 
 .lesson-table-wrap {

@@ -30,6 +30,13 @@ describe("searchChapters", () => {
     expect(results[0]?.chapter.status).toBe("published");
   });
 
+  it("finds Chapter 05 by a validation concept inside the lesson", () => {
+    const results = searchChapters(chapters, "mass assignment");
+
+    expect(results[0]?.chapter.title).toBe("Validation at Trust Boundaries");
+    expect(results[0]?.chapter.status).toBe("published");
+  });
+
   it("returns no results for an empty query", () => {
     expect(searchChapters(chapters, "   ")).toEqual([]);
   });

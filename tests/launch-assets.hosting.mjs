@@ -57,8 +57,9 @@ test("sitemap contains only canonical public routes", async () => {
     "https://backend.therakibul.me/chapters/routing-and-request-dispatch/",
     "https://backend.therakibul.me/chapters/representation-and-serialization/",
     "https://backend.therakibul.me/chapters/identity-authentication-authorization/",
+    "https://backend.therakibul.me/chapters/validation-at-trust-boundaries/",
   ]);
-  assert.doesNotMatch(sitemap, /validation-at-trust-boundaries|localhost|vercel\.app/);
+  assert.doesNotMatch(sitemap, /layered-request-handling|localhost|vercel\.app/);
 });
 
 test("robots allows crawling and advertises the canonical sitemap", async () => {
