@@ -120,7 +120,7 @@ A visitor should be able to:
 - `LES-006`: Provide previous/next navigation with chapter number and title.
 - `LES-007`: Preserve the current section when a theme or notes panel changes.
 - `LES-008`: Expose stable anchors so sections can be deep-linked.
-- `LES-009`: Include at least two original explanatory visuals in every published chapter, with a visible caption and an equivalent text explanation. Visuals must clarify a system boundary, decision, comparison, state change, or rollout rather than decorate the lesson.
+- `LES-009`: Include at least two original explanatory visuals in every published chapter, with a visible caption and an equivalent text explanation. Visuals must clarify a system boundary, decision, comparison, state change, or rollout rather than decorate the lesson. Every diagram renderer must respond to its own container width and transform dense grids into readable rows or vertical sequences before labels or explanations become compressed.
 
 ### Search
 
@@ -173,7 +173,7 @@ A visitor should be able to:
 
 - `A11Y-001`: Meet WCAG 2.2 AA for keyboard use, focus, contrast, landmarks, headings, labels, and reduced motion.
 - `A11Y-002`: Include skip navigation and announce dynamic search, copy, save, and progress feedback.
-- `A11Y-003`: Avoid horizontal page scrolling at 320 px and above.
+- `A11Y-003`: Avoid horizontal page scrolling at 320 px and above. Diagrams and graphs must reflow without clipped nodes, overlapping connectors, compressed labels, or diagram-level horizontal scrolling.
 - `A11Y-004`: Maintain a comfortable reading measure of roughly 65–78 characters on lessons.
 - `A11Y-005`: Make all pointer targets at least 44 by 44 CSS pixels where practical.
 
@@ -200,7 +200,7 @@ A visitor should be able to:
 - Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, practical examples, failure cases, debugging checklist, glossary links, and primary references.
 - Product navigation and positioning remain implementation-language neutral. Initial examples are authored in the current repository language, while the content model must allow additional languages later without renaming the product or restructuring the curriculum.
 - Content must not be bulk-copied or lightly paraphrased from the reference.
-- Every published chapter contains at least two diagrams or graphs created specifically for this project, and every visual has a visible caption and equivalent text explanation.
+- Every published chapter contains at least two diagrams or graphs created specifically for this project, and every visual has a visible caption and equivalent text explanation. New visual types must define and verify desktop, narrow-container, and 320 px presentations before publication.
 - `CON-004`: Before Chapter 04 is published, its reviewed specification must separate identity, authentication, session/token validation, and per-resource authorization; include an executable authorization matrix and session-lifecycle tests; and make clear that the educational examples do not add authentication or a runtime API to this website.
 
 ## 10. Architecture

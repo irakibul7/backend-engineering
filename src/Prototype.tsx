@@ -119,7 +119,9 @@ function AppHeader({
 
   return (
     <header className="app-header">
-      <InternalLink className="brand-mark" href="/" navigate={navigate} aria-label="Backend Engineering home">BE</InternalLink>
+      <InternalLink className="brand-mark" href="/" navigate={navigate} aria-label="Backend Engineering home">
+        <img src="/icon-192.png?v=2" width="44" height="44" alt="" aria-hidden="true" />
+      </InternalLink>
       <nav className="primary-nav" aria-label="Primary navigation">
         <InternalLink className={path === "/" ? "is-active" : ""} href="/" navigate={navigate}>Library</InternalLink>
         <InternalLink className={path.startsWith("/roadmap") ? "is-active" : ""} href="/roadmap/" navigate={navigate}>Roadmap</InternalLink>
@@ -196,10 +198,19 @@ function LearningStreakPanel({ streak }: { streak: LearningStreak }) {
   const mondayOffset = (today.getDay() + 6) % 7;
   const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - mondayOffset);
   const activeDates = new Set(streak.activeDates);
+  const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const week = Array.from({ length: 7 }, (_, index) => {
     const date = new Date(monday);
     date.setDate(monday.getDate() + index);
-    return { label: ["M", "T", "W", "T", "F", "S", "S"][index], active: activeDates.has(toLocalDateKey(date)), future: date > today };
+    const active = activeDates.has(toLocalDateKey(date));
+    const future = date > today;
+    const status = active ? "completed" : future ? "upcoming" : "not completed";
+    return {
+      label: dayNames[index][0],
+      fullLabel: `${dayNames[index]}, ${date.toLocaleDateString(undefined, { month: "long", day: "numeric" })}: ${status}`,
+      active,
+      future,
+    };
   });
 
   return (
@@ -210,8 +221,13 @@ function LearningStreakPanel({ streak }: { streak: LearningStreak }) {
         <strong>{streak.currentStreak} <small>{streak.currentStreak === 1 ? "day" : "days"}</small></strong>
         <small>Best: {streak.bestStreak}</small>
       </div>
-      <div className="streak-week" aria-label={`${streak.currentStreak}-day current learning streak`}>
-        {week.map((day, index) => <span key={`${day.label}-${index}`}><b>{day.label}</b><i className={day.active ? "is-active" : day.future ? "is-future" : ""} /></span>)}
+      <div className="streak-week" role="list" aria-label={`${streak.currentStreak}-day current learning streak`}>
+        {week.map((day, index) => (
+          <span key={`${day.label}-${index}`} role="listitem" aria-label={day.fullLabel} title={day.fullLabel}>
+            <b aria-hidden="true">{day.label}</b>
+            <i aria-hidden="true" className={day.active ? "is-active" : day.future ? "is-future" : ""} />
+          </span>
+        ))}
       </div>
     </section>
   );

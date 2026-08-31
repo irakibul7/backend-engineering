@@ -126,10 +126,14 @@ summary:focus-visible {
   display: grid;
   place-items: center;
   background: var(--nav);
-  color: var(--accent);
-  font-size: 24px;
-  font-weight: 600;
   text-decoration: none;
+}
+
+.brand-mark img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
 }
 
 .primary-nav {
@@ -1095,6 +1099,7 @@ button.feature-line {
 }
 
 .lesson-visual {
+  container: lesson-visual / inline-size;
   margin: 34px 0 0;
   border-top: 1px solid var(--line-strong);
   border-bottom: 1px solid var(--line-strong);
@@ -1221,18 +1226,18 @@ button.feature-line {
 
 .visual-decision ol {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 8px;
   padding: 14px 0 0;
 }
 
 .visual-decision li {
   min-width: 0;
   display: grid;
-  grid-template-columns: minmax(0, auto) auto minmax(0, 1fr);
-  gap: 9px;
-  align-items: start;
-  padding: 14px;
+  grid-template-columns: minmax(150px, 0.75fr) 24px minmax(0, 1.7fr);
+  gap: 14px;
+  align-items: center;
+  padding: 13px 15px;
   border: 1px solid var(--line);
   background: var(--paper);
 }
@@ -1326,6 +1331,122 @@ button.feature-line {
 
 .visual-timeline strong {
   margin-top: 22px;
+}
+
+@container lesson-visual (max-width: 680px) {
+  .lesson-visual figcaption {
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-visual figcaption span {
+    width: fit-content;
+  }
+
+  .visual-flow,
+  .visual-timeline {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .visual-flow li {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 16px 14px;
+    border-width: 0 0 1px;
+    background: transparent;
+  }
+
+  .visual-flow li:first-child {
+    border-top: 1px solid var(--line);
+  }
+
+  .visual-flow .visual-index {
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: var(--accent-soft);
+  }
+
+  .visual-flow strong,
+  .visual-flow p {
+    grid-column: 2;
+  }
+
+  .visual-flow strong {
+    margin-top: 0;
+  }
+
+  .visual-flow svg {
+    top: auto;
+    right: auto;
+    bottom: -10px;
+    left: 20px;
+    transform: rotate(90deg);
+    background: color-mix(in srgb, var(--paper-soft) 58%, var(--paper));
+  }
+
+  .visual-ladder li {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+  }
+
+  .visual-ladder li > p {
+    grid-column: 2 / 4;
+  }
+
+  .visual-ladder li > code,
+  .ladder-request code {
+    overflow-wrap: anywhere;
+  }
+
+  .visual-timeline li {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 10px;
+    padding: 15px 14px 18px;
+    border-top: 0;
+    border-left: 3px solid var(--accent);
+  }
+
+  .visual-timeline strong {
+    margin-top: 0;
+  }
+}
+
+@container lesson-visual (max-width: 480px) {
+  .visual-decision li {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    align-items: start;
+  }
+
+  .visual-decision li svg {
+    transform: rotate(90deg);
+  }
+
+  .visual-ladder li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .visual-ladder li > span {
+    grid-column: 1;
+  }
+
+  .visual-ladder li > code,
+  .visual-ladder li > p {
+    grid-column: 1 / -1;
+  }
+
+  .visual-ladder li > strong {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
 
 .visual-alternative {
@@ -1921,20 +2042,22 @@ button.feature-line {
   }
 
   .mobile-contents-button {
-    position: fixed;
-    top: 84px;
-    left: 14px;
+    position: sticky;
+    top: 72px;
     z-index: 45;
+    width: 100%;
     min-height: 40px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 12px;
-    border: 1px solid var(--line-strong);
-    border-radius: 5px;
-    background: var(--paper);
+    padding: 8px clamp(20px, 4vw, 34px);
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
     color: var(--ink);
-    box-shadow: 0 7px 20px rgb(0 0 0 / 8%);
+    box-shadow: 0 5px 15px rgb(0 0 0 / 5%);
+    backdrop-filter: blur(12px);
     font-family: "JetBrains Mono", monospace;
     font-size: 10px;
   }
@@ -1980,22 +2103,29 @@ button.feature-line {
 @media (max-width: 720px) {
   .app-header {
     height: 64px;
-    grid-template-columns: 60px minmax(0, 1fr) 42px 82px;
+    grid-template-columns: 52px minmax(0, 1fr) 40px 76px;
   }
 
   .brand-mark {
-    font-size: 18px;
+    padding: 0;
+  }
+
+  .brand-mark img {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
   }
 
   .primary-nav {
-    gap: 17px;
-    padding-inline: 16px;
-    overflow-x: auto;
+    min-width: 0;
+    gap: 12px;
+    padding-inline: 10px;
+    overflow: visible;
   }
 
   .primary-nav a,
   .primary-nav button {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .primary-nav button {
@@ -2003,13 +2133,14 @@ button.feature-line {
   }
 
   .header-search {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
+    margin-right: 2px;
   }
 
   .header-actions {
-    gap: 4px;
-    padding-right: 4px;
+    gap: 2px;
+    padding-right: 2px;
   }
 
   .mobile-note-action {
@@ -2017,8 +2148,8 @@ button.feature-line {
   }
 
   .header-actions button {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 
   .profile-link {
@@ -2181,6 +2312,19 @@ button.feature-line {
     padding: 88px 20px 100px;
   }
 
+  .mobile-contents-button {
+    top: 64px;
+  }
+
+  .drawer-backdrop {
+    inset: 64px 0 0;
+  }
+
+  .lesson-toc {
+    inset: 64px auto 0 0;
+    height: calc(100% - 64px);
+  }
+
   .lesson-hero h1 {
     font-size: 48px;
   }
@@ -2191,40 +2335,6 @@ button.feature-line {
 
   .lesson-section h2 {
     font-size: 37px;
-  }
-
-  .lesson-visual figcaption {
-    grid-template-columns: 1fr;
-  }
-
-  .lesson-visual figcaption span {
-    width: fit-content;
-  }
-
-  .visual-flow,
-  .visual-decision ol,
-  .visual-timeline {
-    grid-template-columns: 1fr;
-  }
-
-  .visual-flow li,
-  .visual-timeline li {
-    min-height: 0;
-  }
-
-  .visual-flow svg {
-    top: auto;
-    right: 50%;
-    bottom: -15px;
-    transform: translateX(50%) rotate(90deg);
-  }
-
-  .visual-ladder li {
-    grid-template-columns: 28px minmax(0, 1fr) auto;
-  }
-
-  .visual-ladder li > p {
-    grid-column: 2 / 4;
   }
 
   .chapter-navigation {

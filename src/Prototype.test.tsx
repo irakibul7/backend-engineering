@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Prototype } from "./Prototype";
@@ -13,6 +13,7 @@ describe("Backend Engineering prototype", () => {
   it("presents four published chapters, two coming-next chapters, and a visible public roadmap", () => {
     render(<Prototype />);
 
+    expect(screen.getByRole("link", { name: "Backend Engineering home" }).querySelector("img")).toHaveAttribute("src", "/icon-192.png?v=2");
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Backend Engineering");
     expect(screen.getByRole("heading", { name: "Launch chapters" })).toBeInTheDocument();
     expect(screen.getAllByText("Coming next")).toHaveLength(2);
@@ -20,6 +21,26 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByRole("link", { name: "Open Representation and Serialization" })).toHaveAttribute("href", "/chapters/representation-and-serialization/");
     expect(screen.getByText((_, element) => element?.textContent === "Roadmap (18 topics)")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /View all 18 roadmap topics/ })).toHaveAttribute("href", "/roadmap/");
+  });
+
+  it("gives every compact weekly streak marker an unambiguous day label and status", () => {
+    render(<Prototype />);
+
+    const week = screen.getByRole("list", { name: /current learning streak/ });
+    const days = within(week).getAllByRole("listitem");
+
+    expect(days).toHaveLength(7);
+    expect(days.map((day) => day.getAttribute("aria-label")?.split(",")[0])).toEqual([
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ]);
+    expect(days.every((day) => day.getAttribute("title") === day.getAttribute("aria-label"))).toBe(true);
+    expect(days.some((day) => day.getAttribute("aria-label")?.endsWith(": completed"))).toBe(true);
   });
 
   it("opens command search and finds a roadmap topic", async () => {
@@ -129,6 +150,22 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByText("authorization.ts")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /RFC 8725/ })).toHaveAttribute("href", "https://www.rfc-editor.org/rfc/rfc8725.html");
     expect(screen.queryByText("Next")).not.toBeInTheDocument();
+  });
+
+  it("renders every diagram type through the shared responsive visual system", () => {
+    const routes = [
+      ["/chapters/http-as-a-state-machine", "flow"],
+      ["/chapters/routing-and-request-dispatch", "decision"],
+      ["/chapters/routing-and-request-dispatch", "ladder"],
+      ["/chapters/representation-and-serialization", "timeline"],
+    ] as const;
+
+    for (const [route, kind] of routes) {
+      window.history.replaceState({}, "", route);
+      const { container, unmount } = render(<Prototype />);
+      expect(container.querySelector(`.lesson-visual--${kind}`)).toBeInTheDocument();
+      unmount();
+    }
   });
 
   it("renders the complete serialization chapter with annotated visuals, compatibility table, questions, and references", () => {
