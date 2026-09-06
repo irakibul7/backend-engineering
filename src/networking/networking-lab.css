@@ -1,0 +1,1588 @@
+.networking-lab * {
+  box-sizing: border-box;
+}
+
+.networking-lab {
+  min-width: 0;
+  background: var(--canvas);
+}
+
+.networking-lab {
+  min-width: 0;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: "Spline Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.networking-lab button,
+.networking-lab select {
+  font: inherit;
+}
+
+.networking-lab button,
+.networking-lab a,
+.networking-lab select,
+.networking-lab summary,
+.networking-lab [tabindex] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.networking-lab a {
+  color: inherit;
+}
+
+.networking-lab button:focus-visible,
+.networking-lab a:focus-visible,
+.networking-lab select:focus-visible,
+.networking-lab summary:focus-visible,
+.networking-lab [tabindex]:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 44%, transparent);
+  outline-offset: 3px;
+}
+
+.networking-lab .skip-link {
+  position: fixed;
+  top: 12px;
+  left: 100px;
+  z-index: 100;
+  padding: 9px 13px;
+  transform: translateY(-180%);
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.networking-lab .skip-link:focus {
+  transform: translateY(0);
+}
+
+.networking-lab .visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.networking-lab .poc-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: 70px;
+  display: grid;
+  grid-template-columns: 92px 350px minmax(280px, 1fr) 48px 54px;
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.networking-lab .poc-brand {
+  display: grid;
+  place-items: center;
+  background: var(--nav);
+}
+
+.networking-lab .poc-brand img {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.networking-lab .poc-header nav {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+  padding: 0 42px;
+  font-weight: 600;
+}
+
+.networking-lab .poc-header nav a {
+  text-decoration: none;
+}
+
+.networking-lab .poc-header nav a:hover {
+  color: var(--accent-strong);
+}
+
+.networking-lab .poc-search {
+  align-self: center;
+  justify-self: end;
+  width: min(560px, calc(100% - 24px));
+  height: 43px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-right: 18px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  color: var(--muted);
+}
+
+.networking-lab .poc-search kbd {
+  padding: 2px 7px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--paper-soft);
+  font: 500 10px "JetBrains Mono", monospace;
+}
+
+.networking-lab .icon-button,
+.networking-lab .profile-link {
+  align-self: center;
+  justify-self: center;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.networking-lab .icon-button {
+  cursor: pointer;
+}
+
+.networking-lab .profile-link {
+  border-color: var(--nav);
+  background: var(--nav);
+  color: #ffffff;
+  font: 500 11px "JetBrains Mono", monospace;
+}
+
+.networking-lab .poc-shell {
+  min-height: calc(100vh - 70px);
+  display: grid;
+  grid-template-columns: 294px minmax(0, 1fr);
+}
+
+.networking-lab .chapter-rail {
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  padding: 38px 28px 32px;
+  border-right: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 88%, var(--canvas));
+}
+
+.networking-lab .back-library {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent-strong);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.networking-lab .chapter-identity {
+  margin-top: 44px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.networking-lab .chapter-identity > span,
+.networking-lab .lesson-heading > p {
+  color: var(--accent-strong);
+  font: 500 11px/1.3 "JetBrains Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.networking-lab .chapter-identity h2 {
+  max-width: 220px;
+  margin: 12px 0 10px;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.networking-lab .chapter-identity p {
+  margin: 0;
+  color: var(--muted);
+  font: 500 10px "JetBrains Mono", monospace;
+}
+
+.networking-lab .chapter-rail ol {
+  padding: 18px 0 0;
+  margin: 0;
+  list-style: none;
+}
+
+.networking-lab .chapter-rail li {
+  position: relative;
+}
+
+.networking-lab .chapter-rail li::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -28px;
+  width: 5px;
+  background: var(--accent);
+  content: "";
+  opacity: 0;
+}
+
+.networking-lab .chapter-rail li.is-active::before {
+  opacity: 1;
+}
+
+.networking-lab .chapter-rail button {
+  width: 100%;
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-align: left;
+}
+
+.networking-lab .chapter-rail button span {
+  color: var(--accent-strong);
+  font: 500 10px "JetBrains Mono", monospace;
+}
+
+.networking-lab .chapter-rail li.is-active button {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.networking-lab .poc-main {
+  min-width: 0;
+  padding: 34px clamp(24px, 5vw, 74px) 60px;
+  background: var(--paper);
+}
+
+.networking-lab .lesson-heading {
+  max-width: 1180px;
+  margin: 0 auto 24px;
+}
+
+.networking-lab .lesson-heading > p {
+  margin: 0 0 10px;
+}
+
+.networking-lab .lesson-heading h1 {
+  max-width: 980px;
+  margin: 0;
+  font-size: clamp(36px, 3.65vw, 54px);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+}
+
+.networking-lab .lesson-summary {
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 28px;
+  margin-top: 16px;
+}
+
+.networking-lab .lesson-summary p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.networking-lab .motion-toggle {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.networking-lab .motion-toggle span {
+  color: var(--accent-strong);
+  font: 500 10px "JetBrains Mono", monospace;
+  text-transform: uppercase;
+}
+
+.networking-lab .motion-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.networking-lab .observatory-grid {
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 0.55fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+  margin: 0 auto;
+}
+
+.networking-lab .observatory-stage {
+  min-width: 0;
+  min-height: 560px;
+  display: grid;
+  grid-template-columns: 188px minmax(0, 1fr);
+  align-items: stretch;
+  border-block: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.networking-lab .layer-labels {
+  height: 560px;
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  align-items: center;
+  gap: 0;
+  padding: 0 18px 0 0;
+  margin: 0;
+  list-style: none;
+}
+
+.networking-lab .layer-labels li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 30px;
+  color: var(--muted);
+}
+
+.networking-lab .layer-labels li::after {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  width: 22px;
+  height: 1px;
+  background: var(--line-strong);
+  content: "";
+}
+
+.networking-lab .layer-labels li::before {
+  position: absolute;
+  top: 9px;
+  right: -1px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  content: "";
+}
+
+.networking-lab .layer-labels span {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.networking-lab .layer-labels small {
+  font: 500 9px/1.4 "JetBrains Mono", monospace;
+}
+
+.networking-lab .layer-labels li.is-active span,
+.networking-lab .layer-labels li.is-active small {
+  color: var(--accent-strong);
+}
+
+.networking-lab .layer-labels li.is-active::after,
+.networking-lab .layer-labels li.is-active::before {
+  background: var(--accent);
+}
+
+.networking-lab .canvas-region {
+  position: relative;
+  min-width: 0;
+  min-height: 560px;
+  overflow: hidden;
+}
+
+.networking-lab .canvas-region canvas {
+  width: 100%;
+  height: 560px;
+  display: block;
+}
+
+.networking-lab .scene-loading,
+.networking-lab .semantic-fallback {
+  position: absolute;
+  inset: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: var(--paper-soft);
+  color: var(--muted);
+  font: 500 11px "JetBrains Mono", monospace;
+}
+
+.networking-lab .semantic-fallback {
+  align-content: center;
+  justify-items: start;
+  gap: 12px;
+  padding: clamp(22px, 5vw, 44px);
+}
+
+.networking-lab .semantic-fallback > span {
+  color: var(--accent-strong);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.networking-lab .semantic-fallback > strong {
+  color: var(--ink);
+  font: 600 clamp(20px, 3vw, 30px)/1.2 "Spline Sans", sans-serif;
+}
+
+.networking-lab .semantic-fallback p {
+  margin: 0;
+  color: var(--muted);
+  font: 400 15px/1.55 "Spline Sans", sans-serif;
+}
+
+.networking-lab .semantic-fallback dl {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 8px 0 0;
+  background: var(--line);
+}
+
+.networking-lab .semantic-fallback dl div {
+  padding: 10px;
+  background: var(--paper);
+}
+
+.networking-lab .semantic-fallback dt {
+  color: var(--muted);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.networking-lab .semantic-fallback dd {
+  margin: 4px 0 0;
+  color: var(--ink);
+}
+
+.networking-lab .route-panel {
+  min-width: 0;
+}
+
+.networking-lab .route-panel > header {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.networking-lab .route-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--accent-strong);
+}
+
+.networking-lab .route-panel h2 {
+  margin: 0 0 3px;
+  font-size: 17px;
+}
+
+.networking-lab .route-panel header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.networking-lab .route-panel code {
+  font-family: "JetBrains Mono", monospace;
+}
+
+.networking-lab .route-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+}
+
+.networking-lab .route-panel table {
+  width: 100%;
+  min-width: 360px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.networking-lab .route-panel th,
+.networking-lab .route-panel td {
+  padding: 14px 13px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.networking-lab .route-panel th:last-child,
+.networking-lab .route-panel td:last-child {
+  border-right: 0;
+}
+
+.networking-lab .route-panel tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.networking-lab .route-panel th {
+  background: var(--paper-soft);
+  font-weight: 600;
+}
+
+.networking-lab .route-panel td {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+}
+
+.networking-lab .route-panel tr.is-selected td {
+  border-block: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.networking-lab .route-panel tr.is-selected td:first-child {
+  border-left: 2px solid var(--accent);
+}
+
+.networking-lab .route-panel tr.is-selected td:last-child {
+  border-right: 2px solid var(--accent);
+}
+
+.networking-lab .route-insight {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-strong);
+}
+
+.networking-lab .route-insight svg {
+  color: var(--muted);
+}
+
+.networking-lab .route-insight.is-confirmed {
+  border-left-color: var(--accent);
+}
+
+.networking-lab .route-insight.is-confirmed svg {
+  color: var(--accent);
+}
+
+.networking-lab .route-insight strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.networking-lab .route-insight p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.networking-lab .poc-metrics {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.networking-lab .poc-metrics summary {
+  cursor: pointer;
+}
+
+.networking-lab .poc-metrics dl {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin: 10px 0 0;
+  background: var(--line);
+}
+
+.networking-lab .poc-metrics dl div {
+  padding: 8px;
+  background: var(--paper-soft);
+}
+
+.networking-lab .poc-metrics dt {
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.networking-lab .poc-metrics dd {
+  margin: 3px 0 0;
+  color: var(--ink);
+  font-family: "JetBrains Mono", monospace;
+}
+
+.networking-lab .poc-metrics > button {
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.networking-lab .poc-metrics > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.networking-lab .journey-rail {
+  position: relative;
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(64px, 1fr));
+  gap: 0;
+  margin: 25px auto 0;
+  border-top: 1px solid var(--line);
+}
+
+.networking-lab .journey-rail::before {
+  position: absolute;
+  top: 37px;
+  right: 4%;
+  left: 4%;
+  height: 1px;
+  background: var(--line-strong);
+  content: "";
+}
+
+.networking-lab .journey-rail button {
+  position: relative;
+  z-index: 1;
+  min-height: 76px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 23px;
+  padding: 9px 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.networking-lab .journey-rail button::after {
+  position: absolute;
+  top: 32px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: var(--paper);
+  content: "";
+}
+
+.networking-lab .journey-rail button[aria-current="step"] {
+  color: var(--accent-strong);
+}
+
+.networking-lab .journey-rail button[aria-current="step"]::after {
+  width: 16px;
+  height: 16px;
+  top: 29px;
+  border: 4px solid var(--accent);
+}
+
+.networking-lab .journey-rail span {
+  font: 500 10px "JetBrains Mono", monospace;
+}
+
+.networking-lab .journey-rail small {
+  font-size: 10px;
+}
+
+.networking-lab .journey-select-wrap {
+  display: none;
+}
+
+.networking-lab .journey-controls {
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 220px));
+  justify-content: space-between;
+  gap: 18px;
+  margin: 28px auto 0;
+}
+
+.networking-lab .journey-controls button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.networking-lab .journey-controls button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.networking-lab .journey-controls button.primary-control {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.networking-lab .journey-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.networking-lab .control-hint {
+  margin: 13px 0 0;
+  color: var(--muted);
+  font: 500 10px "JetBrains Mono", monospace;
+  text-align: center;
+}
+
+.networking-lab .scenario-navigation {
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(126px, 1fr));
+  margin: 0 auto 34px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  scrollbar-width: thin;
+}
+
+.networking-lab .scenario-navigation button {
+  min-width: 126px;
+  min-height: 74px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  cursor: pointer;
+  text-align: left;
+}
+
+.networking-lab .scenario-navigation button:last-child {
+  border-right: 0;
+}
+
+.networking-lab .scenario-navigation button:hover,
+.networking-lab .scenario-navigation button.is-selected {
+  background: var(--paper-soft);
+  color: var(--ink);
+}
+
+.networking-lab .scenario-navigation button.is-selected {
+  box-shadow: inset 0 3px var(--accent);
+}
+
+.networking-lab .scenario-navigation button.is-selected svg {
+  color: var(--accent-strong);
+}
+
+.networking-lab .scenario-navigation button > span {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.18;
+}
+
+.networking-lab .scenario-navigation button small {
+  color: var(--accent-strong);
+  font: 500 9px "JetBrains Mono", monospace;
+}
+
+.networking-lab .coverage-list {
+  display: grid;
+  gap: 0;
+  padding-top: 18px !important;
+}
+
+.networking-lab .coverage-list li {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.networking-lab .coverage-list li span {
+  color: var(--accent-strong);
+  font: 500 10px "JetBrains Mono", monospace;
+}
+
+.networking-lab .coverage-list li.is-active {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.networking-lab .evidence-stage {
+  min-height: 520px;
+  grid-template-columns: 170px minmax(0, 1fr);
+}
+
+.networking-lab .scene-caption {
+  display: grid;
+  align-content: end;
+  gap: 18px;
+  padding: 28px 20px 32px 0;
+  border-right: 1px solid var(--line);
+}
+
+.networking-lab .scene-caption > span {
+  color: var(--accent-strong);
+  font: 500 11px "JetBrains Mono", monospace;
+}
+
+.networking-lab .scene-caption div {
+  display: grid;
+  gap: 8px;
+}
+
+.networking-lab .scene-caption strong {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.networking-lab .scene-caption small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.networking-lab .evidence-stage .canvas-region,
+.networking-lab .evidence-stage .canvas-region canvas {
+  min-height: 520px;
+  height: 520px;
+}
+
+.networking-lab .evidence-panel {
+  min-width: 0;
+}
+
+.networking-lab .evidence-panel > header {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.networking-lab .evidence-panel h2 {
+  margin: 0 0 3px;
+  font-size: 17px;
+}
+
+.networking-lab .evidence-panel header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.networking-lab .evidence-panel table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.networking-lab .evidence-panel th,
+.networking-lab .evidence-panel td {
+  padding: 12px 10px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.networking-lab .evidence-panel th:last-child,
+.networking-lab .evidence-panel td:last-child {
+  border-right: 0;
+}
+
+.networking-lab .evidence-panel tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.networking-lab .evidence-panel th {
+  background: var(--paper-soft);
+  font-weight: 600;
+}
+
+.networking-lab .evidence-panel td {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+}
+
+.networking-lab .evidence-panel tr.is-selected td {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.networking-lab .evidence-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 18px 0 0;
+  background: var(--line);
+}
+
+.networking-lab .evidence-facts > div {
+  min-width: 0;
+  padding: 13px;
+  background: var(--paper-soft);
+}
+
+.networking-lab .evidence-facts dt {
+  color: var(--muted);
+  font: 500 9px "JetBrains Mono", monospace;
+  text-transform: uppercase;
+}
+
+.networking-lab .evidence-facts dd {
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+  font: 500 12px/1.45 "JetBrains Mono", monospace;
+}
+
+.networking-lab .evidence-insight {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+}
+
+.networking-lab .evidence-insight svg {
+  color: var(--accent);
+}
+
+.networking-lab .evidence-insight strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.networking-lab .evidence-insight p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.networking-lab .prefix-workbench {
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: var(--paper-soft);
+}
+
+.networking-lab .prefix-address {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 5px;
+}
+
+.networking-lab .prefix-address span,
+.networking-lab .prefix-address strong {
+  min-width: 0;
+  padding: 13px 5px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  font: 600 14px "JetBrains Mono", monospace;
+  text-align: center;
+}
+
+.networking-lab .prefix-address strong {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.networking-lab .prefix-bands {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.networking-lab .prefix-bands span {
+  padding: 7px;
+  background: var(--nav);
+  color: #ffffff;
+  font: 500 8px "JetBrains Mono", monospace;
+  text-align: center;
+}
+
+.networking-lab .prefix-bands span:last-child {
+  background: var(--accent-strong);
+}
+
+.networking-lab .prefix-workbench dl {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin: 14px 0 0;
+  background: var(--line);
+}
+
+.networking-lab .prefix-workbench dl div {
+  padding: 10px;
+  background: var(--paper);
+}
+
+.networking-lab .prefix-workbench dt {
+  color: var(--muted);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.networking-lab .prefix-workbench dd {
+  margin: 5px 0 0;
+  font: 500 10px "JetBrains Mono", monospace;
+}
+
+.networking-lab .semantic-layer-stack,
+.networking-lab .reachability-timeline,
+.networking-lab .command-matrix {
+  display: grid;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--line);
+  list-style: none;
+}
+
+.networking-lab .semantic-layer-stack li,
+.networking-lab .reachability-timeline li,
+.networking-lab .command-matrix li {
+  min-width: 0;
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.networking-lab .semantic-layer-stack li:last-child,
+.networking-lab .reachability-timeline li:last-child,
+.networking-lab .command-matrix li:last-child {
+  border-bottom: 0;
+}
+
+.networking-lab .semantic-layer-stack li {
+  grid-template-columns: 30px 1fr;
+}
+
+.networking-lab .semantic-layer-stack li > span,
+.networking-lab .reachability-timeline li > span,
+.networking-lab .command-matrix li > span {
+  color: var(--accent-strong);
+  font: 500 9px "JetBrains Mono", monospace;
+}
+
+.networking-lab .semantic-layer-stack li div {
+  display: grid;
+  gap: 3px;
+}
+
+.networking-lab .semantic-layer-stack li small,
+.networking-lab .reachability-timeline li small {
+  font-size: 10px;
+}
+
+.networking-lab .semantic-layer-stack li.is-active,
+.networking-lab .reachability-timeline li.is-active,
+.networking-lab .command-matrix li.is-active {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.networking-lab .semantic-layer-stack li.is-active {
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.networking-lab .reachability-timeline li {
+  grid-template-columns: 30px minmax(120px, 0.8fr) 1fr;
+}
+
+.networking-lab .command-matrix li {
+  grid-template-columns: 30px minmax(130px, 0.8fr) 1fr;
+}
+
+.networking-lab .command-matrix code {
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font: 500 10px/1.45 "JetBrains Mono", monospace;
+}
+
+.networking-lab .journey-rail {
+  grid-template-columns: repeat(var(--step-count), minmax(76px, 1fr));
+}
+
+.networking-lab .proof-metrics {
+  max-width: 980px;
+  margin: 22px auto 0;
+}
+
+@media (max-width: 1180px) {
+  .networking-lab .poc-header {
+    grid-template-columns: 78px 280px minmax(220px, 1fr) 48px 52px;
+  }
+
+  .networking-lab .poc-header nav {
+    gap: 24px;
+    padding: 0 26px;
+  }
+
+  .networking-lab .poc-shell {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+
+  .networking-lab .chapter-rail {
+    padding-inline: 22px;
+  }
+
+  .networking-lab .chapter-rail li::before {
+    left: -22px;
+  }
+
+  .networking-lab .observatory-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .networking-lab .route-panel {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .networking-lab .scenario-navigation {
+    grid-template-columns: repeat(8, 142px);
+  }
+
+  .networking-lab .evidence-panel {
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 820px) {
+  .networking-lab .poc-header {
+    grid-template-columns: 70px 1fr 48px 52px;
+  }
+
+  .networking-lab .poc-header nav {
+    padding-inline: 20px;
+  }
+
+  .networking-lab .poc-header nav span,
+  .networking-lab .poc-search {
+    display: none;
+  }
+
+  .networking-lab .poc-shell {
+    display: block;
+  }
+
+  .networking-lab .chapter-rail {
+    position: static;
+    height: auto;
+    padding: 18px 20px;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .networking-lab .back-library {
+    display: none;
+  }
+
+  .networking-lab .chapter-identity {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px;
+    align-items: end;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .networking-lab .chapter-identity > span,
+  .networking-lab .chapter-identity h2 {
+    grid-column: 1;
+  }
+
+  .networking-lab .chapter-identity h2 {
+    max-width: none;
+    margin: 2px 0 0;
+    font-size: 19px;
+  }
+
+  .networking-lab .chapter-identity p {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .networking-lab .chapter-rail ol {
+    display: none;
+  }
+
+  .networking-lab .scenario-navigation {
+    margin-bottom: 28px;
+  }
+
+  .networking-lab .poc-main {
+    padding: 26px 20px 46px;
+  }
+
+  .networking-lab .lesson-heading h1 {
+    font-size: clamp(34px, 8vw, 50px);
+  }
+
+  .networking-lab .lesson-summary {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .networking-lab .motion-toggle {
+    justify-self: start;
+  }
+
+  .networking-lab .observatory-stage {
+    min-height: 500px;
+    grid-template-columns: 145px minmax(0, 1fr);
+  }
+
+  .networking-lab .evidence-stage {
+    grid-template-columns: 132px minmax(0, 1fr);
+  }
+
+  .networking-lab .scene-caption {
+    padding: 20px 14px 24px 0;
+  }
+
+  .networking-lab .scene-caption small {
+    display: none;
+  }
+
+  .networking-lab .layer-labels,
+  .networking-lab .canvas-region,
+  .networking-lab .canvas-region canvas {
+    height: 500px;
+    min-height: 500px;
+  }
+
+  .networking-lab .layer-labels {
+    padding-right: 10px;
+  }
+
+  .networking-lab .layer-labels li {
+    padding-right: 20px;
+  }
+
+  .networking-lab .layer-labels small {
+    display: none;
+  }
+
+  .networking-lab .journey-rail {
+    overflow-x: auto;
+    grid-template-columns: repeat(10, 82px);
+    padding-bottom: 8px;
+  }
+
+  .networking-lab .journey-controls {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .networking-lab .poc-header {
+    height: 62px;
+    grid-template-columns: 62px 1fr 46px 48px;
+  }
+
+  .networking-lab .poc-brand img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .networking-lab .poc-header nav {
+    gap: 18px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+
+  .networking-lab .poc-header nav a:nth-child(2) {
+    display: none;
+  }
+
+  .networking-lab .icon-button,
+  .networking-lab .profile-link {
+    width: 34px;
+    height: 34px;
+  }
+
+  .networking-lab .chapter-identity {
+    display: block;
+  }
+
+  .networking-lab .chapter-identity p {
+    margin-top: 7px;
+  }
+
+  .networking-lab .lesson-heading h1 {
+    font-size: 37px;
+  }
+
+  .networking-lab .lesson-summary p {
+    font-size: 16px;
+  }
+
+  .networking-lab .observatory-stage {
+    min-height: 450px;
+    grid-template-columns: 108px minmax(0, 1fr);
+  }
+
+  .networking-lab .scenario-navigation {
+    width: 100%;
+    margin-inline: 0;
+    grid-template-columns: repeat(8, 132px);
+  }
+
+  .networking-lab .scenario-navigation button {
+    min-width: 132px;
+    min-height: 68px;
+  }
+
+  .networking-lab .evidence-stage {
+    min-height: 430px;
+    grid-template-columns: 1fr;
+  }
+
+  .networking-lab .scene-caption {
+    min-height: 80px;
+    grid-template-columns: 32px 1fr;
+    align-content: center;
+    padding: 14px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .networking-lab .evidence-stage .canvas-region,
+  .networking-lab .evidence-stage .canvas-region canvas {
+    min-height: 350px;
+    height: 350px;
+  }
+
+  .networking-lab .evidence-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .networking-lab .prefix-workbench {
+    padding: 12px;
+  }
+
+  .networking-lab .prefix-address span,
+  .networking-lab .prefix-address strong {
+    padding: 11px 3px;
+    font-size: 11px;
+  }
+
+  .networking-lab .prefix-workbench dl {
+    grid-template-columns: 1fr;
+  }
+
+  .networking-lab .reachability-timeline li,
+  .networking-lab .command-matrix li {
+    grid-template-columns: 26px 1fr;
+  }
+
+  .networking-lab .reachability-timeline li small,
+  .networking-lab .command-matrix li code {
+    grid-column: 2;
+  }
+
+  .networking-lab .evidence-panel table {
+    min-width: 520px;
+  }
+
+  .networking-lab .layer-labels,
+  .networking-lab .canvas-region,
+  .networking-lab .canvas-region canvas {
+    height: 450px;
+    min-height: 450px;
+  }
+
+  .networking-lab .layer-labels li {
+    padding-right: 15px;
+  }
+
+  .networking-lab .layer-labels li::after {
+    width: 12px;
+  }
+
+  .networking-lab .layer-labels span {
+    font-size: 11px;
+  }
+
+  .networking-lab .semantic-fallback {
+    inset: 10px;
+    padding: 16px;
+  }
+
+  .networking-lab .semantic-fallback dl {
+    grid-template-columns: 1fr;
+  }
+
+  .networking-lab .route-panel > header {
+    margin-top: 6px;
+  }
+
+  .networking-lab .route-panel table {
+    min-width: 400px;
+  }
+
+  .networking-lab .journey-rail {
+    display: none;
+  }
+
+  .networking-lab .journey-select-wrap {
+    display: grid;
+    gap: 7px;
+    margin-top: 24px;
+  }
+
+  .networking-lab .journey-select-wrap label {
+    color: var(--muted);
+    font: 500 10px "JetBrains Mono", monospace;
+    text-transform: uppercase;
+  }
+
+  .networking-lab .journey-select-wrap select {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .networking-lab .journey-controls {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .networking-lab .journey-controls button {
+    min-width: 0;
+    padding-inline: 10px;
+  }
+
+  .networking-lab .journey-controls .primary-control {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 340px) {
+  .networking-lab .poc-main,
+  .networking-lab .chapter-rail {
+    padding-inline: 14px;
+  }
+
+  .networking-lab .lesson-heading h1 {
+    font-size: 33px;
+  }
+
+  .networking-lab .observatory-stage {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .networking-lab .layer-labels span {
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .networking-lab *,
+  .networking-lab *::before,
+  .networking-lab *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .networking-lab .journey-rail button[aria-current="step"]::after,
+  .networking-lab .chapter-rail li.is-active::before,
+  .networking-lab .route-panel tr.is-selected td {
+    border-color: Highlight;
+  }
+
+  .networking-lab .layer-labels li.is-active span,
+  .networking-lab .route-insight.is-confirmed strong {
+    color: Highlight;
+  }
+}
+
+.networking-lab.is-embedded .poc-shell { display: block; }
+.networking-lab.is-embedded .poc-main { padding: 20px 0; max-width: 100%; }
+.networking-lab.is-embedded .lesson-heading h3 { font-size: clamp(24px, 3vw, 36px); line-height: 1.15; margin: 14px 0; }
+.networking-lab.is-embedded .observatory-grid { grid-template-columns: minmax(0, 1fr); }
+.networking-lab.is-embedded { overflow-wrap: anywhere; }
+@media (min-width: 1280px) { .networking-lab.is-embedded .observatory-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
+
+.networking-lab .journey-controls button.primary-control:hover:not(:disabled) { color: #fff; }
+
+.networking-lab.is-embedded .observatory-stage { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+.networking-lab.is-embedded .scene-caption { padding: 16px; border-right: 0; border-bottom: 1px solid var(--line); }
+.networking-lab.is-embedded .canvas-region { height: 420px; min-height: 0; }
+.networking-lab .prefix-bit-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 3px; margin-block: 12px; }
+.networking-lab .prefix-bit-grid span { text-align: center; padding: 4px 0; background: var(--accent-soft); font-family: monospace; }
+.networking-lab .prefix-bit-grid span.host-bit { background: var(--paper-soft); border-bottom: 2px solid var(--ink); }
+@media (max-width: 600px) { .networking-lab.is-embedded .canvas-region { height: 300px; } }

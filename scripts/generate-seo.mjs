@@ -2,7 +2,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { publishedChapters } from "../src/content/chapters.ts";
+import { publishedChapters } from "../src/content/catalog.ts";
+import { renderRoute } from "../dist/prerender/entry-server.js";
 import { getSeoRoutes, SITE_NAME, SITE_URL, SOCIAL_IMAGE_URL } from "../src/lib/seo.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -52,7 +53,7 @@ function routeFile(pathname) {
 
 const routes = getSeoRoutes(publishedChapters);
 for (const metadata of routes) {
-  const output = indexTemplate.replace(/<!-- SEO:START -->[\s\S]*?<!-- SEO:END -->/, renderSeo(metadata));
+  const output = indexTemplate.replace(/<!-- SEO:START -->[\s\S]*?<!-- SEO:END -->/, renderSeo(metadata)).replace('<div id="root"></div>', `<div id="root">${renderRoute(metadata.path)}</div>`);
   const file = routeFile(metadata.path);
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, output, "utf8");

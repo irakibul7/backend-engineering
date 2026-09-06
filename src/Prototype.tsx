@@ -31,14 +31,17 @@ import {
   type Chapter,
   type LessonSection,
   type LessonVisual,
-} from "./content/chapters";
+} from "./content/catalog";
 import { readReadingProgress, readTheme, recordLearningVisit, toLocalDateKey, writeProgress, writeReadingProgress, writeTheme, type LearningStreak, type ReadingProgress, type Theme } from "./lib/storage";
+import InteractiveLab from "./networking/InteractiveLab";
+import { getLoadedLesson, loadLesson } from "./content/loadLesson";
 import { applyDocumentMetadata } from "./lib/seo";
 
 const knownPublishedSlugs = new Set(publishedChapters.map((chapter) => chapter.slug));
-const publishedSectionsBySlug = new Map(publishedChapters.map((chapter) => [chapter.slug, new Set(chapter.sections?.map((section) => section.id) ?? [])]));
+const publishedSectionsBySlug = new Map(publishedChapters.map((chapter) => [chapter.slug, new Set(chapter.sectionIndex?.map((section) => section.id) ?? [])]));
 const emptySectionIds = new Set<string>();
 const themes: Theme[] = ["light", "original", "dark"];
+
 const SearchDialog = lazy(() => import("./SearchDialog"));
 const NotesPanel = lazy(() => import("./NotesPanel"));
 
@@ -49,14 +52,15 @@ const chapterLabels: Record<number, { difficulty: "Fundamental" | "Important" }>
   4: { difficulty: "Important" },
   5: { difficulty: "Important" },
   6: { difficulty: "Important" },
+  7: { difficulty: "Important" },
 };
 
 function pad(number: number) {
   return String(number).padStart(2, "0");
 }
 
-function useRoute() {
-  const [path, setPath] = useState(() => window.location.pathname);
+function useRoute(initialPath?: string) {
+  const [path, setPath] = useState(() => initialPath ?? window.location.pathname);
 
   useEffect(() => {
     const update = () => setPath(window.location.pathname);
@@ -69,7 +73,7 @@ function useRoute() {
     window.history.pushState({}, "", `${url.pathname}${url.hash}`);
     setPath(url.pathname);
     if (url.hash) {
-      window.requestAnimationFrame(() => document.getElementById(url.hash.slice(1))?.scrollIntoView());
+      window.requestAnimationFrame(() => document.getElementById(url.hash.slice(1))?.scrollIntoView?.());
     } else {
       window.scrollTo({ top: 0, behavior: "auto" });
     }
@@ -248,17 +252,17 @@ function CatalogPage({
 }) {
   const publishedCount = publishedChapters.length;
   const comingNextCount = launchChapters.filter((chapter) => chapter.status === "coming-next").length;
-  const totalSections = publishedChapters.reduce((total, chapter) => total + (chapter.sections?.length ?? 0), 0);
+  const totalSections = publishedChapters.reduce((total, chapter) => total + (chapter.sectionIndex?.length ?? 0), 0);
   const readSections = publishedChapters.reduce((total, chapter) => total + (readingProgress.get(chapter.slug)?.size ?? 0), 0);
   const progress = totalSections === 0 ? 0 : Math.round((readSections / totalSections) * 100);
-  const completed = new Set(publishedChapters.filter((chapter) => (chapter.sections?.length ?? 0) > 0 && readingProgress.get(chapter.slug)?.size === chapter.sections?.length).map((chapter) => chapter.slug));
+  const completed = new Set(publishedChapters.filter((chapter) => (chapter.sectionIndex?.length ?? 0) > 0 && readingProgress.get(chapter.slug)?.size === chapter.sectionIndex?.length).map((chapter) => chapter.slug));
 
   const partial = publishedChapters.find((chapter) => {
     const read = readingProgress.get(chapter.slug)?.size ?? 0;
     return read > 0 && !completed.has(chapter.slug);
   });
   const nextChapter = partial ?? publishedChapters.find((chapter) => !completed.has(chapter.slug));
-  const nextSection = partial?.sections?.find((section) => !readingProgress.get(partial.slug)?.has(section.id));
+  const nextSection = partial?.sectionIndex?.find((section) => !readingProgress.get(partial.slug)?.has(section.id));
   const resumeHref = nextChapter ? `${chapterHref(nextChapter)}${nextSection ? `#${nextSection.id}` : ""}` : "/roadmap/";
   const resumeLabel = partial ? "Continue reading" : nextChapter ? (readSections ? "Start next chapter" : "Start reading") : "Explore the roadmap";
 
@@ -293,7 +297,7 @@ function CatalogPage({
         </header>
         <div className="syllabus-list">
           {launchChapters.map((chapter) => {
-            const total = chapter.sections?.length ?? 0;
+            const total = chapter.sectionIndex?.length ?? 0;
             const chapterProgress = total === 0 ? 0 : Math.round(((readingProgress.get(chapter.slug)?.size ?? 0) / total) * 100);
             return <SyllabusRow key={chapter.slug} current={chapter.slug === nextChapter?.slug} chapter={chapter} progress={chapterProgress} onToggle={onToggle} navigate={navigate} />;
           })}
@@ -325,14 +329,21 @@ function RoadmapPage() {
       </header>
       <section className="roadmap-index" aria-label="Roadmap chapters">
         <div className="roadmap-index-head"><span>Topic</span><span>System focus</span><span>Status</span></div>
-        {roadmapChapters.map((chapter) => (
+        {[
+          { title: "API contracts and durable data", slugs: roadmapChapters.slice(0, 5) },
+          { title: "Reliability and service operations", slugs: roadmapChapters.slice(5, 10) },
+          { title: "Security, scale, and delivery", slugs: roadmapChapters.slice(10) },
+        ].map((stage, index) => <section className="roadmap-stage" key={stage.title} aria-labelledby={`stage-${index}`}>
+          <h2 id={`stage-${index}`}>Stage {index + 1} · {stage.title}</h2>
+          {stage.slugs.map((chapter) => (
           <article className="roadmap-row" id={chapter.slug} key={chapter.slug}>
             <span>{pad(chapter.number)}</span>
             <div><strong>{chapter.title}</strong><small>{chapter.promise}</small></div>
             <span>{chapter.tags.slice(0, 2).join(" · ")}</span>
             <b>Planned</b>
           </article>
-        ))}
+          ))}
+        </section>)}
       </section>
     </main>
   );
@@ -500,7 +511,7 @@ function LessonPage({
           <p className="eyebrow">Backend Engineering · Field guide {pad(chapter.number)}</p>
           <h1>{chapter.title}</h1>
           <p>{chapter.promise} This chapter connects protocol behavior to the decisions a production service must make.</p>
-          <div className="lesson-meta"><span>Application layer</span><span>{chapter.sections.length} sections</span><span>{chapter.duration}</span><span aria-live="polite">{lessonProgress}% read</span></div>
+          <div className="lesson-meta"><span>{chapter.number === 7 ? "Links and routing" : "Application layer"}</span><span>{chapter.sections.length} sections</span><span>{chapter.duration}</span><span aria-live="polite">{lessonProgress}% read</span></div>
         </section>
         <div className="lesson-content">
           {chapter.sections.map((section) => (
@@ -511,6 +522,7 @@ function LessonPage({
               {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               {section.codeFirst && section.code ? <CodeBlock filename={section.code.filename} source={section.code.source} /> : null}
               {section.callout ? <aside className="lesson-callout"><strong>{section.callout.label}</strong><p>{section.callout.body}</p></aside> : null}
+              {section.interactive === "networking" ? <Suspense fallback={null}><InteractiveLab /></Suspense> : null}
               {section.visuals?.map((visual) => <LessonVisualFigure key={visual.label} visual={visual} />)}
               {!section.codeFirst && section.code ? <CodeBlock filename={section.code.filename} source={section.code.source} /> : null}
               {section.table ? <LessonTable table={section.table} /> : null}
@@ -535,8 +547,8 @@ function LessonPage({
   );
 }
 
-export function Prototype() {
-  const { path, navigate } = useRoute();
+export function Prototype({ initialPath, initialChapter }: { initialPath?: string; initialChapter?: Chapter } = {}) {
+  const { path, navigate } = useRoute(initialPath);
   const [readingProgress, setReadingProgress] = useState<ReadingProgress>(() => readReadingProgress(publishedSectionsBySlug));
   const [streak] = useState(() => recordLearningVisit());
   const [theme, setTheme] = useState<Theme>(() => readTheme());
@@ -552,8 +564,21 @@ export function Prototype() {
     setNotesOpen(true);
   }, []);
   const lessonSlug = path.startsWith("/chapters/") ? path.split("/").filter(Boolean).at(-1) : undefined;
-  const lesson = lessonSlug ? chapterBySlug(lessonSlug) : undefined;
-  const noteScope = lesson?.slug ?? "master";
+  const metadata = lessonSlug ? chapterBySlug(lessonSlug) : undefined;
+  const [loadedLesson, setLoadedLesson] = useState(() => initialChapter ?? (lessonSlug ? getLoadedLesson(lessonSlug) : undefined));
+  const [failedSlug, setFailedSlug] = useState<string>();
+  const loadFailed = failedSlug === lessonSlug && Boolean(lessonSlug);
+  const lesson = loadedLesson?.slug === lessonSlug ? loadedLesson : undefined;
+  useEffect(() => {
+    let cancelled = false;
+    if (!lessonSlug || !metadata) return;
+    loadLesson(lessonSlug).then((chapter) => { if (!cancelled) { setLoadedLesson(chapter); setFailedSlug(undefined); } }).catch(() => { if (!cancelled) setFailedSlug(lessonSlug); });
+    return () => { cancelled = true; };
+  }, [lessonSlug, metadata]);
+  useEffect(() => {
+    if (lesson && window.location.hash) document.getElementById(window.location.hash.slice(1))?.scrollIntoView?.();
+  }, [lesson]);
+  const noteScope = metadata?.slug ?? "master";
 
   useEffect(() => { document.documentElement.dataset.theme = theme; writeTheme(theme); }, [theme]);
   useEffect(() => { applyDocumentMetadata(path, publishedChapters); }, [path]);
@@ -612,7 +637,7 @@ export function Prototype() {
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
       <AppHeader path={path} theme={theme} navigate={navigate} onOpenSearch={openSearch} onOpenNotes={openNotes} onCycleTheme={cycleTheme} />
-      {lesson ? <LessonPage chapter={lesson} readSectionIds={readingProgress.get(lesson.slug) ?? emptySectionIds} onReadSections={markSectionsRead} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage readingProgress={readingProgress} streak={streak} onToggle={toggleComplete} onOpenNotes={openNotes} navigate={navigate} />}
+      {lesson ? <LessonPage chapter={lesson} readSectionIds={readingProgress.get(lesson.slug) ?? emptySectionIds} onReadSections={markSectionsRead} navigate={navigate} /> : metadata ? <main id="main-content" className="lesson-main"><h1>{metadata.title}</h1><p role="status">{loadFailed ? "This lesson could not load. Reload to try again." : "Loading lesson…"}</p>{loadFailed ? <button type="button" onClick={() => window.location.reload()}>Reload lesson</button> : null}</main> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage readingProgress={readingProgress} streak={streak} onToggle={toggleComplete} onOpenNotes={openNotes} navigate={navigate} />}
       {searchOpen ? <Suspense fallback={null}><SearchDialog returnFocus={modalOpener} onClose={() => setSearchOpen(false)} navigate={navigate} /></Suspense> : null}
       {notesOpen ? <Suspense fallback={null}><NotesPanel returnFocus={modalOpener} scope={noteScope} onClose={() => setNotesOpen(false)} /></Suspense> : null}
     </>

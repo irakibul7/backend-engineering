@@ -23,6 +23,18 @@ describe("networking observatory proof", () => {
     installMotionPreference(false);
   });
 
+  it("embeds without changing theme and can replay the final step", async () => {
+    document.documentElement.dataset.theme = "dark";
+    render(<NetworkingPoc embedded visualMode="fallback" />);
+    expect(document.documentElement.dataset.theme).toBe("dark");
+    expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent("Application data");
+    const user = userEvent.setup();
+    await user.selectOptions(screen.getByLabelText("Protocol layers step"), "4");
+    await user.click(screen.getByRole("button", { name: "Replay" }));
+    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent("Application data");
+  });
+
   it("keeps the complete semantic journey available without WebGL", () => {
     render(<NetworkingPoc visualMode="fallback" />);
 

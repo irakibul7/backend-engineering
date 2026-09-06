@@ -49,7 +49,7 @@ A visitor should be able to:
 
 ### MVP
 
-- 24-chapter catalog with duration, tags, summary, completion state, and explicit published/coming-next/roadmap status.
+- 25-chapter catalog with duration, tags, summary, completion state, and explicit published/coming-next/roadmap status.
 - Long-form chapter route with table of contents, active-section indication, previous/next navigation, diagrams, code blocks, callouts, tables, and references.
 - Command-search dialog available by click and keyboard shortcut.
 - Completion tracking, theme preference, and notes stored locally.
@@ -197,7 +197,7 @@ A visitor should be able to:
 
 ## 9. Content requirements
 
-- The current release includes six complete chapters and the 24-chapter outline in `docs/content-outline.md`; chapters 07–24 are public roadmap entries.
+- The current implementation includes seven complete chapters and 18 roadmap entries (08–25), with the approved insertion defined in `docs/chapter-07-networking-spec.md`.
 - Each published chapter has a learning promise, prerequisites, mental model, first-principles explanation, production implications, practical examples, failure cases, debugging checklist, glossary links, and primary references.
 - Product navigation and positioning remain implementation-language neutral. Initial examples are authored in the current repository language, while the content model must allow additional languages later without renaming the product or restructuring the curriculum.
 - Content must not be bulk-copied or lightly paraphrased from the reference.
@@ -235,7 +235,7 @@ The release is ready only when:
 Confirmed 2026-08-30:
 
 1. Canonical domain: `backend.therakibul.me`.
-2. Staged growth: six complete foundation chapters and a public roadmap for chapters 07–24.
+2. Staged growth: seven complete chapters and a public roadmap for chapters 08–25.
 3. Public positioning is language-neutral. Initial examples use the current repository language; additional language variants may be added later.
 4. Specification approved; proceed through technical validation and small reviewed slices.
 

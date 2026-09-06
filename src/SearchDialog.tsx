@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { ArrowRight, Search, X } from "lucide-react";
-import { chapterHref, chapters } from "./content/chapters";
+import { chapterHref, chapters } from "./content/catalog";
 import { searchChapters, type SearchResult } from "./lib/search";
 import { useModalFocus } from "./lib/useModalFocus";
 

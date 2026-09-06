@@ -2,14 +2,14 @@ import { describe, expect, it } from "vitest";
 import { chapterBySlug, chapterHref, chapters, launchChapters, publishedChapters } from "./chapters";
 
 describe("chapter publication model", () => {
-  it("keeps all six launch entries while exposing only complete lessons", () => {
-    expect(launchChapters).toHaveLength(6);
-    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4, 5, 6]);
+  it("keeps all seven launch entries while exposing only complete lessons", () => {
+    expect(launchChapters).toHaveLength(7);
+    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4, 5, 6, 7]);
     expect(publishedChapters.every((chapter) => chapter.sections?.length)).toBe(true);
   });
 
   it("does not resolve an unfinished chapter as a lesson route", () => {
-    const upcoming = chapters.find((chapter) => chapter.number === 7);
+    const upcoming = chapters.find((chapter) => chapter.number === 8);
     expect(upcoming).toBeDefined();
     expect(chapterHref(upcoming!)).toBe("/roadmap/#resource-oriented-api-design");
     expect(chapterBySlug("resource-oriented-api-design")).toBeUndefined();

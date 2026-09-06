@@ -65,3 +65,26 @@
 - **Trust boundary**: A point where data or control crosses between parties with different security assumptions.
 
 This glossary will expand alongside authored chapters. Each definition must be short, original, and link to a deeper chapter section.
+
+## Networking terms
+
+- **---**: ---
+- **Link**: A medium and link-layer relationship over which adjacent interfaces exchange frames.
+- **Frame**: A link-layer envelope used for delivery on one link.
+- **Packet**: A network-layer unit carrying source, destination, protocol, lifetime, and payload information.
+- **Encapsulation**: Wrapping higher-layer data with the header and metadata required by a lower layer.
+- **MAC address**: A link-layer identifier used for delivery on a local link; it is not a global route.
+- **IP address**: A network-layer identifier whose prefix participates in forwarding decisions.
+- **Subnet prefix**: The leading address bits that describe a destination set.
+- **Next hop**: The adjacent node to which the current node sends a packet on its selected route.
+- **Default gateway**: The next hop used when no more-specific local or learned route matches.
+- **ARP**: IPv4 address resolution used to discover a neighbor's link-layer address on a local broadcast link.
+- **Neighbor cache**: Temporary mappings between network-layer neighbors and link-layer addresses.
+- **Routing table**: Candidate destination prefixes and forwarding information available to a node.
+- **Longest-prefix match**: Selecting the matching route with the greatest prefix length.
+- **TTL**: An IPv4 hop limit decremented by routers to bound persistent forwarding loops.
+- **Forwarding plane**: Per-packet lookup and transmission behavior.
+- **Control plane**: Processes that install or update reachability information used by forwarding.
+- **Autonomous system**: A routing-policy domain identified for inter-domain reachability exchange.
+- **BGP**: A protocol for exchanging reachability and path information between autonomous systems.
+- **Asymmetric routing**: Forward and return traffic using different valid paths.

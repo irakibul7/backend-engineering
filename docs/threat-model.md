@@ -57,3 +57,11 @@ The MVP has no account, database, cookies, or remote note/progress sync. Browser
 ## Security review triggers
 
 Repeat threat modeling before adding authentication, remote sync, comments, a CMS, code execution, image uploads, third-party embeds, a runtime API, or user-generated public content.
+
+## Chapter 07: bounded networking illustrations
+
+The public lesson promotes the reviewed ADR-0006 proof into a chapter-only lazy boundary. The scenario reducer owns all educational state; the Three.js adapter only projects that state. Inputs are fixed documentation addresses and bounded route fixtures. No device interface, neighbor cache, packet capture, network probe, route change, shader upload, or remote request is exposed.
+
+The renderer loads near the viewport, renders on demand, pauses offscreen or when hidden, and disposes resources on unmount. Reduced motion disables interpolation and auto-play. Context loss and dependency failure leave semantic evidence available; every scenario state also appears in the generated static lesson HTML. The single versioned local motion preference contains no network information. Existing analytics collect no lab step or command data.
+
+Verification: parser and route-boundary tests, lifecycle and fallback component tests, static HTML and chunk-budget tests, and the browser evidence in `validation/chapter-07-publication.md`.

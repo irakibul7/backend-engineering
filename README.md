@@ -7,7 +7,7 @@ The product uses an original engineering-notebook interface, original writing, a
 ## Current phase
 
 - Phase: public launch
-- Implementation: catalog, roadmap, study tools, and six complete foundation lessons available
+- Implementation: catalog, roadmap, study tools, and seven complete lessons available
 - Production host: Vercel
 - Production domain: <https://backend.therakibul.me/>
 - Inspiration studied: <https://backend-from-first-principle.vercel.app/> (interaction research only; not a visual target)
@@ -36,7 +36,7 @@ The dated launch record, including Lighthouse, accessibility, responsive, consol
 
 ## Documentation map
 
-- `docs/content-outline.md`: original 24-chapter curriculum
+- `docs/content-outline.md`: original curriculum (Chapter 07 insertion is specified in `docs/chapter-07-networking-spec.md`)
 - `docs/workflow.md`: Addy-inspired operating loop and review gates
 - `docs/glossary.md`: shared product and backend vocabulary
 - `docs/role-matrix.md`: capabilities by user role

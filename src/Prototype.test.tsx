@@ -1,16 +1,19 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { publishedChapters } from "./content/catalog";
+import { loadLesson } from "./content/loadLesson";
 import { Prototype } from "./Prototype";
 
 describe("Backend Engineering prototype", () => {
+  beforeAll(async () => { await Promise.all(publishedChapters.map((chapter) => loadLesson(chapter.slug))); });
   beforeEach(() => {
     window.localStorage.clear();
     window.history.replaceState({}, "", "/");
     document.documentElement.removeAttribute("data-theme");
   });
 
-  it("presents six published chapters and a visible public roadmap", () => {
+  it("presents seven published chapters and a visible public roadmap", () => {
     render(<Prototype />);
 
     expect(screen.getByRole("link", { name: "Backend Engineering home" }).querySelector("img")).toHaveAttribute("src", "/icon-192.png?v=2");
@@ -32,7 +35,7 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByRole("link", { name: "Start next chapter" })).toHaveAttribute("href", "/chapters/routing-and-request-dispatch/");
     expect(screen.getByRole("link", { name: /Routing and Request Dispatch\s*Path matching/ })).toHaveAttribute("aria-current", "step");
     expect(screen.getByText(/chapters completed/)).toBeInTheDocument();
-    expect(screen.getByText(/12% of sections read/)).toBeInTheDocument();
+    expect(screen.getByText(/9% of sections read/)).toBeInTheDocument();
   });
 
   it("resumes a partially read chapter at its first unread section after reload", () => {
@@ -44,7 +47,7 @@ describe("Backend Engineering prototype", () => {
   it("offers the roadmap when all published chapters are complete", async () => {
     const user = userEvent.setup();
     render(<Prototype />);
-    for (let n = 1; n <= 6; n++) await user.click(screen.getByRole("button", { name: `Mark chapter ${n} complete` }));
+    for (let n = 1; n <= 7; n++) await user.click(screen.getByRole("button", { name: `Mark chapter ${n} complete` }));
     expect(screen.getByRole("heading", { name: "Foundations complete" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Explore the roadmap" })).toHaveAttribute("href", "/roadmap/");
   });
@@ -137,7 +140,7 @@ describe("Backend Engineering prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "12");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "9");
     expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuemax", "100");
     expect(screen.getByRole("button", { name: "Reset chapter 1 reading progress" })).toHaveAttribute("aria-pressed", "true");
   });
@@ -260,7 +263,7 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByText("publish-document.ts")).toBeInTheDocument();
     expect(screen.getByText("middleware.ts")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Node.js: Asynchronous context tracking" })).toHaveAttribute("href", "https://nodejs.org/api/async_context.html");
-    expect(screen.queryByText("Next")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /NextNetworking and Packet Routing/ })).toBeInTheDocument();
   });
 
   it("renders every diagram type through the shared responsive visual system", () => {

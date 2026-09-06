@@ -22,7 +22,7 @@ export function searchChapters(chapters: Chapter[], rawQuery: string): SearchRes
       const summary = normalize(chapter.summary);
       const tags = normalize(chapter.tags.join(" "));
       const promise = normalize(chapter.promise);
-      const sectionHeadings = normalize(chapter.sections?.map((section) => section.title).join(" ") ?? "");
+      const sectionHeadings = normalize((chapter.sectionIndex ?? chapter.sections)?.map((section) => section.title).join(" ") ?? "");
       let score = 0;
 
       for (const token of tokens) {
@@ -36,7 +36,7 @@ export function searchChapters(chapters: Chapter[], rawQuery: string): SearchRes
         if (sectionHeadings.includes(token)) score += 2;
       }
 
-      const section = chapter.status === "published" ? chapter.sections
+      const section = chapter.status === "published" ? (chapter.sectionIndex ?? chapter.sections)
         ?.map((section) => ({ section, score: tokens.filter((token) => normalize(section.title).includes(token)).length }))
         .filter((match) => match.score > 0)
         .sort((left, right) => right.score - left.score)[0]?.section : undefined;

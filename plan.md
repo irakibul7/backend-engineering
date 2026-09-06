@@ -297,4 +297,31 @@ Each chapter or coherent two-chapter pair should be its own human-reviewed commi
 - Acceptance: resume handles new, partial, completed, and all-complete states; Notes and Search contain keyboard focus and restore the trigger; cache/caching finds the published HTTP section with a deep link; search supports arrows, Enter, Escape, and touch close; counts distinguish chapters and sections; mobile summary is compact with the reading action ahead of streak statistics.
 - Files in scope: `src/Prototype.tsx`, `src/NotesPanel.tsx`, `src/SearchDialog.tsx`, focused helpers and tests, `src/prototype.css`, specification and validation evidence.
 - Exclusions: new lessons, roadmap redesign, new storage schemas, remote services, dependencies, deployment, and commits.
-- Status: Complete, pending human review. User requested these fixes on 2026-09-06; verification is recorded in `docs/validation/learning-flow-review.md`. No commit or deployment.
+- Status: Complete. Reviewed and authorized by the user; committed and pushed as `b8cdf11` on 2026-09-06. Verification is recorded in `docs/validation/learning-flow-review.md`.
+
+
+### T-707 Lesson and roadmap presentation
+
+- Requirements: `CAT-005`, `LES-004`, `A11Y-003`, `A11Y-004`.
+- Acceptance: lesson entry uses compact spacing; all roadmap descriptions wrap; three named stages retain chapter order and stable anchors; responsive and repository gates pass.
+- Files: `src/Prototype.tsx`, `src/prototype.css`, component tests, validation notes.
+- Exclusions: curriculum reordering, new assets, deployment.
+- Status: Complete, authorized 2026-09-06; approved for commit and push with Chapter 07.
+
+
+### T-602J-1 Route-size architecture execution
+
+- Requirements: ADR-0005, `PERF-001`, `PERF-003`, `LES-001`, `LES-008`, `SEA-002`, `PRO-002`, `SEO-002`.
+- Acceptance: metadata-only catalog, independently lazy lesson bodies, shared entry below 100 kB gzip, real static body HTML for every public route, working direct/deep links, search and existing progress.
+- Scope: content modules, route loading, initial boot, prerender entry, build scripts and regression tests.
+- Exclusions: new storage, analytics, API or deployment.
+- Status: Complete; validated by the production build, static-route tests, and bundle budgets.
+
+
+### T-602J-2 through T-602J-4 Public Chapter 07 execution
+
+- Requirements: `CON-007`, `LES-001`, `LES-004`, `LES-008`, `LES-009`, `A11Y-001`, `A11Y-003`, `A11Y-004`, `PERF-002`, `PERF-003`, ADR-0005 and ADR-0006.
+- Acceptance: all 16 stable sections and eight scenario modules; deterministic 40-state semantic evidence; route repair and packet-capture walkthrough; no-JavaScript lesson HTML; lazy, bounded 3D with motion/fallback controls; seven-chapter navigation, progress, search and SEO; desktop/390/320 checks and full repository gate.
+- Files: `src/content/`, `src/networking/`, existing PoC compatibility exports/tests, catalog and lesson UI, static build checks, glossary and validation documentation.
+- Exclusions: live network inspection, networking API, cloud changes, new analytics, Chapters 08–25, production deployment.
+- Status: Implemented and verified locally; user approved commit and push on 2026-09-06. Evidence: `docs/validation/chapter-07-publication.md`.

@@ -12,7 +12,7 @@ describe("searchChapters", () => {
   it("finds roadmap topics by technology tag", () => {
     const results = searchChapters(chapters, "Kafka");
 
-    expect(results[0]?.chapter.number).toBe(23);
+    expect(results[0]?.chapter.number).toBe(24);
     expect(results[0]?.chapter.status).toBe("roadmap");
   });
 

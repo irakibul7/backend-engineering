@@ -17,6 +17,7 @@ describe("SEO metadata", () => {
       "/chapters/identity-authentication-authorization/",
       "/chapters/validation-at-trust-boundaries/",
       "/chapters/layered-request-handling/",
+      "/chapters/networking-and-packet-routing/",
     ]);
     expect(routes.every((route) => route.robots.startsWith("index"))).toBe(true);
   });
