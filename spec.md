@@ -136,6 +136,7 @@ A visitor should be able to:
 - `PRO-002`: Persist completion locally using a versioned schema.
 - `PRO-003`: Ignore unknown chapter IDs and recover from malformed stored data.
 - `PRO-004`: Expose completion state to assistive technology and never rely on color alone.
+- `PRO-006`: The reading shortcut resumes the first unread section of the first partially read published chapter, otherwise starts the first unread chapter. With no progress it offers Start reading; with all published chapters complete it offers the roadmap. Counts explicitly identify completed chapters and percentages identify sections read.
 - `PRO-005`: Record at most one learning visit per local calendar day, display the current and best consecutive-day streak, and keep all streak data in versioned browser storage.
 
 ### Study notes

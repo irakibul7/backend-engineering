@@ -24,6 +24,48 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByRole("link", { name: /View all 18 roadmap topics/ })).toHaveAttribute("href", "/roadmap/");
   });
 
+  it("starts new readers and moves past completed chapters", async () => {
+    const user = userEvent.setup();
+    render(<Prototype />);
+    expect(screen.getByRole("link", { name: "Start reading" })).toHaveAttribute("href", "/chapters/http-as-a-state-machine/");
+    await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
+    expect(screen.getByRole("link", { name: "Start next chapter" })).toHaveAttribute("href", "/chapters/routing-and-request-dispatch/");
+    expect(screen.getByRole("link", { name: /Routing and Request Dispatch\s*Path matching/ })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByText(/chapters completed/)).toBeInTheDocument();
+    expect(screen.getByText(/12% of sections read/)).toBeInTheDocument();
+  });
+
+  it("resumes a partially read chapter at its first unread section after reload", () => {
+    window.localStorage.setItem("backend-engineering:reading-progress:v1", JSON.stringify({schemaVersion: 1, chapterSections: {"http-as-a-state-machine": ["protocol-contract"]}}));
+    render(<Prototype />);
+    expect(screen.getByRole("link", { name: "Continue reading" })).toHaveAttribute("href", "/chapters/http-as-a-state-machine/#request-lifecycle");
+  });
+
+  it("offers the roadmap when all published chapters are complete", async () => {
+    const user = userEvent.setup();
+    render(<Prototype />);
+    for (let n = 1; n <= 6; n++) await user.click(screen.getByRole("button", { name: `Mark chapter ${n} complete` }));
+    expect(screen.getByRole("heading", { name: "Foundations complete" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Explore the roadmap" })).toHaveAttribute("href", "/roadmap/");
+  });
+
+  it("keeps Notes keyboard focus inside and restores its opener", async () => {
+    const user = userEvent.setup();
+    render(<Prototype />);
+    const opener = screen.getByRole("button", { name: "Open study notes" });
+    await user.click(opener);
+    const editor = await screen.findByRole("textbox", { name: "Study notes Markdown editor" });
+    await waitFor(() => expect(editor).toHaveFocus());
+    const dialog = screen.getByRole("dialog", { name: "Study notes" });
+    await user.tab();
+    expect(within(dialog).getByRole("button", { name: "Close study notes" })).toHaveFocus();
+    await user.tab({shift: true});
+    expect(editor).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(opener).toHaveFocus();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
   it("gives every compact weekly streak marker an unambiguous day label and status", () => {
     render(<Prototype />);
 
@@ -53,6 +95,40 @@ describe("Backend Engineering prototype", () => {
     await user.type(input, "Kafka");
 
     expect(screen.getByRole("button", { name: /Messaging and Event Streams/ })).toBeInTheDocument();
+  });
+
+  it("navigates search results by keyboard to a published section and restores focus", async () => {
+    const user = userEvent.setup();
+    render(<Prototype />);
+    const opener = screen.getByRole("button", { name: "Search chapters and topics" });
+    await user.click(opener);
+    const input = await screen.findByRole("textbox", { name: "Search chapters and topics" });
+    await user.type(input, "cache");
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: /Caching as Controlled Staleness/ })).toHaveFocus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: /HTTP as a State Machine/ })).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(window.location.hash).toBe("#caching");
+    expect(window.location.pathname).toBe("/chapters/http-as-a-state-machine/");
+    expect(opener).toHaveFocus();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("contains search focus with no results and closes with its touch control", async () => {
+    const user = userEvent.setup();
+    render(<Prototype />);
+    const opener = screen.getByRole("button", { name: "Search chapters and topics" });
+    await user.click(opener);
+    const input = await screen.findByRole("textbox", { name: "Search chapters and topics" });
+    await user.type(input, "zzzznomatch");
+    await user.tab({ shift: true });
+    const close = screen.getByRole("button", { name: "Close search" });
+    expect(close).toHaveFocus();
+    await user.tab();
+    expect(input).toHaveFocus();
+    await user.click(close);
+    expect(opener).toHaveFocus();
   });
 
   it("tracks completed launch chapters without navigating", async () => {

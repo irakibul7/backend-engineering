@@ -44,6 +44,13 @@ describe("searchChapters", () => {
     expect(results[0]?.chapter.status).toBe("published");
   });
 
+  it("finds cache and caching through the same published section", () => {
+    for (const query of ["cache", "caching", "CACHE"]) {
+      const result = searchChapters(chapters, query).find(({ chapter }) => chapter.number === 1);
+      expect(result?.section?.id).toBe("caching");
+    }
+  });
+
   it("returns no results for an empty query", () => {
     expect(searchChapters(chapters, "   ")).toEqual([]);
   });

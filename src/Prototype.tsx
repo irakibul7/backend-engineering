@@ -125,9 +125,9 @@ function AppHeader({
         <InternalLink className={path.startsWith("/roadmap") ? "is-active" : ""} href="/roadmap/" navigate={navigate}>Roadmap</InternalLink>
         <button type="button" onClick={onOpenNotes} aria-label="Open study notes">Notes</button>
       </nav>
-      <button className="header-search" type="button" onClick={onOpenSearch} aria-label="Search topics, chapters, and notes">
+      <button className="header-search" type="button" onClick={onOpenSearch} aria-label="Search chapters and topics">
         <Search size={18} aria-hidden="true" />
-        <span>Search topics, chapters, notes…</span>
+        <span>Search chapters, topics…</span>
         <kbd>⌘ K</kbd>
       </button>
       <div className="header-actions">
@@ -145,11 +145,13 @@ function ProgressSegments({ progress }: { progress: number }) {
 
 function SyllabusRow({
   chapter,
+  current,
   progress,
   onToggle,
   navigate,
 }: {
   chapter: Chapter;
+  current: boolean;
   progress: number;
   onToggle: (slug: string) => void;
   navigate: (href: string) => void;
@@ -160,10 +162,10 @@ function SyllabusRow({
   const copy = <><strong>{chapter.title}</strong><span>{chapter.summary}</span></>;
 
   return (
-    <article id={chapter.slug} className={`syllabus-row ${chapter.number === 1 ? "is-current" : ""} ${available ? "" : "is-coming-next"}`}>
+    <article id={chapter.slug} className={`syllabus-row ${current ? "is-current" : ""} ${available ? "" : "is-coming-next"}`}>
       <span className="syllabus-number">{pad(chapter.number)}</span>
       {available
-        ? <InternalLink className="syllabus-copy" href={chapterHref(chapter)} navigate={navigate}>{copy}</InternalLink>
+        ? <InternalLink className="syllabus-copy" aria-current={current ? "step" : undefined} href={chapterHref(chapter)} navigate={navigate}>{copy}</InternalLink>
         : <div className="syllabus-copy">{copy}</div>}
       <span className="syllabus-difficulty">{labels?.difficulty ?? "Important"}</span>
       <span className="syllabus-duration">{chapter.duration}</span>
@@ -251,23 +253,32 @@ function CatalogPage({
   const progress = totalSections === 0 ? 0 : Math.round((readSections / totalSections) * 100);
   const completed = new Set(publishedChapters.filter((chapter) => (chapter.sections?.length ?? 0) > 0 && readingProgress.get(chapter.slug)?.size === chapter.sections?.length).map((chapter) => chapter.slug));
 
+  const partial = publishedChapters.find((chapter) => {
+    const read = readingProgress.get(chapter.slug)?.size ?? 0;
+    return read > 0 && !completed.has(chapter.slug);
+  });
+  const nextChapter = partial ?? publishedChapters.find((chapter) => !completed.has(chapter.slug));
+  const nextSection = partial?.sections?.find((section) => !readingProgress.get(partial.slug)?.has(section.id));
+  const resumeHref = nextChapter ? `${chapterHref(nextChapter)}${nextSection ? `#${nextSection.id}` : ""}` : "/roadmap/";
+  const resumeLabel = partial ? "Continue reading" : nextChapter ? (readSections ? "Start next chapter" : "Start reading") : "Explore the roadmap";
+
   return (
     <main className="catalog-layout" id="main-content">
       <aside className="catalog-intro">
         <p className="eyebrow">Engineer’s field notebook</p>
         <h1>Backend <br />Engineering</h1>
         <p className="intro-copy">Understand the systems behind reliable backend software—protocols, boundaries, data, security, resilience, and production delivery.</p>
-        <LearningStreakPanel streak={streak} />
         <section className="progress-panel" aria-labelledby="progress-heading">
-          <div className="progress-heading"><span id="progress-heading">Reading progress</span><strong>{completed.size} <small>of {publishedCount}</small></strong><b>{progress}%</b></div>
-          <div className="progress-track" role="progressbar" aria-label="Overall reading progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><i style={{ width: `${progress}%` }} /></div>
+          <div className="progress-heading"><span id="progress-heading">Reading progress</span><strong>{completed.size} <small>of {publishedCount} chapters completed</small></strong><b>{progress}% of sections read</b></div>
+          <div className="progress-track" role="progressbar" aria-label="Overall reading progress" aria-valuetext={`${progress}% of sections read`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><i style={{ width: `${progress}%` }} /></div>
         </section>
         <section className="continue-panel" aria-labelledby="continue-heading">
-          <span>Currently reading</span>
-          <h2 id="continue-heading">HTTP as a State Machine</h2>
-          <small>Chapter 01</small>
-          <InternalLink className="continue-action" href={chapterHref(publishedChapters[0])} navigate={navigate}><BookOpen size={17} /> Continue HTTP</InternalLink>
+          <span>{partial ? "Continue learning" : nextChapter ? "Up next" : "Well done"}</span>
+          <h2 id="continue-heading">{nextChapter?.title ?? "Foundations complete"}</h2>
+          <small>{nextChapter ? `Chapter ${pad(nextChapter.number)}${nextSection ? ` · ${nextSection.title}` : ""}` : "You have read every published chapter."}</small>
+          <InternalLink className="continue-action" href={resumeHref} navigate={navigate}><BookOpen size={17} />{resumeLabel}</InternalLink>
         </section>
+        <LearningStreakPanel streak={streak} />
         <div className="feature-list">
           <FeatureLine icon={Code2} title="Practical examples" body="Concepts connected to working systems" />
           <FeatureLine icon={LockKeyhole} title="Private study notes" body="Your notes stay local to this device" action={onOpenNotes} />
@@ -284,7 +295,7 @@ function CatalogPage({
           {launchChapters.map((chapter) => {
             const total = chapter.sections?.length ?? 0;
             const chapterProgress = total === 0 ? 0 : Math.round(((readingProgress.get(chapter.slug)?.size ?? 0) / total) * 100);
-            return <SyllabusRow key={chapter.slug} chapter={chapter} progress={chapterProgress} onToggle={onToggle} navigate={navigate} />;
+            return <SyllabusRow key={chapter.slug} current={chapter.slug === nextChapter?.slug} chapter={chapter} progress={chapterProgress} onToggle={onToggle} navigate={navigate} />;
           })}
         </div>
         <details className="roadmap-band" open>
@@ -531,6 +542,15 @@ export function Prototype() {
   const [theme, setTheme] = useState<Theme>(() => readTheme());
   const [searchOpen, setSearchOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
+  const [modalOpener, setModalOpener] = useState<HTMLElement | null>(null);
+  const openSearch = useCallback(() => {
+    setModalOpener(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+    setSearchOpen(true);
+  }, []);
+  const openNotes = useCallback(() => {
+    setModalOpener(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+    setNotesOpen(true);
+  }, []);
   const lessonSlug = path.startsWith("/chapters/") ? path.split("/").filter(Boolean).at(-1) : undefined;
   const lesson = lessonSlug ? chapterBySlug(lessonSlug) : undefined;
   const noteScope = lesson?.slug ?? "master";
@@ -539,16 +559,17 @@ export function Prototype() {
   useEffect(() => { applyDocumentMetadata(path, publishedChapters); }, [path]);
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (searchOpen || notesOpen) return;
       const target = event.target;
       const editable = target instanceof Element && target.matches("input, textarea, [contenteditable='true']");
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); }
-      else if (event.key === "/" && !editable) { event.preventDefault(); setSearchOpen(true); }
-      else if (event.altKey && event.key.toLowerCase() === "n") { event.preventDefault(); setNotesOpen(true); }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); openSearch(); }
+      else if (event.key === "/" && !editable) { event.preventDefault(); openSearch(); }
+      else if (event.altKey && event.key.toLowerCase() === "n") { event.preventDefault(); openNotes(); }
       else if (event.key === "Escape") { setSearchOpen(false); setNotesOpen(false); }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [searchOpen, notesOpen, openSearch, openNotes]);
 
   useEffect(() => {
     writeReadingProgress(readingProgress);
@@ -590,10 +611,10 @@ export function Prototype() {
   return (
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
-      <AppHeader path={path} theme={theme} navigate={navigate} onOpenSearch={() => setSearchOpen(true)} onOpenNotes={() => setNotesOpen(true)} onCycleTheme={cycleTheme} />
-      {lesson ? <LessonPage chapter={lesson} readSectionIds={readingProgress.get(lesson.slug) ?? emptySectionIds} onReadSections={markSectionsRead} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage readingProgress={readingProgress} streak={streak} onToggle={toggleComplete} onOpenNotes={() => setNotesOpen(true)} navigate={navigate} />}
-      {searchOpen ? <Suspense fallback={null}><SearchDialog onClose={() => setSearchOpen(false)} navigate={navigate} /></Suspense> : null}
-      {notesOpen ? <Suspense fallback={null}><NotesPanel scope={noteScope} onClose={() => setNotesOpen(false)} /></Suspense> : null}
+      <AppHeader path={path} theme={theme} navigate={navigate} onOpenSearch={openSearch} onOpenNotes={openNotes} onCycleTheme={cycleTheme} />
+      {lesson ? <LessonPage chapter={lesson} readSectionIds={readingProgress.get(lesson.slug) ?? emptySectionIds} onReadSections={markSectionsRead} navigate={navigate} /> : path.startsWith("/roadmap") ? <RoadmapPage /> : <CatalogPage readingProgress={readingProgress} streak={streak} onToggle={toggleComplete} onOpenNotes={openNotes} navigate={navigate} />}
+      {searchOpen ? <Suspense fallback={null}><SearchDialog returnFocus={modalOpener} onClose={() => setSearchOpen(false)} navigate={navigate} /></Suspense> : null}
+      {notesOpen ? <Suspense fallback={null}><NotesPanel returnFocus={modalOpener} scope={noteScope} onClose={() => setNotesOpen(false)} /></Suspense> : null}
     </>
   );
 }

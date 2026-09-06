@@ -1,12 +1,13 @@
-import type { Chapter } from "../content/chapters";
+import type { Chapter, LessonSection } from "../content/chapters";
 
 export type SearchResult = {
   chapter: Chapter;
   score: number;
+  section?: Pick<LessonSection, "id" | "title">;
 };
 
 function normalize(value: string) {
-  return value.toLocaleLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return value.toLocaleLowerCase().replace(/\b(?:caching|cached|caches)\b/g, "cache").replace(/[^a-z0-9]+/g, " ").trim();
 }
 
 export function searchChapters(chapters: Chapter[], rawQuery: string): SearchResult[] {
@@ -35,7 +36,11 @@ export function searchChapters(chapters: Chapter[], rawQuery: string): SearchRes
         if (sectionHeadings.includes(token)) score += 2;
       }
 
-      return { chapter, score };
+      const section = chapter.status === "published" ? chapter.sections
+        ?.map((section) => ({ section, score: tokens.filter((token) => normalize(section.title).includes(token)).length }))
+        .filter((match) => match.score > 0)
+        .sort((left, right) => right.score - left.score)[0]?.section : undefined;
+      return { chapter, score, section: section ? { id: section.id, title: section.title } : undefined };
     })
     .filter((result) => result.score > 0)
     .sort((left, right) => right.score - left.score || left.chapter.number - right.chapter.number);

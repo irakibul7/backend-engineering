@@ -289,3 +289,12 @@ Each chapter or coherent two-chapter pair should be its own human-reviewed commi
 - Acceptance: portfolio card describes the project accurately, links to the verified production URL, passes portfolio checks, and deploys.
 - Files in scope: portfolio project only
 - Exclusions: changes to this field guide
+
+
+## Review fixes — T-706 Learning flow usability
+
+- Requirements: `PRO-006`, `CAT-004`, `CAT-005`, `SEA-001`–`SEA-005`, `LES-008`, `NOT-007`, `A11Y-001`–`A11Y-005`.
+- Acceptance: resume handles new, partial, completed, and all-complete states; Notes and Search contain keyboard focus and restore the trigger; cache/caching finds the published HTTP section with a deep link; search supports arrows, Enter, Escape, and touch close; counts distinguish chapters and sections; mobile summary is compact with the reading action ahead of streak statistics.
+- Files in scope: `src/Prototype.tsx`, `src/NotesPanel.tsx`, `src/SearchDialog.tsx`, focused helpers and tests, `src/prototype.css`, specification and validation evidence.
+- Exclusions: new lessons, roadmap redesign, new storage schemas, remote services, dependencies, deployment, and commits.
+- Status: Complete, pending human review. User requested these fixes on 2026-09-06; verification is recorded in `docs/validation/learning-flow-review.md`. No commit or deployment.
