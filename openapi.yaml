@@ -15,3 +15,6 @@ x-static-site: true
 x-change-policy: >-
   Adding any path requires a reviewed ADR, an updated role matrix and threat
   model, contract tests, and explicit human approval.
+x-educational-lab:
+  contract: public/labs/field-notes/openapi.yaml
+  deployment: never deployed; separately launched on 127.0.0.1 by the reader

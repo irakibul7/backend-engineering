@@ -44,6 +44,7 @@ export type LessonSection = {
   table?: { caption: string; columns: string[]; rows: string[][] };
   checklist?: string[];
   questions?: string[];
+  links?: { title: string; url: string }[];
   references?: { title: string; url: string }[];
 };
 

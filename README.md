@@ -7,7 +7,7 @@ The product uses an original engineering-notebook interface, original writing, a
 ## Current phase
 
 - Phase: public launch
-- Implementation: catalog, roadmap, study tools, and seven complete lessons available
+- Implementation: catalog, roadmap, private local study tools, ten complete lessons and eighteen planned topics available
 - Production host: Vercel
 - Production domain: <https://backend.therakibul.me/>
 - Inspiration studied: <https://backend-from-first-principle.vercel.app/> (interaction research only; not a visual target)
@@ -59,3 +59,36 @@ The repository follows a specification-first loop inspired by Addy Osmani's AI-a
 6. Review every change before making a small, explainable commit.
 
 No generated change is accepted only because it compiles. A human must understand the diff and its evidence.
+
+
+## Practical case studies and local reference application
+
+Read foundations 01–07, then follow the hypothetical Field Notes document service
+through [payment design](src/content/lessons/idempotent-payment-endpoint.ts),
+[job recovery](src/content/lessons/reliable-background-jobs.ts), and
+[request tracing](src/content/lessons/tracing-a-slow-request.ts) (chapters 26–28).
+Existing URLs and planned topics retain their identifiers.
+
+The [downloadable lab](public/labs/field-notes/README.md) runs on Node.js 24 with
+built-in SQLite and no package installation. All payments and receipts are local
+simulations. Copy its eight files into `.local/field-notes` before running them.
+No database, API, credentials or paid service is added to the website.
+
+```sh
+npm run test:lab
+npm run check
+npm run preview -- --host 127.0.0.1 --port 4176
+# In another terminal, with Google Chrome installed:
+npm run test:browser
+npm run verify:links
+```
+
+Browser checks use pinned Playwright and axe dev dependencies. `BROWSER_BASE_URL`
+overrides the preview URL; `BROWSER_CHANNEL` overrides `chrome` (install the
+corresponding browser first). Screenshots and the browser report are stored in
+`.local/field-notes-browser/`. The build rejects unapproved files and symlinks in
+the public lab directory before copying assets.
+
+See [implementation and verification evidence](docs/validation/field-notes.md)
+for changes, measured workload details, privacy boundaries and remaining gaps.
+The validation record documents the local review; deployment is a separate step.

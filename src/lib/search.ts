@@ -10,6 +10,10 @@ function normalize(value: string) {
   return value.toLocaleLowerCase().replace(/\b(?:caching|cached|caches)\b/g, "cache").replace(/[^a-z0-9]+/g, " ").trim();
 }
 
+function matchesToken(value: string, token: string) {
+  return value.split(" ").some((word) => word.startsWith(token));
+}
+
 export function searchChapters(chapters: Chapter[], rawQuery: string): SearchResult[] {
   const query = normalize(rawQuery);
   if (!query) return [];
@@ -28,16 +32,16 @@ export function searchChapters(chapters: Chapter[], rawQuery: string): SearchRes
       for (const token of tokens) {
         if (title === token) score += 18;
         else if (title.startsWith(token)) score += 12;
-        else if (title.includes(token)) score += 8;
+        else if (matchesToken(title, token)) score += 8;
         if (tags.split(" ").includes(token)) score += 6;
-        else if (tags.includes(token)) score += 3;
-        if (summary.includes(token)) score += 2;
-        if (promise.includes(token)) score += 1;
-        if (sectionHeadings.includes(token)) score += 2;
+        else if (matchesToken(tags, token)) score += 3;
+        if (matchesToken(summary, token)) score += 2;
+        if (matchesToken(promise, token)) score += 1;
+        if (matchesToken(sectionHeadings, token)) score += 2;
       }
 
       const section = chapter.status === "published" ? (chapter.sectionIndex ?? chapter.sections)
-        ?.map((section) => ({ section, score: tokens.filter((token) => normalize(section.title).includes(token)).length }))
+        ?.map((section) => ({ section, score: tokens.filter((token) => matchesToken(normalize(section.title), token)).length }))
         .filter((match) => match.score > 0)
         .sort((left, right) => right.score - left.score)[0]?.section : undefined;
       return { chapter, score, section: section ? { id: section.id, title: section.title } : undefined };

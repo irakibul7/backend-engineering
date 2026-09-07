@@ -54,3 +54,21 @@ Every chapter must include:
 10. Primary technical references with review date.
 
 Every visual must be original, captioned, readable without color, and followed by an equivalent text explanation. Qualitative comparisons must be labeled as qualitative; the project does not present invented benchmark values as measured evidence.
+
+## Completed Field Notes case studies (2026-09-07)
+
+Preserve the foundation sequence 01–07, then follow one hypothetical document
+publishing application through these complete, runnable case studies:
+
+1. 26 — Designing an Idempotent Payment Endpoint: stable command identity,
+   atomic simulated wallet/payment/response/outbox, restart and concurrency tests.
+2. 27 — Reliable Background Jobs: expiring ownership, effect deduplication,
+   retry scheduling, dead letters and deliberate operator replay.
+3. 28 — Tracing a Slow Request from API to Database: explicit request context,
+   query-plan diagnosis, result equivalence and reproducible measurement.
+
+The numbering appends to existing stable identifiers. Topics 08–25 remain
+planned; the case studies are practical entry points rather than completed
+replacements for broad API design, PostgreSQL, BullMQ, OpenTelemetry, scaling,
+concurrency or messaging field guides. Catalog and roadmap show this path and
+link related planned topics to the available exercises.

@@ -65,3 +65,7 @@ The public lesson promotes the reviewed ADR-0006 proof into a chapter-only lazy 
 The renderer loads near the viewport, renders on demand, pauses offscreen or when hidden, and disposes resources on unmount. Reduced motion disables interpolation and auto-play. Context loss and dependency failure leave semantic evidence available; every scenario state also appears in the generated static lesson HTML. The single versioned local motion preference contains no network information. Existing analytics collect no lab step or command data.
 
 Verification: parser and route-boundary tests, lifecycle and fallback component tests, static HTML and chunk-budget tests, and the browser evidence in `validation/chapter-07-publication.md`.
+
+## Field Notes downloads and local process
+
+Only authored source fixtures are public. The example runs separately on loopback, rejects browser Origin requests and non-loopback Host headers, limits request bodies/time, binds SQL parameters, uses synthetic identities/data and writes its database outside the downloaded source directory. It has no authentication and is not safe to expose as a service. No credentials, provider calls, email or telemetry exporter exist. Crash hooks are CLI/test-only. Dead-letter replay is an explicit local operator command. Exported traces omit bodies, keys and SQL parameter values. Tests create isolated temporary directories. Download boundary tests reject database, results and environment files. The static site's private note/progress boundary is unchanged.

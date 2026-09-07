@@ -243,3 +243,13 @@ Still governed by the existing contract:
 
 - A contribution link is added only after a dedicated repository exists.
 - Reuse of source assets or prose requires documented permission; otherwise all content and assets remain original.
+
+## 14. Practical reference application expansion (2026-09-07)
+
+- `CON-008`: Publish three substantial hypothetical Field Notes case studies: idempotent payments, reliable background jobs, and API-to-database tracing. Each includes prerequisites, decisions, executable local code, inputs/outputs, failures/recovery, exercises, tests, limitations, and official references reviewed on 2026-09-07.
+- `LAB-001`: Ship one dependency-free Node.js 24 / SQLite document-publishing lab. All money and receipt effects are simulated locally. Prove duplicate/concurrent requests, atomic rollback, process crashes, retries, expired leases, bounded attempts, dead-letter replay, and query-plan/result equivalence with executable tests.
+- `LAB-002`: Supply a reproducible API measurement runner recording environment, workload, raw samples, errors, percentiles, query plans and trace relationships. Publish no invented performance numbers.
+- `SEQ-001`: Preserve all existing slugs/numbers and roadmap topics. Append case studies 26–28 and explicitly link foundations → payment → jobs → tracing; broad roadmap topics remain planned, with links to applicable completed case studies.
+- `PUB-001`: Prerender public chapters with unique metadata, author attribution, canonical URLs, structured data and sitemap entries. Downloads contain authored fixtures only. Notes/progress remain browser-local; no authenticated content exists and no private state is built, indexed or transmitted.
+
+This expansion supersedes historical seven-chapter counts. The website still has no runtime API. A separately launched loopback-only educational process is explicitly authorized; it adds no deployed service, payment provider, account, secret, paid infrastructure, commit, push or deployment.

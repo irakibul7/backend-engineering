@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { chapterBySlug, chapterHref, chapters, launchChapters, publishedChapters } from "./chapters";
 
 describe("chapter publication model", () => {
-  it("keeps all seven launch entries while exposing only complete lessons", () => {
-    expect(launchChapters).toHaveLength(7);
-    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  it("keeps all ten published entries while exposing only complete lessons", () => {
+    expect(launchChapters).toHaveLength(10);
+    expect(publishedChapters.map((chapter) => chapter.number)).toEqual([1, 2, 3, 4, 5, 6, 7, 26, 27, 28]);
     expect(publishedChapters.every((chapter) => chapter.sections?.length)).toBe(true);
   });
 

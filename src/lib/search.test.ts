@@ -51,6 +51,12 @@ describe("searchChapters", () => {
     }
   });
 
+  it("does not match round inside background and still accepts word prefixes", () => {
+    expect(searchChapters(chapters, "round").some((result) => result.chapter.number === 27)).toBe(false);
+    expect(searchChapters(chapters, "idempot")[0]?.chapter.number).toBe(26);
+    expect(searchChapters(chapters, "dead letter").some((result) => result.chapter.number === 27)).toBe(true);
+  });
+
   it("returns no results for an empty query", () => {
     expect(searchChapters(chapters, "   ")).toEqual([]);
   });

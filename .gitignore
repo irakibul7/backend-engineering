@@ -11,3 +11,9 @@ reports/
 *.log
 .DS_Store
 *.tsbuildinfo
+
+# Local reference-app state must never become public content
+.local/
+*.sqlite
+*.sqlite-*
+measurement*.json

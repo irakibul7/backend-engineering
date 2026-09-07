@@ -13,7 +13,7 @@ describe("Backend Engineering prototype", () => {
     document.documentElement.removeAttribute("data-theme");
   });
 
-  it("presents seven published chapters and a visible public roadmap", () => {
+  it("presents ten published chapters and a visible public roadmap", () => {
     render(<Prototype />);
 
     expect(screen.getByRole("link", { name: "Backend Engineering home" }).querySelector("img")).toHaveAttribute("src", "/icon-192.png?v=2");
@@ -35,7 +35,7 @@ describe("Backend Engineering prototype", () => {
     expect(screen.getByRole("link", { name: "Start next chapter" })).toHaveAttribute("href", "/chapters/routing-and-request-dispatch/");
     expect(screen.getByRole("link", { name: /Routing and Request Dispatch\s*Path matching/ })).toHaveAttribute("aria-current", "step");
     expect(screen.getByText(/chapters completed/)).toBeInTheDocument();
-    expect(screen.getByText(/9% of sections read/)).toBeInTheDocument();
+    expect(screen.getByText(/7% of sections read/)).toBeInTheDocument();
   });
 
   it("resumes a partially read chapter at its first unread section after reload", () => {
@@ -47,7 +47,7 @@ describe("Backend Engineering prototype", () => {
   it("offers the roadmap when all published chapters are complete", async () => {
     const user = userEvent.setup();
     render(<Prototype />);
-    for (let n = 1; n <= 7; n++) await user.click(screen.getByRole("button", { name: `Mark chapter ${n} complete` }));
+    for (const chapter of publishedChapters) await user.click(screen.getByRole("button", { name: `Mark chapter ${chapter.number} complete` }));
     expect(screen.getByRole("heading", { name: "Foundations complete" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Explore the roadmap" })).toHaveAttribute("href", "/roadmap/");
   });
@@ -140,7 +140,7 @@ describe("Backend Engineering prototype", () => {
 
     await user.click(screen.getByRole("button", { name: "Mark chapter 1 complete" }));
 
-    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "9");
+    expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuenow", "7");
     expect(screen.getByRole("progressbar", { name: "Overall reading progress" })).toHaveAttribute("aria-valuemax", "100");
     expect(screen.getByRole("button", { name: "Reset chapter 1 reading progress" })).toHaveAttribute("aria-pressed", "true");
   });

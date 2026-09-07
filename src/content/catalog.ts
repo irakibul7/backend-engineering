@@ -213,7 +213,7 @@ export const chapters: Chapter[] = [
       },
       {
         "id": "parsing-is-not-validation",
-        "title": "Parsing only means “I can read it”"
+        "title": "Parsing only means \u201cI can read it\u201d"
       },
       {
         "id": "three-kinds-of-validation",
@@ -648,6 +648,165 @@ export const chapters: Chapter[] = [
       "WebSockets",
       "SSE",
       "real-time"
+    ]
+  },
+  {
+    "number": 26,
+    "slug": "idempotent-payment-endpoint",
+    "title": "Designing an Idempotent Payment Endpoint",
+    "duration": "45 min",
+    "status": "published",
+    "summary": "Build a local payment endpoint with durable replay, atomic debit and outbox writes, concurrency tests, and explicit provider boundaries.",
+    "promise": "Make retries safe by defining command identity, a business invariant, and one commit boundary.",
+    "tags": [
+      "payments",
+      "idempotency",
+      "transactions",
+      "SQLite"
+    ],
+    "sectionIndex": [
+      {
+        "id": "a-response-is-not-a-receipt",
+        "title": "A lost response must not buy publication twice"
+      },
+      {
+        "id": "run-the-reference-app",
+        "title": "Run the same Field Notes application"
+      },
+      {
+        "id": "define-command-identity",
+        "title": "Separate a request key from a business invariant"
+      },
+      {
+        "id": "place-the-transaction",
+        "title": "Put every local payment effect inside one transaction"
+      },
+      {
+        "id": "reason-about-concurrency",
+        "title": "Let the database arbitrate concurrent requests"
+      },
+      {
+        "id": "send-and-repeat",
+        "title": "Send one command, then lose confidence in the response"
+      },
+      {
+        "id": "crashes-and-uncertainty",
+        "title": "Treat a timeout as an unknown outcome"
+      },
+      {
+        "id": "test-the-failure-boundary",
+        "title": "Break the boundary and observe the invariant"
+      },
+      {
+        "id": "production-checklist",
+        "title": "Know what remains before handling money"
+      }
+    ]
+  },
+  {
+    "number": 27,
+    "slug": "reliable-background-jobs",
+    "title": "Reliable Background Jobs: Retries, Backoff, and Dead Letters",
+    "duration": "45 min",
+    "status": "published",
+    "summary": "Recover receipt jobs after worker crashes using expiring leases, bounded backoff, deduplicated effects, and explicit dead-letter replay.",
+    "promise": "Move receipt work off the request path while making ownership, retries, and recovery observable.",
+    "tags": [
+      "jobs",
+      "retries",
+      "backoff",
+      "dead-letter queues"
+    ],
+    "sectionIndex": [
+      {
+        "id": "accepted-does-not-mean-delivered",
+        "title": "A paid document still needs its receipt"
+      },
+      {
+        "id": "run-the-reference-app",
+        "title": "Run the same Field Notes application"
+      },
+      {
+        "id": "choose-the-delivery-guarantee",
+        "title": "Promise repeated attempts, not exactly-once execution"
+      },
+      {
+        "id": "claim-with-a-lease",
+        "title": "Claim atomically, then release the transaction"
+      },
+      {
+        "id": "backoff-is-a-capacity-policy",
+        "title": "Back off with jitter and a finite attempt budget"
+      },
+      {
+        "id": "kill-after-the-effect",
+        "title": "Kill a worker after delivery but before acknowledgment"
+      },
+      {
+        "id": "dead-letters-are-an-operational-state",
+        "title": "Make exhaustion visible and replay deliberately"
+      },
+      {
+        "id": "verify-state-transitions",
+        "title": "Test the windows between durable writes"
+      },
+      {
+        "id": "operate-the-boundary",
+        "title": "Extend the worker only after its guarantee is clear"
+      }
+    ]
+  },
+  {
+    "number": 28,
+    "slug": "tracing-a-slow-request",
+    "title": "Tracing a Slow Request from API to Database",
+    "duration": "40 min",
+    "status": "published",
+    "summary": "Trace a document-list request into SQLite, inspect query plans, and reproduce an index experiment with recorded workload and raw timing samples.",
+    "promise": "Locate request time with correlated spans, test a query-plan hypothesis, and measure without inventing results.",
+    "tags": [
+      "tracing",
+      "performance",
+      "SQLite",
+      "observability"
+    ],
+    "sectionIndex": [
+      {
+        "id": "locate-time-before-optimizing",
+        "title": "The document list feels slow; locate the time"
+      },
+      {
+        "id": "run-the-reference-app",
+        "title": "Run the same Field Notes application"
+      },
+      {
+        "id": "make-context-explicit",
+        "title": "Carry trace identity through each boundary"
+      },
+      {
+        "id": "capture-the-baseline",
+        "title": "Start with an unindexed request and its query plan"
+      },
+      {
+        "id": "form-a-falsifiable-hypothesis",
+        "title": "Use the plan to explain the expensive boundary"
+      },
+      {
+        "id": "measure-reproducibly",
+        "title": "Measure a workload, not a single lucky request"
+      },
+      {
+        "id": "read-spans-without-double-counting",
+        "title": "Nested durations overlap; do not add them together"
+      },
+      {
+        "id": "slow-query-and-failure-exercises",
+        "title": "Separate correctness assertions from timing observations"
+      },
+      {
+        "id": "production-observability-gaps",
+        "title": "Carry the method into production, then add the missing instruments"
+      }
     ]
   }
 ];

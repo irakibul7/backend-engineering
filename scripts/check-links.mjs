@@ -1,10 +1,12 @@
 #!/usr/bin/env node
+import { setTimeout } from "node:timers/promises";
 import { chapters, publishedChapters } from "../src/content/chapters.ts";
 import { getSeoRoutes, SITE_URL } from "../src/lib/seo.ts";
 
 const baseUrl = new URL(process.argv[2] ?? "http://127.0.0.1:4176/");
 const internalPaths = [
   ...getSeoRoutes(publishedChapters).map((route) => route.path),
+  ...chapters.flatMap((chapter) => chapter.sections?.flatMap((section) => section.links?.map((link) => link.url) ?? []) ?? []),
   "/favicon.svg",
   "/favicon-32x32.png",
   "/favicon.ico",
@@ -22,13 +24,23 @@ const externalUrls = new Set([
   ...chapters.flatMap((chapter) => chapter.sections?.flatMap((section) => section.references?.map((reference) => reference.url) ?? []) ?? []),
 ]);
 
-const urls = [
+const urls = [...new Set([
   ...internalPaths.map((pathname) => new URL(pathname, baseUrl).href),
   ...externalUrls,
-];
+].map((value) => { const url = new URL(value); url.hash = ""; return url.href; }))];
 
-const results = await Promise.all(urls.map(async (url) => {
+const results = [];
+const nextRequestByOrigin = new Map();
+// Bound per-host pressure; anchors do not require another document fetch.
+for (let offset = 0; offset < urls.length; offset += 4) {
+results.push(...await Promise.all(urls.slice(offset, offset + 4).map(async (url) => {
   try {
+    const origin = new URL(url).origin;
+    if (origin !== baseUrl.origin) {
+      const startsAt = Math.max(Date.now(), nextRequestByOrigin.get(origin) ?? 0);
+      nextRequestByOrigin.set(origin, startsAt + 1000);
+      await setTimeout(Math.max(0, startsAt - Date.now()));
+    }
     const response = await fetch(url, {
       headers: { "user-agent": "BackendEngineeringLinkCheck/1.0" },
       redirect: "follow",
@@ -38,7 +50,8 @@ const results = await Promise.all(urls.map(async (url) => {
   } catch (error) {
     return { url, status: 0, ok: false, error: error instanceof Error ? error.message : String(error) };
   }
-}));
+})));
+}
 
 const failures = results.filter((result) => !result.ok);
 for (const result of results) {

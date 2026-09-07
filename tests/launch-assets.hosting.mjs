@@ -60,6 +60,9 @@ test("sitemap contains only canonical public routes", async () => {
     "https://backend.therakibul.me/chapters/validation-at-trust-boundaries/",
     "https://backend.therakibul.me/chapters/layered-request-handling/",
     "https://backend.therakibul.me/chapters/networking-and-packet-routing/",
+    "https://backend.therakibul.me/chapters/idempotent-payment-endpoint/",
+    "https://backend.therakibul.me/chapters/reliable-background-jobs/",
+    "https://backend.therakibul.me/chapters/tracing-a-slow-request/",
   ]);
   assert.doesNotMatch(sitemap, /resource-oriented-api-design|localhost|vercel\.app/);
 });

@@ -325,3 +325,11 @@ Each chapter or coherent two-chapter pair should be its own human-reviewed commi
 - Files: `src/content/`, `src/networking/`, existing PoC compatibility exports/tests, catalog and lesson UI, static build checks, glossary and validation documentation.
 - Exclusions: live network inspection, networking API, cloud changes, new analytics, Chapters 08–25, production deployment.
 - Status: Implemented and verified locally; user approved commit and push on 2026-09-06. Evidence: `docs/validation/chapter-07-publication.md`.
+
+### T-708 Practical reference application and case studies
+
+- Requirements: `CON-008`, `LAB-001`, `LAB-002`, `SEQ-001`, `PUB-001`, `LES-001`, `LES-004`, `LES-006`, `LES-009`, `AUT-001`, `SEO-001`–`SEO-004`, `PERF-003`, `NOT-008`.
+- Acceptance: Node integration tests cover real SQLite transactions and separate-process concurrency/crashes; chapters have complete editorial sections and two semantic visuals each; static HTML/metadata/sitemap/download checks; navigation/search/storage regression tests; production build, lint/types, desktop/390/320 browser, keyboard and axe checks; measured evidence and remaining gaps documented.
+- Files: `public/labs/field-notes/`, chapter data/loaders/schema/tests, catalog and learning links, lesson authorship/navigation, SEO tests, package scripts, scoped ADR/OpenAPI/threat model and validation documentation. Required verification fixes include search word boundaries, bounded/deduplicated link checks, and small contrast corrections to the existing original theme and Notes export control, and compatible patches for four audit-reported build dependency advisories (Vite 6.4.3, Browserslist, PostCSS and nanoid).
+- Exclusions: redesign, rewrites of foundation chapters, hosted API, real payments/email, cloud resources, credentials, authentication, telemetry expansion, commits, pushes, deployment.
+- Status: Implemented and verified locally; user approved commit and push after review. No deployment command requested. Evidence: `docs/validation/field-notes.md`.

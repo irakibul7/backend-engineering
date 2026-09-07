@@ -23,12 +23,12 @@
   --paper: #fbf7f0;
   --paper-soft: #efe9df;
   --ink: #22262d;
-  --muted: #6d6a65;
-  --quiet: #6f6a63;
+  --muted: #625e58;
+  --quiet: #625e58;
   --line: #ddd6cc;
   --line-strong: #c9c0b5;
   --accent: #e95515;
-  --accent-strong: #c9450c;
+  --accent-strong: #b23808;
   --accent-soft: #f9e1d2;
   --nav: #1e252d;
   --progress: #e95515;
@@ -2475,3 +2475,17 @@ button.feature-line {
   font-size: 17px;
   line-height: 1.4;
 }
+
+/* Keep the reference-application path within the existing notebook typography. */
+.learning-path { padding: 18px 0; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+.learning-path p { font-size: 14px; line-height: 1.6; max-width: 72ch; }
+.learning-path nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.learning-path a, .roadmap-case-link { display: inline-flex; align-items: center; min-height: 44px; text-underline-offset: 4px; }
+.roadmap-case-link { font-size: 13px; }
+.lesson-hero .lesson-byline { font-size: 14px; line-height: 1.6; }
+.lesson-links ul { padding-left: 20px; }
+.lesson-links a { display: inline-block; min-height: 44px; padding-block: 8px; overflow-wrap: anywhere; text-underline-offset: 4px; }
+@media (max-width: 600px) { .learning-path nav { flex-direction: column; gap: 0; } }
+
+/* Export must remain readable when enabled in every notebook theme. */
+.notes-panel footer button { background: var(--ink); border-color: var(--ink); color: var(--paper); min-height: 44px; }

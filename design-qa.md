@@ -218,3 +218,19 @@ No actionable P0, P1, or P2 differences remain.
 Chapter 06 reviewed: 2026-08-31. The lesson adds three original figures through the existing extended-flow, timeline, and decision renderers. Desktop, 390 x 844, and 320 x 700 checks found no page overflow, diagram overflow, error overlay, or console warning/error. At 390 px each figure measured 335 px within the content viewport; at 320 px each measured 265 px. The mobile contents drawer exposed all ten section anchors, diagram transcripts remained collapsed, and the conditionally loaded search and notes overlays remained operable. Axe found zero automated violations; Lighthouse scored 97 performance and 100 accessibility, best practices, and SEO. No actionable P0, P1, or P2 visual finding remains. Detailed evidence is in `docs/validation/chapter-06-layered-handling.md`.
 
 final result: passed
+
+## Field Notes practical case studies — 2026-09-07
+
+Preserved the notebook layout, existing chapter renderers, font stack and theme
+controls. Inspected the live original catalog before changes and local captures at
+matching desktop/mobile sizes. Reviewed the new catalog learning path, roadmap,
+320 px tracing title/byline, and 390 px job-recovery timeline. All diagrams remain
+semantic and reflow; tables retain their existing accessible horizontal-scroll
+containers. Browser checks across 1280×720, 390×844 and 320×700 found no page or
+diagram overflow. Original-theme small text and Notes export contrast were corrected;
+new resource links have 44 px minimum target height. Keyboard search, copy,
+contents navigation, local notes and all themes passed with zero axe violations
+and zero console warnings/errors. All three chapters meet the Lighthouse mobile
+95-point budgets. Evidence and limitations: `docs/validation/field-notes.md`.
+
+final result: passed

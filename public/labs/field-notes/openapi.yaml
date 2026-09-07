@@ -1,0 +1,46 @@
+openapi: 3.1.0
+info:
+  title: Field Notes local simulation
+  version: 1.0.0
+  description: Hypothetical document publishing; no authentication or real money. Never expose this lab publicly.
+servers:
+  - url: http://127.0.0.1:4318
+paths:
+  /payments:
+    post:
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: {type: string, pattern: '^[A-Za-z0-9_-]{1,80}$'}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [documentId, amountCents, currency]
+              properties:
+                documentId: {type: string, enum: [document-7, document-8]}
+                amountCents: {type: integer, const: 500}
+                currency: {type: string, const: USD}
+      responses:
+        '201': {description: Simulated payment; exact status and body replayed for the same key and command}
+        '400': {description: Invalid JSON or command/key}
+        '403': {description: Browser Origin or non-loopback Host rejected}
+        '404': {description: Document absent or not owned by the fixed demo author}
+        '409': {description: Key mismatch or document already paid or price/balance conflict}
+        '413': {description: Body exceeds 4096 bytes}
+        '415': {description: JSON media type required}
+        '503': {description: Database unavailable or busy; retry same key}
+  /documents:
+    get:
+      parameters:
+        - in: query
+          name: owner
+          schema: {type: string, default: author-42}
+      responses:
+        '200': {description: Up to 20 synthetic documents ordered by created descending; X-Trace-Id joins spans}
+        '403': {description: Browser Origin or non-loopback Host rejected}
+        '503': {description: Database unavailable}

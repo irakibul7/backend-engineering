@@ -291,6 +291,7 @@ function CatalogPage({
         </div>
       </aside>
       <section className="curriculum-panel" aria-labelledby="launch-heading">
+        <LearningPath />
         <header className="syllabus-header">
           <h2 id="launch-heading">Launch chapters</h2>
           <span>Difficulty</span><span>Est. time</span><span>Progress</span>
@@ -319,6 +320,29 @@ function CatalogPage({
   );
 }
 
+function LearningPath() {
+  return <aside className="learning-path" aria-label="Suggested learning sequence">
+    <strong>From foundations to engineering decisions</strong>
+    <p>Read chapters 01–07, then follow one hypothetical Field Notes application through three practical case studies. Topics 08–25 remain planned; these case studies give you a practical next step.</p>
+    <nav aria-label="Case study learning path">
+      <a href="/chapters/http-as-a-state-machine/">01–07 · Foundations</a>
+      <a href="/chapters/idempotent-payment-endpoint/">26 · Idempotent payments</a>
+      <a href="/chapters/reliable-background-jobs/">27 · Reliable jobs</a>
+      <a href="/chapters/tracing-a-slow-request/">28 · Request tracing</a>
+    </nav>
+  </aside>;
+}
+
+const roadmapCaseStudies: Record<number, { title: string; href: string }> = {
+  8: { title: "Payment endpoint case study", href: "/chapters/idempotent-payment-endpoint/" },
+  9: { title: "Payment transaction case study", href: "/chapters/idempotent-payment-endpoint/#place-the-transaction" },
+  11: { title: "Reliable jobs case study", href: "/chapters/reliable-background-jobs/" },
+  13: { title: "Retry and outage exercise", href: "/chapters/reliable-background-jobs/#dead-letters-are-an-operational-state" },
+  16: { title: "Request tracing case study", href: "/chapters/tracing-a-slow-request/" },
+  19: { title: "Reproducible query measurement", href: "/chapters/tracing-a-slow-request/#measure-reproducibly" },
+  23: { title: "Executable failure tests", href: "/chapters/reliable-background-jobs/#verify-state-transitions" },
+};
+
 function RoadmapPage() {
   return (
     <main className="roadmap-page" id="main-content">
@@ -327,6 +351,7 @@ function RoadmapPage() {
         <h1>What comes after<br />the foundations.</h1>
         <p>Eighteen planned field guides connect API contracts and durable data to distributed systems and real-time delivery. A topic becomes a lesson only after it is complete and reviewed.</p>
       </header>
+      <LearningPath />
       <section className="roadmap-index" aria-label="Roadmap chapters">
         <div className="roadmap-index-head"><span>Topic</span><span>System focus</span><span>Status</span></div>
         {[
@@ -338,7 +363,7 @@ function RoadmapPage() {
           {stage.slugs.map((chapter) => (
           <article className="roadmap-row" id={chapter.slug} key={chapter.slug}>
             <span>{pad(chapter.number)}</span>
-            <div><strong>{chapter.title}</strong><small>{chapter.promise}</small></div>
+            <div><strong>{chapter.title}</strong><small>{chapter.promise}</small>{roadmapCaseStudies[chapter.number] ? <a className="roadmap-case-link" href={roadmapCaseStudies[chapter.number].href}>Available: {roadmapCaseStudies[chapter.number].title}</a> : null}</div>
             <span>{chapter.tags.slice(0, 2).join(" · ")}</span>
             <b>Planned</b>
           </article>
@@ -466,8 +491,9 @@ function LessonPage({
   navigate: (href: string) => void;
 }) {
   const [contentsOpen, setContentsOpen] = useState(false);
-  const previous = publishedChapters.find((item) => item.number === chapter.number - 1);
-  const next = publishedChapters.find((item) => item.number === chapter.number + 1);
+  const chapterIndex = publishedChapters.findIndex((item) => item.slug === chapter.slug);
+  const previous = publishedChapters[chapterIndex - 1];
+  const next = publishedChapters[chapterIndex + 1];
   const totalSections = chapter.sections?.length ?? 0;
   const lessonProgress = totalSections === 0 ? 0 : Math.round((readSectionIds.size / totalSections) * 100);
 
@@ -510,6 +536,7 @@ function LessonPage({
         <section className="lesson-hero">
           <p className="eyebrow">Backend Engineering · Field guide {pad(chapter.number)}</p>
           <h1>{chapter.title}</h1>
+          <p className="lesson-byline">By <a href="https://therakibul.me/">Rakibul Islam</a>{chapter.number >= 26 ? " · Hypothetical case study · Reviewed September 7, 2026" : ""}</p>
           <p>{chapter.promise} This chapter connects protocol behavior to the decisions a production service must make.</p>
           <div className="lesson-meta"><span>{chapter.number === 7 ? "Links and routing" : "Application layer"}</span><span>{chapter.sections.length} sections</span><span>{chapter.duration}</span><span aria-live="polite">{lessonProgress}% read</span></div>
         </section>
@@ -528,6 +555,7 @@ function LessonPage({
               {section.table ? <LessonTable table={section.table} /> : null}
               {section.checklist ? <ul className="lesson-checklist">{section.checklist.map((item) => <li key={item}><Check size={16} />{item}</li>)}</ul> : null}
               {section.questions ? <div className="lesson-questions"><h3>Design questions</h3><ol>{section.questions.map((question) => <li key={question}>{question}</li>)}</ol></div> : null}
+              {section.links ? <nav className="lesson-links" aria-label={`${section.title} resources`}><ul>{section.links.map((link) => <li key={link.url}><a href={link.url}>{link.title}</a></li>)}</ul></nav> : null}
               {section.references ? (
                 <div className="lesson-references">
                   <h3>Primary references</h3>

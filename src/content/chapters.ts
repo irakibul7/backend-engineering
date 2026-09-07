@@ -1,3 +1,6 @@
+import { tracingSections } from "./lessons/tracing-a-slow-request.ts";
+import { jobsSections } from "./lessons/reliable-background-jobs.ts";
+import { paymentSections } from "./lessons/idempotent-payment-endpoint.ts";
 import { chapters as catalog } from "./catalog.ts";
 import type { Chapter, LessonSection } from "./types";
 export type { Chapter, LessonSection, LessonVisual } from "./types";
@@ -11,6 +14,9 @@ import { layeredRequestSections } from "./lessons/layered-request-handling.ts";
 import { networkingSections } from "./lessons/networking-and-packet-routing.ts";
 
 const sections: Record<string, LessonSection[]> = {
+  "tracing-a-slow-request": tracingSections,
+  "reliable-background-jobs": jobsSections,
+  "idempotent-payment-endpoint": paymentSections,
   "networking-and-packet-routing": networkingSections,
   "http-as-a-state-machine": httpSections,
   "routing-and-request-dispatch": routingSections,

@@ -43,7 +43,8 @@ function lessonMetadata(chapter: Chapter): SeoMetadata {
       url: `${SITE_URL}${path}`,
       author: personSchema(),
       isPartOf: { "@type": "WebSite", name: SITE_NAME, url: `${SITE_URL}/` },
-      proficiencyLevel: "Beginner",
+      proficiencyLevel: chapter.number >= 26 ? "Intermediate" : "Beginner",
+      ...(chapter.number >= 26 ? { dateModified: "2026-09-07" } : {}),
       ...(minutes ? { timeRequired: `PT${minutes}M` } : {}),
     },
   };

@@ -18,6 +18,9 @@ describe("SEO metadata", () => {
       "/chapters/validation-at-trust-boundaries/",
       "/chapters/layered-request-handling/",
       "/chapters/networking-and-packet-routing/",
+      "/chapters/idempotent-payment-endpoint/",
+      "/chapters/reliable-background-jobs/",
+      "/chapters/tracing-a-slow-request/",
     ]);
     expect(routes.every((route) => route.robots.startsWith("index"))).toBe(true);
   });
